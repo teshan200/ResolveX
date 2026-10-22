@@ -1,0 +1,77 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+dist-ssr/
+build/
+out/
+coverage/
+*.tsbuildinfo
+
+# Expo / React Native
+.expo/
+.expo-shared/
+web-build/
+expo-env.d.ts
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+ios/
+android/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+*.pem
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Caches
+.cache/
+.eslintcache
+.parcel-cache/
+.vite/
+.turbo/
+
+# Backend (update once the stack is chosen)
+backend/node_modules/
+backend/dist/
+backend/target/
+backend/__pycache__/
+backend/.venv/
+*.pyc
+uploads/
+
+# Editors / IDEs (keep shared VS Code config)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Claude Code local settings
+.claude/settings.local.json
