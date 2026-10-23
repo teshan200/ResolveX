@@ -1,75 +1,100 @@
-# React + TypeScript + Vite
+# ResolveX Admin Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Administration dashboard for ResolveX (React + TypeScript + Vite + Tailwind CSS). It serves three roles: **Super Admin**, **Tenant Admin** and **Branch Manager**. The design is in the ResolveX Figma file, and the Figma screen names are used below.
 
-Currently, two official plugins are available:
+## Getting started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Other scripts: `npm run build`, `npm run lint`, `npm run preview`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project structure
 
 ```
+src/
+  components/ui/   Reusable components (Button, Input, Badge, Card, Modal)
+  layout/          AppLayout, Sidebar, TopBar and navigation.ts (menu per role)
+  pages/           Screens
+  features/        Feature code (one folder per feature)
+  routes/          AppRoutes.tsx (all routes)
+  services/        API calls
+  hooks/ types/ mocks/
+```
+
+- Colours, fonts and radii come from the Figma design tokens in `src/index.css`.
+- The menu for each role is defined in `src/layout/navigation.ts`.
+- There is no authentication yet. `/login` continues to the Super Admin area, and any area can be opened by its URL.
+
+## Screens and API endpoints
+
+All endpoints are under `/api/v1` and are **proposed**, to be agreed with the backend team. The tenant is taken from the login token, so the client never sends a tenant id. A **Built** status means the real screen exists. **Placeholder** means the route exists but shows an empty page.
+
+### Public and onboarding
+
+These routes are planned and not yet in the router.
+
+| Figma screen | Route | Endpoints |
+|---|---|---|
+| Landing Page | `/` | `GET /plans` |
+| Company Registration | `/register` | `POST /tenants/register` |
+| Email Verification | `/verify-email` | `POST /tenants/verify-email` |
+| Login, Sign in with Google | `/login` | Handled by Asgardeo, then `GET /me` |
+| Forgot / Reset Password | `/forgot-password`, `/reset-password` | Handled by Asgardeo |
+| Choose Plan | `/choose-plan` | `GET /plans` |
+| Payment | `/payment` | `POST /subscription/checkout` (PayHere sandbox) |
+| Onboarding Success | `/onboarding-success` | `POST /tenants/activate` |
+
+### Super Admin (`/super-admin`)
+
+| Figma screen | Route | Status | Endpoints |
+|---|---|---|---|
+| SA · Platform Overview | `/super-admin/overview` | Placeholder | `GET /admin/usage` |
+| SA · Companies, Tenant Detail, Suspend Tenant | `/super-admin/companies` | Placeholder | `GET /admin/tenants`, `GET /admin/tenants/{id}`, `POST /admin/tenants/{id}/suspend`, `POST /admin/tenants/{id}/reactivate`, `POST /admin/tenants/{id}/deactivate` |
+| SA · Subscriptions | `/super-admin/subscriptions` | Placeholder | `GET /admin/subscriptions` |
+| SA · Plans & Pricing | `/super-admin/plans` | Placeholder | `GET /admin/plans`, `POST /admin/plans`, `PUT /admin/plans/{id}` |
+| SA · Platform Audit Log | `/super-admin/audit-log` | Placeholder | `GET /admin/audit-logs` |
+
+### Tenant Admin (`/tenant`)
+
+| Figma screen | Route | Status | Endpoints |
+|---|---|---|---|
+| TA · Dashboard | `/tenant/dashboard` | Placeholder | `GET /analytics/overview` |
+| TA · Complaints Overview, Complaint Detail | `/tenant/complaints` | Placeholder | `GET /tickets`, `GET /tickets/{id}`, `GET /tickets/{id}/history` |
+| TA · Escalated to Me, Escalated Complaint | `/tenant/escalated` | Placeholder | `GET /escalations`, `GET /tickets/{id}/escalations` |
+| TA · Branches, Add Branch, Branch Detail | `/tenant/branches` | Placeholder | `GET /branches`, `POST /branches`, `GET /branches/{id}`, `PUT /branches/{id}`, `DELETE /branches/{id}` |
+| TA · Employees, Add / Edit / Remove Employee | `/tenant/employees` | Placeholder | `GET /employees`, `POST /employees`, `GET /employees/{id}`, `PUT /employees/{id}`, `DELETE /employees/{id}` |
+| TA · Hierarchy | `/tenant/hierarchy` | Placeholder | `GET /hierarchy`, `PUT /hierarchy` |
+| TA · Feedback Forms, Form Builder | `/tenant/feedback-forms` | Placeholder | `GET /forms`, `POST /forms`, `GET /forms/{id}`, `PUT /forms/{id}`, `POST /forms/{id}/publish`, `GET /forms/{id}/versions` |
+| TA · QR Codes, QR Code Preview, Disable QR Code | `/tenant/qr-codes` | Placeholder | `GET /qr-codes`, `PATCH /qr-codes/{id}` |
+| TA · SLA Policies | `/tenant/sla-policies` | Placeholder | `GET /sla-policies`, `PUT /sla-policies` |
+| TA · Analytics | `/tenant/analytics` | Placeholder | `GET /analytics/overview`, `GET /analytics/branches`, `GET /analytics/staff` |
+| TA · Reports | `/tenant/reports` | Placeholder | `GET /reports`, `GET /reports/{id}/export?format=pdf\|csv` |
+| TA · Audit Log | `/tenant/audit-log` | Placeholder | `GET /audit-logs` |
+| TA · Billing & Plan, Payment Failed | `/tenant/billing` | Placeholder | `GET /subscription`, `POST /subscription/checkout`, `POST /subscription/upgrade`, `POST /subscription/downgrade`, `POST /subscription/renew` |
+| TA · Settings, Branding / Email Delivery | `/tenant/settings` | Placeholder | `GET /me`, `PATCH /me` |
+
+### Branch Manager (`/branch`)
+
+| Figma screen | Route | Status | Endpoints |
+|---|---|---|---|
+| BM · Branch Overview | `/branch/overview` | Placeholder | `GET /analytics/overview` |
+| BM · Tickets, Ticket Detail | `/branch/tickets` | Placeholder | `GET /tickets`, `GET /tickets/{id}`, `POST /tickets/{id}/assign`, `POST /tickets/{id}/claim`, `POST /tickets/{id}/reopen`, `POST /tickets/{id}/cancel` |
+| BM · AI Review Queue | `/branch/ai-review` | Placeholder | `GET /ai-reviews`, `PATCH /ai-reviews/{ticketId}` |
+| BM · Resolution Approvals | `/branch/approvals` | Placeholder | `GET /approvals`, `POST /approvals/{id}/decision` |
+| BM · Escalation Inbox | `/branch/escalations` | Placeholder | `GET /escalations` |
+| BM · Staff & Workload | `/branch/staff` | Placeholder | `GET /analytics/staff` |
+| BM · Employees, Add Employee, Employee Detail | `/branch/employees` | Placeholder | `GET /employees`, `POST /employees`, `GET /employees/{id}` |
+| BM · QR Codes, Generate QR Codes, Rename QR Code | `/branch/qr-codes` | Placeholder | `GET /qr-codes`, `POST /qr-codes`, `PATCH /qr-codes/{id}` |
+
+### Shared (all roles)
+
+| Purpose | Endpoint |
+|---|---|
+| Current user | `GET /me`, `PATCH /me` |
+| Notifications | `GET /notifications`, `PATCH /notifications/{id}/read` |
+| Live ticket updates and dashboard events | `WS /ws` |
+
+When a screen is built, change its **Status** to **Built** in this file.
