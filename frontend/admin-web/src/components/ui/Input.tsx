@@ -1,8 +1,8 @@
 import { useId } from 'react'
-import type { InputHTMLAttributes } from 'react'
+import type { ComponentProps } from 'react'
 import { cn } from './cn'
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends ComponentProps<'input'> {
   label?: string
   helper?: string
   error?: string
