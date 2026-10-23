@@ -30,22 +30,24 @@ src/
 
 ## Screens and API endpoints
 
-All endpoints are under `/api/v1` and are **proposed**, to be agreed with the backend team. The tenant is taken from the login token, so the client never sends a tenant id. A **Built** status means the real screen exists. **Placeholder** means the route exists but shows an empty page.
+All endpoints are under `/api/v1` and are **proposed**, to be agreed with the backend team. The tenant is taken from the login token, so the client never sends a tenant id. **Built** means the real screen exists. **Placeholder** means the route exists but shows an empty page. **Planned** means the route does not exist yet.
 
 ### Public and onboarding
 
-These routes are planned and not yet in the router.
+| Figma screen | Route | Status | Endpoints |
+|---|---|---|---|
+| Landing Page | `/` | Planned | `GET /plans` |
+| Company Registration | `/register` | Built | `POST /tenants/register` |
+| Email Verification | `/verify-email` | Built | `POST /tenants/verify-email` |
+| Sign up with Google, Connecting | `/signup/google` | Built | Handled by Asgardeo |
+| Login | `/login` | Placeholder | Handled by Asgardeo, then `GET /me` |
+| Sign in with Google, Connecting | `/signin/google` | Planned | Handled by Asgardeo |
+| Forgot / Reset Password | `/forgot-password`, `/reset-password` | Planned | Handled by Asgardeo |
+| Choose Plan | `/choose-plan` | Planned | `GET /plans` |
+| Payment | `/payment` | Planned | `POST /subscription/checkout` (PayHere sandbox) |
+| Onboarding Success | `/onboarding-success` | Planned | `POST /tenants/activate` |
 
-| Figma screen | Route | Endpoints |
-|---|---|---|
-| Landing Page | `/` | `GET /plans` |
-| Company Registration | `/register` | `POST /tenants/register` |
-| Email Verification | `/verify-email` | `POST /tenants/verify-email` |
-| Login, Sign in with Google | `/login` | Handled by Asgardeo, then `GET /me` |
-| Forgot / Reset Password | `/forgot-password`, `/reset-password` | Handled by Asgardeo |
-| Choose Plan | `/choose-plan` | `GET /plans` |
-| Payment | `/payment` | `POST /subscription/checkout` (PayHere sandbox) |
-| Onboarding Success | `/onboarding-success` | `POST /tenants/activate` |
+Registration uses a mock service (`src/services/registrationService.ts`). To see the error state, register with the email `taken@example.com`.
 
 ### Super Admin (`/super-admin`)
 
