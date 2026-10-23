@@ -52,7 +52,4 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/mobile/package-lock.json
       - run: npm ci
-      # The Expo template code still has type errors, so this step does not
-      # fail the build yet. Remove continue-on-error once they are fixed.
       - run: npx tsc --noEmit
-        continue-on-error: true
