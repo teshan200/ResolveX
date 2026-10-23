@@ -1,8 +1,11 @@
+import { useNavigate } from 'react-router-dom'
 import { Button, Stepper } from '../components/ui'
 import { RegisterForm } from '../features/registration/RegisterForm'
 import { AuthLayout } from '../layout/AuthLayout'
 
 export function RegisterPage() {
+  const navigate = useNavigate()
+
   return (
     <AuthLayout>
       <Stepper steps={['Account', 'Plan', 'Payment']} current={1} />
@@ -14,7 +17,12 @@ export function RegisterPage() {
         </p>
       </div>
 
-      <Button variant="outline" size="lg" className="w-full">
+      <Button
+        variant="outline"
+        size="lg"
+        className="w-full"
+        onClick={() => navigate('/signup/google')}
+      >
         <span className="font-bold">G</span>
         Sign up with Google
       </Button>
