@@ -26,3 +26,35 @@ export interface SlaSummary {
   breached: number
   paused: number
 }
+
+export type SlaTimelineKind =
+  | 'opened'
+  | 'assigned'
+  | 'claimed'
+  | 'warning'
+  | 'breached'
+  | 'escalated'
+  | 'paused'
+  | 'reopened'
+
+export interface SlaTimelineEvent {
+  id: string
+  complaintId: string
+  /** ISO timestamp. */
+  at: string
+  kind: SlaTimelineKind
+  title: string
+  actor: string
+  note?: string
+}
+
+/** A manual or rule-driven change recorded for audit purposes. */
+export interface SlaAuditEntry {
+  id: string
+  complaintId: string
+  /** ISO timestamp. */
+  at: string
+  actor: string
+  action: string
+  detail?: string
+}

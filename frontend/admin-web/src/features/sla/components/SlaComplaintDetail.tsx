@@ -3,8 +3,12 @@ import { Link } from 'react-router-dom'
 import { Card, PriorityBadge, StatusBadge } from '../../../components/ui'
 import { WARNING_THRESHOLD, formatDateTime, formatDuration, getSlaTiming } from '../sla'
 import type { SlaComplaint } from '../types'
+import { buildTimeline, getAuditEntries } from '../history'
+import { SlaAuditHistory } from './SlaAuditHistory'
+import { SlaBreachDetails } from './SlaBreachDetails'
 import { SlaCountdown } from './SlaCountdown'
 import { SlaStatusBadge } from './SlaStatusBadge'
+import { SlaTimeline } from './SlaTimeline'
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -75,6 +79,28 @@ export function SlaComplaintDetail({ complaint, nowMs }: { complaint: SlaComplai
               <Field label="Ticket status">{complaint.ticketStatus}</Field>
               <Field label="Assignee">{complaint.assignee ?? 'Unassigned'}</Field>
             </dl>
+          </Card>
+        </section>
+      </div>
+
+      <SlaBreachDetails complaint={complaint} nowMs={nowMs} />
+
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <section aria-labelledby="sla-timeline">
+          <Card className="flex flex-col gap-5">
+            <h2 id="sla-timeline" className="text-lg font-semibold">
+              SLA timeline
+            </h2>
+            <SlaTimeline events={buildTimeline(complaint, nowMs)} />
+          </Card>
+        </section>
+
+        <section aria-labelledby="audit-history">
+          <Card className="flex flex-col gap-5">
+            <h2 id="audit-history" className="text-lg font-semibold">
+              Audit history
+            </h2>
+            <SlaAuditHistory entries={getAuditEntries(complaint.id)} />
           </Card>
         </section>
       </div>

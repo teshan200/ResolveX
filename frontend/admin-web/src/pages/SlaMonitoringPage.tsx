@@ -1,7 +1,10 @@
 import { Card } from '../components/ui'
+import { SlaAuditHistory } from '../features/sla/components/SlaAuditHistory'
+import { SlaBreachList } from '../features/sla/components/SlaBreachList'
 import { SlaComplaintTable } from '../features/sla/components/SlaComplaintTable'
 import { SlaSummaryCards } from '../features/sla/components/SlaSummaryCards'
 import { SlaWatchlist } from '../features/sla/components/SlaWatchlist'
+import { getAuditEntries } from '../features/sla/history'
 import { slaComplaints } from '../features/sla/mocks'
 import { summarizeSla } from '../features/sla/sla'
 import { useMockNow } from '../features/sla/useMockNow'
@@ -55,9 +58,18 @@ export function SlaMonitoringPage() {
         <h2 id="sla-breaches" className="text-lg font-semibold">
           Breaches and history
         </h2>
-        <Card className="text-sm text-content-secondary">
-          Breach timeline and audit history arrive in a later increment.
-        </Card>
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+          <div className="flex flex-col gap-2">
+            <h3 className="text-sm font-medium text-content-secondary">Breached complaints</h3>
+            <SlaBreachList complaints={slaComplaints} nowMs={now} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <h3 className="text-sm font-medium text-content-secondary">Recent audit activity</h3>
+            <Card>
+              <SlaAuditHistory entries={getAuditEntries().slice(0, 6)} showComplaint />
+            </Card>
+          </div>
+        </div>
       </section>
     </div>
   )
