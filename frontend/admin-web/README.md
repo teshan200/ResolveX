@@ -43,11 +43,13 @@ All endpoints are under `/api/v1` and are **proposed**, to be agreed with the ba
 | Login | `/login` | Placeholder | Handled by Asgardeo, then `GET /me` |
 | Sign in with Google, Connecting | `/signin/google` | Planned | Handled by Asgardeo |
 | Forgot / Reset Password | `/forgot-password`, `/reset-password` | Planned | Handled by Asgardeo |
-| Choose Plan | `/choose-plan` | Planned | `GET /plans` |
-| Payment | `/payment` | Planned | `POST /subscription/checkout` (PayHere sandbox) |
-| Onboarding Success | `/onboarding-success` | Planned | `POST /tenants/activate` |
+| Choose Plan | `/choose-plan` | Built | `GET /plans` |
+| Payment | `/payment` | Built | `POST /subscription/checkout` (PayHere sandbox) |
+| Onboarding Success | `/onboarding-success` | Built | `POST /tenants/activate` |
 
 Registration uses a mock service (`src/services/registrationService.ts`). To see the error state, register with the email `taken@example.com`.
+
+The plan flow is Choose Plan (`/choose-plan`), Payment (`/payment`), then Onboarding Success. Plans and prices come from `src/services/planService.ts`, and the payment is a mock sandbox in `src/services/paymentService.ts`. In the Payment form, use the card `4242 4242 4242 4242` to succeed, or `4000 0000 0000 0002` to see a declined payment.
 
 ### Super Admin (`/super-admin`)
 
