@@ -4,6 +4,7 @@ import { AppLayout } from '../layout/AppLayout'
 import { areas } from '../layout/navigation'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
 import { GoogleSignupPage } from '../pages/GoogleSignupPage'
+import { LandingPage } from '../pages/LandingPage'
 import { LoginPage } from '../pages/LoginPage'
 import { OnboardingSuccessPage } from '../pages/OnboardingSuccessPage'
 import { PaymentPage } from '../pages/PaymentPage'
@@ -20,7 +21,7 @@ const builtPages: Record<string, ReactElement> = {
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
