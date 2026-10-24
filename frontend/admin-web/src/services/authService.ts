@@ -8,3 +8,8 @@ export async function requestPasswordReset(email: string): Promise<void> {
   await delay()
   console.info(`Mock: password reset link sent to ${email}`)
 }
+
+export async function resetPassword(password: string): Promise<void> {
+  void password
+  await delay()
+}

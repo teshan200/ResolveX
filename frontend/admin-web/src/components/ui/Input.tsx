@@ -33,9 +33,10 @@ export function Input({
       <div
         className={cn(
           'flex h-10 items-center gap-2 rounded-md border bg-surface px-3 text-content-tertiary',
-          'focus-within:border-line-focus focus-within:outline-2 focus-within:outline-line-focus/30',
           props.disabled && 'cursor-not-allowed bg-muted',
-          error ? 'border-danger-solid' : 'border-line',
+          error
+            ? 'border-danger-fg shadow-[inset_0_0_0_0.5px_var(--color-danger-fg),0_0_0_3px_rgba(220,38,38,0.25)]'
+            : 'border-line focus-within:border-line-focus focus-within:shadow-[inset_0_0_0_0.5px_var(--color-line-focus),0_0_0_3px_rgba(42,140,126,0.35)]',
         )}
       >
         {leadingIcon}
