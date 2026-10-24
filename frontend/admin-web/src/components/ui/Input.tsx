@@ -1,36 +1,56 @@
 import { useId } from 'react'
-import type { ComponentProps } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 import { cn } from './cn'
 
 interface InputProps extends ComponentProps<'input'> {
   label?: string
   helper?: string
   error?: string
+  leadingIcon?: ReactNode
+  trailing?: ReactNode
 }
 
-export function Input({ label, helper, error, className, id, ...props }: InputProps) {
+export function Input({
+  label,
+  helper,
+  error,
+  leadingIcon,
+  trailing,
+  className,
+  id,
+  ...props
+}: InputProps) {
   const generatedId = useId()
   const inputId = id ?? generatedId
 
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <label htmlFor={inputId} className="text-sm font-medium text-content">
+        <label htmlFor={inputId} className="text-[13px] leading-4.5 font-medium text-content">
           {label}
         </label>
       )}
-      <input
-        id={inputId}
-        aria-invalid={Boolean(error)}
+      <div
         className={cn(
-          'h-10 rounded-md border bg-surface px-3 text-sm text-content placeholder:text-content-tertiary',
-          'focus:border-line-focus focus:outline-2 focus:outline-line-focus/30',
-          'disabled:cursor-not-allowed disabled:bg-muted disabled:text-content-disabled',
+          'flex h-10 items-center gap-2 rounded-md border bg-surface px-3 text-content-tertiary',
+          'focus-within:border-line-focus focus-within:outline-2 focus-within:outline-line-focus/30',
+          props.disabled && 'cursor-not-allowed bg-muted',
           error ? 'border-danger-solid' : 'border-line',
-          className,
         )}
-        {...props}
-      />
+      >
+        {leadingIcon}
+        <input
+          id={inputId}
+          aria-invalid={Boolean(error)}
+          className={cn(
+            'min-w-0 flex-1 bg-transparent text-sm leading-5 text-content outline-none',
+            'placeholder:text-content-tertiary disabled:cursor-not-allowed disabled:text-content-disabled',
+            className,
+          )}
+          {...props}
+        />
+        {trailing}
+      </div>
       {(error || helper) && (
         <p className={cn('text-xs', error ? 'text-danger-fg' : 'text-content-tertiary')}>
           {error ?? helper}

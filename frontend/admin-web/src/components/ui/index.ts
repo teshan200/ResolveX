@@ -1,6 +1,8 @@
 export { Badge } from './Badge'
 export { Button } from './Button'
 export { Card } from './Card'
+export { Checkbox } from './Checkbox'
+export { GoogleButton } from './GoogleButton'
 export { Input } from './Input'
 export { Logo } from './Logo'
 export { Modal } from './Modal'
