@@ -1,4 +1,5 @@
 import { Card } from '../components/ui'
+import { SlaComplaintTable } from '../features/sla/components/SlaComplaintTable'
 import { SlaSummaryCards } from '../features/sla/components/SlaSummaryCards'
 import { SlaWatchlist } from '../features/sla/components/SlaWatchlist'
 import { slaComplaints } from '../features/sla/mocks'
@@ -47,9 +48,7 @@ export function SlaMonitoringPage() {
         <h2 id="sla-complaints" className="text-lg font-semibold">
           Complaint SLA table
         </h2>
-        <Card className="text-sm text-content-secondary">
-          Filterable complaint table arrives in a later increment.
-        </Card>
+        <SlaComplaintTable complaints={slaComplaints} nowMs={now} />
       </section>
 
       <section aria-labelledby="sla-breaches" className="flex flex-col gap-3">
