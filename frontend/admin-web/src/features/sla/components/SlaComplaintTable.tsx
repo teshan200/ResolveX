@@ -1,6 +1,8 @@
 import { useId, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Button, Card, Input, PriorityBadge } from '../../../components/ui'
 import { cn } from '../../../components/ui/cn'
+import { slaDetailPath } from '../sla'
 import {
   emptyFilters,
   hasActiveFilters,
@@ -160,7 +162,12 @@ export function SlaComplaintTable({ complaints, nowMs }: SlaComplaintTableProps)
               <tr key={complaint.id}>
                 <td className="max-w-64 px-4 py-3">
                   <p className="truncate font-medium">
-                    <span className="text-content-tertiary">{complaint.id}</span> {complaint.title}
+                    <Link
+                      to={slaDetailPath(complaint.id)}
+                      className="hover:text-content-link hover:underline focus-visible:outline-2 focus-visible:outline-line-focus"
+                    >
+                      <span className="text-content-tertiary">{complaint.id}</span> {complaint.title}
+                    </Link>
                   </p>
                   <p className="truncate text-xs text-content-secondary">{complaint.customer}</p>
                 </td>

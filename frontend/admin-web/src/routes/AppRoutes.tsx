@@ -9,6 +9,7 @@ import { OnboardingSuccessPage } from '../pages/OnboardingSuccessPage'
 import { PaymentPage } from '../pages/PaymentPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { RegisterPage } from '../pages/RegisterPage'
+import { SlaComplaintDetailPage } from '../pages/SlaComplaintDetailPage'
 import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
 import { VerifyEmailPage } from '../pages/VerifyEmailPage'
 
@@ -42,6 +43,9 @@ export function AppRoutes() {
               }
             />
           ))}
+          {area.basePath === '/tenant' && (
+            <Route path="sla-monitoring/:complaintId" element={<SlaComplaintDetailPage />} />
+          )}
         </Route>
       ))}
       <Route path="*" element={<Navigate to="/login" replace />} />
