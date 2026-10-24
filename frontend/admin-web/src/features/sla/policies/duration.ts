@@ -56,6 +56,12 @@ export function warnAtError(input: string): string | null {
   const match = /^(\d+)\s*%?$/.exec(text)
   if (!match) return 'Use a whole number, for example 80'
   const value = Number(match[1])
-  if (value < WARN_MIN || value > WARN_MAX) return `Must be between ${WARN_MIN}% and ${WARN_MAX}%`
+  if (value < WARN_MIN || value > WARN_MAX) return `Enter a value from ${WARN_MIN}% to ${WARN_MAX}%`
   return null
+}
+
+/** Numeric value of a warn-at field such as "80 %". Returns null when it is not a number. */
+export function parseWarnAt(input: string): number | null {
+  const match = /^(\d+)\s*%?$/.exec(input.trim())
+  return match ? Number(match[1]) : null
 }
