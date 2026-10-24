@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
-import { areas } from '../layout/navigation'
+import { areas, navItems } from '../layout/navigation'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage'
 import { GoogleSigninPage } from '../pages/GoogleSigninPage'
@@ -40,8 +40,8 @@ export function AppRoutes() {
       <Route path="/onboarding-success" element={<OnboardingSuccessPage />} />
       {areas.map((area) => (
         <Route key={area.basePath} path={area.basePath} element={<AppLayout area={area} />}>
-          <Route index element={<Navigate to={area.items[0].path} replace />} />
-          {area.items.map((item) => (
+          <Route index element={<Navigate to={navItems(area)[0].path} replace />} />
+          {navItems(area).map((item) => (
             <Route
               key={item.path}
               path={item.path}
