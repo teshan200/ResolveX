@@ -61,5 +61,44 @@ export const Spacing = {
   six: 64,
 } as const;
 
-export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
+export const Brand = {
+  bgBrand: '#155e54',
+  bgSurface: '#ffffff',
+  textOnBrand: '#ffffff',
+  bgCanvas: '#f5f7f7',
+  textPrimary: '#162120',
+  textSecondary: '#4e5d5b',
+  textTertiary: '#6b7b79',
+  textLink: '#1b7266',
+  borderDefault: '#dde4e3',
+  borderStrong: '#c3cdcc',
+  borderFocus: '#4aaa9c',
+  dangerFg: '#b91c1c',
+} as const;
+
+export const Ring = {
+  focus: 'rgba(42, 140, 126, 0.35)',
+  danger: 'rgba(220, 38, 38, 0.25)',
+} as const;
+
+export const Radius = {
+  xs: 4,
+  md: 8,
+  xl: 16,
+  xl2: 24,
+} as const;
+
+export const FigmaSpace = {
+  onePointFive: 6,
+  three: 12,
+  five: 20,
+} as const;
+
+export const InterFonts = {
+  regular: 'Inter_400Regular',
+  medium: 'Inter_500Medium',
+  semiBold: 'Inter_600SemiBold',
+} as const;
+
+export const BottomTabInset =Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;
