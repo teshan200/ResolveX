@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
 import { areas } from '../layout/navigation'
+import { ChoosePlanPage } from '../pages/ChoosePlanPage'
 import { GoogleSignupPage } from '../pages/GoogleSignupPage'
 import { LoginPage } from '../pages/LoginPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
@@ -15,6 +16,7 @@ export function AppRoutes() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route path="/signup/google" element={<GoogleSignupPage />} />
+      <Route path="/choose-plan" element={<ChoosePlanPage />} />
       {areas.map((area) => (
         <Route key={area.basePath} path={area.basePath} element={<AppLayout area={area} />}>
           <Route index element={<Navigate to={area.items[0].path} replace />} />
