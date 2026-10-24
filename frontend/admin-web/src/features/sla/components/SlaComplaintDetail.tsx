@@ -6,7 +6,7 @@ import type { SlaComplaint } from '../types'
 import { buildTimeline, getAuditEntries } from '../history'
 import { SlaAuditHistory } from './SlaAuditHistory'
 import { SlaBreachDetails } from './SlaBreachDetails'
-import { SlaCountdown } from './SlaCountdown'
+import { SlaPanel } from './SlaPanel'
 import { SlaStatusBadge } from './SlaStatusBadge'
 import { SlaTimeline } from './SlaTimeline'
 
@@ -47,13 +47,17 @@ export function SlaComplaintDetail({ complaint, nowMs }: { complaint: SlaComplai
       </header>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <section aria-labelledby="sla-timing">
+        <section aria-labelledby="sla-timing" className="flex flex-col gap-4">
+          <SlaPanel
+            label="Resolution SLA"
+            timing={timing}
+            caption={`Target ${formatDuration(due - opened)} · ${complaint.assignee ?? 'Unassigned'}`}
+          />
           <Card className="flex flex-col gap-5">
             <h2 id="sla-timing" className="text-lg font-semibold">
               SLA timing
             </h2>
-            <SlaCountdown timing={timing} />
-            <dl className="flex flex-col gap-3 border-t border-line pt-4">
+            <dl className="flex flex-col gap-3">
               <Field label="SLA target">{formatDuration(due - opened)}</Field>
               <Field label="Clock">{complaint.paused ? 'Paused' : 'Running'}</Field>
               <Field label="Opened">{formatDateTime(opened)}</Field>
