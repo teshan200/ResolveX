@@ -48,6 +48,21 @@ export function summarizeSla(complaints: SlaComplaint[], nowMs: number): SlaSumm
   return summary
 }
 
+/** Route for a complaint's SLA detail page. Ids look like "#1042"; the "#" is dropped from the URL. */
+export function slaDetailPath(complaintId: string): string {
+  return `/tenant/sla-monitoring/${complaintId.replace('#', '')}`
+}
+
+const dateTimeFormat = new Intl.DateTimeFormat('en-GB', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+  timeZone: 'Asia/Colombo',
+})
+
+export function formatDateTime(ms: number): string {
+  return dateTimeFormat.format(ms)
+}
+
 const MINUTE = 60_000
 const HOUR = 60 * MINUTE
 const DAY = 24 * HOUR

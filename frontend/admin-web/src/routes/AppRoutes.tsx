@@ -13,12 +13,15 @@ import { PaymentPage } from '../pages/PaymentPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { RegisterPage } from '../pages/RegisterPage'
+import { SlaComplaintDetailPage } from '../pages/SlaComplaintDetailPage'
 import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
+import { SlaPoliciesPage } from '../pages/SlaPoliciesPage'
 import { VerifyEmailPage } from '../pages/VerifyEmailPage'
 
 // Screens that have been built, keyed by full path. Anything else falls back to a placeholder.
 const builtPages: Record<string, ReactElement> = {
   '/tenant/sla-monitoring': <SlaMonitoringPage />,
+  '/tenant/sla-policies': <SlaPoliciesPage />,
 }
 
 export function AppRoutes() {
@@ -49,6 +52,9 @@ export function AppRoutes() {
               }
             />
           ))}
+          {area.basePath === '/tenant' && (
+            <Route path="sla-monitoring/:complaintId" element={<SlaComplaintDetailPage />} />
+          )}
         </Route>
       ))}
       <Route path="*" element={<Navigate to="/login" replace />} />
