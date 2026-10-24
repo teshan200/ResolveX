@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Button, Stepper } from '../components/ui'
+import { GoogleButton, Stepper } from '../components/ui'
 import { RegisterForm } from '../features/registration/RegisterForm'
 import { AuthLayout } from '../layout/AuthLayout'
 
@@ -17,15 +17,7 @@ export function RegisterPage() {
         </p>
       </div>
 
-      <Button
-        variant="outline"
-        size="lg"
-        className="w-full"
-        onClick={() => navigate('/signup/google')}
-      >
-        <span className="font-bold">G</span>
-        Sign up with Google
-      </Button>
+      <GoogleButton label="Sign up with Google" onClick={() => navigate('/signup/google')} />
 
       <div className="flex items-center gap-3 text-xs text-content-tertiary">
         <span className="h-px flex-1 bg-line" />

@@ -40,7 +40,10 @@ export function Button({
       className={cn(
         'inline-flex cursor-pointer items-center justify-center rounded-md font-medium transition-colors',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-focus',
-        'disabled:cursor-not-allowed disabled:opacity-50',
+        'disabled:cursor-not-allowed',
+        variant === 'primary' && !loading
+          ? 'disabled:bg-muted disabled:text-content-disabled'
+          : 'disabled:opacity-50',
         variants[variant],
         sizes[size],
         className,

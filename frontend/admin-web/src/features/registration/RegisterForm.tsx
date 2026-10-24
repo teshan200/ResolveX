@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { Button, Input } from '../../components/ui'
+import { Button, Checkbox, Input } from '../../components/ui'
 import { registerTenant } from '../../services/registrationService'
 import { getPasswordStrength, registerSchema } from './schema'
 import type { RegisterFormValues } from './schema'
@@ -65,14 +65,10 @@ export function RegisterForm() {
       />
 
       <div className="flex flex-col gap-1.5">
-        <label className="flex items-start gap-2 text-sm text-content-secondary">
-          <input
-            type="checkbox"
-            className="mt-0.5 size-4 accent-brand"
-            {...register('acceptTerms')}
-          />
-          <span>I agree to the Terms of Service and Privacy Policy</span>
-        </label>
+        <Checkbox
+          label="I agree to the Terms of Service and Privacy Policy"
+          {...register('acceptTerms')}
+        />
         {errors.acceptTerms && (
           <p className="text-xs text-danger-fg">{errors.acceptTerms.message}</p>
         )}
