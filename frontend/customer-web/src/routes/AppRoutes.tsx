@@ -1,11 +1,18 @@
+import type { ReactElement } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CustomerLayout } from '../layout/CustomerLayout'
+import { GuestFeedbackPage } from '../pages/GuestFeedbackPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
+import { SubmissionSuccessPage } from '../pages/SubmissionSuccessPage'
 
-// Route table for the public feedback app. Every screen is a placeholder until it is built.
-const screens: Array<{ path: string; title: string }> = [
-  { path: 'feedback/:qrId', title: 'Guest Feedback' },
-  { path: 'feedback/:qrId/success', title: 'Submission Success' },
+// Route table for the public feedback app. Screens that are not built yet fall back to a placeholder.
+const screens: Array<{ path: string; title: string; element?: ReactElement }> = [
+  { path: 'feedback/:qrId', title: 'Guest Feedback', element: <GuestFeedbackPage /> },
+  {
+    path: 'feedback/:qrId/success',
+    title: 'Submission Success',
+    element: <SubmissionSuccessPage />,
+  },
   { path: 'track', title: 'Track Your Case' },
   { path: 'track/:caseId', title: 'Case Detail' },
   { path: 'survey/:caseId', title: 'Post-Resolution Survey' },
@@ -22,7 +29,11 @@ export function AppRoutes() {
       <Route element={<CustomerLayout />}>
         <Route path="/" element={<Navigate to="/feedback/QR-12" replace />} />
         {screens.map((screen) => (
-          <Route key={screen.path} path={screen.path} element={<PlaceholderPage title={screen.title} />} />
+          <Route
+            key={screen.path}
+            path={screen.path}
+            element={screen.element ?? <PlaceholderPage title={screen.title} />}
+          />
         ))}
         <Route path="*" element={<Navigate to="/invalid-qr" replace />} />
       </Route>

@@ -8,7 +8,7 @@ export function CustomerLayout() {
   return (
     <div className="min-h-screen bg-muted">
       <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col bg-canvas sm:border-x sm:border-line">
-        <CustomerHeader {...mockBranding} />
+        <CustomerHeader restaurant={mockBranding.restaurant} location={mockBranding.location} />
         <main className="flex flex-1 flex-col">
           <Outlet />
         </main>

@@ -1,7 +1,10 @@
 import { MapPinIcon, ShieldCheckIcon, UtensilsIcon } from '../components/icons'
 import type { TenantBranding } from '../mocks/branding'
 
-export function CustomerHeader({ restaurant, location }: TenantBranding) {
+export function CustomerHeader({
+  restaurant,
+  location,
+}: Pick<TenantBranding, 'restaurant' | 'location'>) {
   return (
     <header className="flex items-center gap-3 border-b border-line-subtle bg-surface p-4">
       <div className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-brand-muted text-content-brand">
