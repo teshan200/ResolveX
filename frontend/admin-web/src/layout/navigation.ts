@@ -33,7 +33,6 @@ export const tenantAdminArea: NavArea = {
     { label: 'Hierarchy', path: 'hierarchy' },
     { label: 'Feedback Forms', path: 'feedback-forms' },
     { label: 'QR Codes', path: 'qr-codes' },
-    { label: 'SLA Monitoring', path: 'sla-monitoring' },
     { label: 'SLA Policies', path: 'sla-policies' },
     { label: 'Analytics', path: 'analytics' },
     { label: 'Reports', path: 'reports' },
