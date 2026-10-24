@@ -1,4 +1,4 @@
-import type { SlaComplaint, SlaSummary } from './types'
+import type { SlaComplaint } from './types'
 
 // Mock data only: no backend is connected. Timestamps are fixed so the
 // screens render the same way on every load.
@@ -14,7 +14,6 @@ export const slaComplaints: SlaComplaint[] = [
     assignee: 'Kasun Fernando',
     openedAt: '2026-10-23T09:15:00+05:30',
     dueAt: '2026-10-24T09:15:00+05:30',
-    slaStatus: 'Warning',
   },
   {
     id: '#1043',
@@ -27,7 +26,6 @@ export const slaComplaints: SlaComplaint[] = [
     assignee: 'Dilini Jayawardena',
     openedAt: '2026-10-23T12:40:00+05:30',
     dueAt: '2026-10-25T12:40:00+05:30',
-    slaStatus: 'On Track',
   },
   {
     id: '#1044',
@@ -40,7 +38,6 @@ export const slaComplaints: SlaComplaint[] = [
     assignee: 'Tharindu Gunasekara',
     openedAt: '2026-10-22T19:05:00+05:30',
     dueAt: '2026-10-23T07:05:00+05:30',
-    slaStatus: 'Breached',
   },
   {
     id: '#1045',
@@ -53,7 +50,6 @@ export const slaComplaints: SlaComplaint[] = [
     assignee: null,
     openedAt: '2026-10-24T08:30:00+05:30',
     dueAt: '2026-10-27T08:30:00+05:30',
-    slaStatus: 'On Track',
   },
   {
     id: '#1046',
@@ -66,7 +62,6 @@ export const slaComplaints: SlaComplaint[] = [
     assignee: 'Chamara Bandara',
     openedAt: '2026-10-23T20:10:00+05:30',
     dueAt: '2026-10-24T14:10:00+05:30',
-    slaStatus: 'Warning',
   },
   {
     id: '#1047',
@@ -79,7 +74,6 @@ export const slaComplaints: SlaComplaint[] = [
     assignee: 'Dilini Jayawardena',
     openedAt: '2026-10-21T13:00:00+05:30',
     dueAt: '2026-10-23T13:00:00+05:30',
-    slaStatus: 'Breached',
   },
   {
     id: '#1048',
@@ -92,7 +86,6 @@ export const slaComplaints: SlaComplaint[] = [
     assignee: 'Kasun Fernando',
     openedAt: '2026-10-24T07:50:00+05:30',
     dueAt: '2026-10-24T19:50:00+05:30',
-    slaStatus: 'On Track',
   },
   {
     id: '#1049',
@@ -105,7 +98,7 @@ export const slaComplaints: SlaComplaint[] = [
     assignee: 'Nuwan Pathirana',
     openedAt: '2026-10-23T17:25:00+05:30',
     dueAt: '2026-10-25T17:25:00+05:30',
-    slaStatus: 'Paused',
+    paused: true,
   },
   {
     id: '#1050',
@@ -118,7 +111,6 @@ export const slaComplaints: SlaComplaint[] = [
     assignee: 'Chamara Bandara',
     openedAt: '2026-10-22T11:00:00+05:30',
     dueAt: '2026-10-25T11:00:00+05:30',
-    slaStatus: 'On Track',
   },
   {
     id: '#1051',
@@ -131,18 +123,5 @@ export const slaComplaints: SlaComplaint[] = [
     assignee: 'Tharindu Gunasekara',
     openedAt: '2026-10-23T15:45:00+05:30',
     dueAt: '2026-10-24T11:45:00+05:30',
-    slaStatus: 'Warning',
   },
 ]
-
-export function summarizeSla(complaints: SlaComplaint[]): SlaSummary {
-  const count = (s: SlaComplaint['slaStatus']) =>
-    complaints.filter((c) => c.slaStatus === s).length
-  return {
-    total: complaints.length,
-    onTrack: count('On Track'),
-    warning: count('Warning'),
-    breached: count('Breached'),
-    paused: count('Paused'),
-  }
-}

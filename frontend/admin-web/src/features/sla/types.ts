@@ -15,7 +15,8 @@ export interface SlaComplaint {
   openedAt: string
   /** ISO timestamp by which the complaint must be resolved. */
   dueAt: string
-  slaStatus: SlaStatus
+  /** True while the SLA clock is paused (for example, awaiting the customer). */
+  paused?: boolean
 }
 
 export interface SlaSummary {
