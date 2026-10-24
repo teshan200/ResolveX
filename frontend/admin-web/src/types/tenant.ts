@@ -1,5 +1,7 @@
 export interface RegisterTenantRequest {
   companyName: string
+  adminName: string
+  phone: string
   email: string
   password: string
 }

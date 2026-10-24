@@ -1,5 +1,4 @@
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { Card } from '../components/ui'
 import { OrderSummary } from '../features/payment/OrderSummary'
 import { PaymentForm } from '../features/payment/PaymentForm'
 import { OnboardingLayout } from '../layout/OnboardingLayout'
@@ -21,28 +20,22 @@ export function PaymentPage() {
 
   return (
     <OnboardingLayout step={3}>
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold">Complete your setup</h1>
-        <p className="text-content-secondary">
+      <div className="mx-auto flex max-w-131.25 flex-col items-center gap-2 text-center">
+        <h1 className="text-3xl leading-9.5 font-semibold tracking-[-0.3px]">
+          Complete your setup
+        </h1>
+        <p className="text-base leading-6 text-content-secondary">
           Start your 14-day free trial of {plan.name}. You won’t be charged today.
         </p>
       </div>
 
-      <div className="grid items-start gap-6 lg:grid-cols-[1fr_380px]">
-        <div className="flex flex-col gap-4">
-          <div className="rounded-lg border border-warning-border bg-warning-bg p-4 text-sm text-warning-fg">
-            <p className="font-semibold">Sandbox mode</p>
-            <p>Test gateway — no real charges. Use card 4242 4242 4242 4242.</p>
-          </div>
-          <Card>
-            <PaymentForm
-              planId={state.planId}
-              outlets={state.outlets}
-              onBack={() => navigate('/choose-plan')}
-              onSuccess={() => navigate('/onboarding-success', { state })}
-            />
-          </Card>
-        </div>
+      <div className="mx-auto grid w-full max-w-266 items-start gap-6 lg:grid-cols-[620px_420px]">
+        <PaymentForm
+          planId={state.planId}
+          outlets={state.outlets}
+          onBack={() => navigate('/choose-plan')}
+          onSuccess={() => navigate('/onboarding-success', { state })}
+        />
         <OrderSummary plan={plan} outlets={state.outlets} />
       </div>
     </OnboardingLayout>

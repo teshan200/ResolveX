@@ -2,6 +2,11 @@ import { z } from 'zod'
 
 export const registerSchema = z.object({
   companyName: z.string().trim().min(2, 'Enter your company name'),
+  adminName: z.string().trim().min(2, 'Enter your full name'),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\+?[0-9 ]{9,15}$/, 'Enter a valid phone number, e.g. +94 77 123 4567'),
   email: z.string().trim().min(1, 'Enter your work email').email('Enter a valid email'),
   password: z
     .string()

@@ -3,11 +3,15 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
 import { areas } from '../layout/navigation'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
+import { ForgotPasswordPage } from '../pages/ForgotPasswordPage'
+import { GoogleSigninPage } from '../pages/GoogleSigninPage'
 import { GoogleSignupPage } from '../pages/GoogleSignupPage'
+import { LandingPage } from '../pages/LandingPage'
 import { LoginPage } from '../pages/LoginPage'
 import { OnboardingSuccessPage } from '../pages/OnboardingSuccessPage'
 import { PaymentPage } from '../pages/PaymentPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
+import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { RegisterPage } from '../pages/RegisterPage'
 import { SlaComplaintDetailPage } from '../pages/SlaComplaintDetailPage'
 import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
@@ -23,11 +27,14 @@ const builtPages: Record<string, ReactElement> = {
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route path="/signup/google" element={<GoogleSignupPage />} />
+      <Route path="/signin/google" element={<GoogleSigninPage />} />
       <Route path="/choose-plan" element={<ChoosePlanPage />} />
       <Route path="/payment" element={<PaymentPage />} />
       <Route path="/onboarding-success" element={<OnboardingSuccessPage />} />

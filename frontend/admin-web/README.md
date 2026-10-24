@@ -36,13 +36,13 @@ All endpoints are under `/api/v1` and are **proposed**, to be agreed with the ba
 
 | Figma screen | Route | Status | Endpoints |
 |---|---|---|---|
-| Landing Page | `/` | Planned | `GET /plans` |
+| Landing Page | `/` | Built | `GET /plans` |
 | Company Registration | `/register` | Built | `POST /tenants/register` |
 | Email Verification | `/verify-email` | Built | `POST /tenants/verify-email` |
 | Sign up with Google, Connecting | `/signup/google` | Built | Handled by Asgardeo |
-| Login | `/login` | Placeholder | Handled by Asgardeo, then `GET /me` |
-| Sign in with Google, Connecting | `/signin/google` | Planned | Handled by Asgardeo |
-| Forgot / Reset Password | `/forgot-password`, `/reset-password` | Planned | Handled by Asgardeo |
+| Login | `/login` | Built | Handled by Asgardeo, then `GET /me` |
+| Sign in with Google, Connecting | `/signin/google` | Built | Handled by Asgardeo |
+| Forgot / Reset Password | `/forgot-password`, `/reset-password` | Built | Handled by Asgardeo |
 | Choose Plan | `/choose-plan` | Built | `GET /plans` |
 | Payment | `/payment` | Built | `POST /subscription/checkout` (PayHere sandbox) |
 | Onboarding Success | `/onboarding-success` | Built | `POST /tenants/activate` |
