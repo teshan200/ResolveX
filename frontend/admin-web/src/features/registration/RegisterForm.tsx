@@ -1,18 +1,13 @@
-import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ArrowRight } from 'lucide-react'
+import { useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button, Checkbox, Input } from '../../components/ui'
 import { registerTenant } from '../../services/registrationService'
+import { PasswordStrength } from './PasswordStrength'
 import { getPasswordStrength, registerSchema } from './schema'
 import type { RegisterFormValues } from './schema'
-
-const passwordHints = {
-  empty: 'Use 8+ characters with upper and lower case letters and a number',
-  weak: 'Use 8+ characters with upper and lower case letters and a number',
-  strong: 'Strong password · add a symbol to make it excellent',
-  excellent: 'Excellent password',
-}
 
 export function RegisterForm() {
   const navigate = useNavigate()
@@ -25,7 +20,14 @@ export function RegisterForm() {
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { companyName: '', email: '', password: '', acceptTerms: false },
+    defaultValues: {
+      companyName: '',
+      adminName: '',
+      phone: '',
+      email: '',
+      password: '',
+      acceptTerms: false,
+    },
   })
 
   const strength = getPasswordStrength(useWatch({ control, name: 'password' }))
@@ -41,37 +43,54 @@ export function RegisterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
-      <Input
-        label="Company name"
-        placeholder="Spice Garden Holdings"
-        error={errors.companyName?.message}
-        {...register('companyName')}
-      />
-      <Input
-        label="Work email"
-        type="email"
-        placeholder="marcus@spicegarden.lk"
-        error={errors.email?.message}
-        {...register('email')}
-      />
-      <Input
-        label="Password"
-        type="password"
-        placeholder="••••••••••••"
-        helper={passwordHints[strength]}
-        error={errors.password?.message}
-        {...register('password')}
-      />
-
-      <div className="flex flex-col gap-1.5">
-        <Checkbox
-          label="I agree to the Terms of Service and Privacy Policy"
-          {...register('acceptTerms')}
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4">
+        <Input
+          label="Company name"
+          placeholder="Spice Garden Holdings"
+          error={errors.companyName?.message}
+          {...register('companyName')}
         />
-        {errors.acceptTerms && (
-          <p className="text-xs text-danger-fg">{errors.acceptTerms.message}</p>
-        )}
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label="Admin full name"
+            placeholder="Marcus Vance"
+            error={errors.adminName?.message}
+            {...register('adminName')}
+          />
+          <Input
+            label="Phone"
+            type="tel"
+            placeholder="+94 77 123 4567"
+            error={errors.phone?.message}
+            {...register('phone')}
+          />
+        </div>
+        <Input
+          label="Work email"
+          type="email"
+          placeholder="marcus@spicegarden.lk"
+          error={errors.email?.message}
+          {...register('email')}
+        />
+        <Input
+          label="Password"
+          type="password"
+          placeholder="••••••••••••"
+          error={errors.password?.message}
+          {...register('password')}
+        />
+        <PasswordStrength strength={strength} />
+
+        <div className="flex flex-col gap-1.5">
+          <Checkbox
+            label="I agree to the Terms of Service and Privacy Policy"
+            {...register('acceptTerms')}
+          />
+          {errors.acceptTerms && (
+            <p className="text-xs text-danger-fg">{errors.acceptTerms.message}</p>
+          )}
+        </div>
       </div>
 
       {serverError && (
@@ -80,13 +99,14 @@ export function RegisterForm() {
         </p>
       )}
 
-      <Button type="submit" size="lg" loading={isSubmitting}>
+      <Button type="submit" size="lg" className="w-full" loading={isSubmitting}>
         Create account
+        <ArrowRight size={20} />
       </Button>
 
-      <p className="text-center text-sm text-content-secondary">
-        Already have an account?{' '}
-        <Link to="/login" className="font-medium text-content-link hover:underline">
+      <p className="flex gap-1 text-[13px] leading-4.5 text-content-secondary">
+        Already have an account?
+        <Link to="/login" className="font-semibold text-content-link hover:underline">
           Log in
         </Link>
       </p>
