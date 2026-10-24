@@ -4,6 +4,7 @@ import { areas } from '../layout/navigation'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
 import { GoogleSignupPage } from '../pages/GoogleSignupPage'
 import { LoginPage } from '../pages/LoginPage'
+import { OnboardingSuccessPage } from '../pages/OnboardingSuccessPage'
 import { PaymentPage } from '../pages/PaymentPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { RegisterPage } from '../pages/RegisterPage'
@@ -19,6 +20,7 @@ export function AppRoutes() {
       <Route path="/signup/google" element={<GoogleSignupPage />} />
       <Route path="/choose-plan" element={<ChoosePlanPage />} />
       <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/onboarding-success" element={<OnboardingSuccessPage />} />
       {areas.map((area) => (
         <Route key={area.basePath} path={area.basePath} element={<AppLayout area={area} />}>
           <Route index element={<Navigate to={area.items[0].path} replace />} />
