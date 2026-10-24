@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
 import { areas } from '../layout/navigation'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
+import { ForgotPasswordPage } from '../pages/ForgotPasswordPage'
 import { GoogleSigninPage } from '../pages/GoogleSigninPage'
 import { GoogleSignupPage } from '../pages/GoogleSignupPage'
 import { LandingPage } from '../pages/LandingPage'
@@ -24,6 +25,7 @@ export function AppRoutes() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route path="/signup/google" element={<GoogleSignupPage />} />
