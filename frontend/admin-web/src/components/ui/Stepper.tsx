@@ -4,9 +4,11 @@ import { cn } from './cn'
 interface StepperProps {
   steps: string[]
   current: number
+  // Longer connectors, used in the onboarding header.
+  wide?: boolean
 }
 
-export function Stepper({ steps, current }: StepperProps) {
+export function Stepper({ steps, current, wide = false }: StepperProps) {
   return (
     <ol className="flex items-center gap-2">
       {steps.map((label, index) => {
@@ -36,7 +38,12 @@ export function Stepper({ steps, current }: StepperProps) {
                 {label}
               </span>
             </span>
-            {number < steps.length && <span aria-hidden className="h-0.5 w-6 bg-line" />}
+            {number < steps.length && (
+              <span
+                aria-hidden
+                className={cn('h-0.5', wide ? 'w-10' : 'w-6', done ? 'bg-brand' : 'bg-line')}
+              />
+            )}
           </li>
         )
       })}
