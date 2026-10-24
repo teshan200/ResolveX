@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
 import { areas } from '../layout/navigation'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
+import { EscalatedToMePage } from '../pages/EscalatedToMePage'
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage'
 import { GoogleSigninPage } from '../pages/GoogleSigninPage'
 import { GoogleSignupPage } from '../pages/GoogleSignupPage'
@@ -20,6 +21,7 @@ import { VerifyEmailPage } from '../pages/VerifyEmailPage'
 
 // Screens that have been built, keyed by full path. Anything else falls back to a placeholder.
 const builtPages: Record<string, ReactElement> = {
+  '/tenant/escalated': <EscalatedToMePage />,
   '/tenant/sla-monitoring': <SlaMonitoringPage />,
   '/tenant/sla-policies': <SlaPoliciesPage />,
 }
