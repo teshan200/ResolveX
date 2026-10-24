@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
 import { areas } from '../layout/navigation'
@@ -5,7 +6,13 @@ import { GoogleSignupPage } from '../pages/GoogleSignupPage'
 import { LoginPage } from '../pages/LoginPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { RegisterPage } from '../pages/RegisterPage'
+import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
 import { VerifyEmailPage } from '../pages/VerifyEmailPage'
+
+// Screens that have been built, keyed by full path. Anything else falls back to a placeholder.
+const builtPages: Record<string, ReactElement> = {
+  '/tenant/sla-monitoring': <SlaMonitoringPage />,
+}
 
 export function AppRoutes() {
   return (
@@ -22,7 +29,11 @@ export function AppRoutes() {
             <Route
               key={item.path}
               path={item.path}
-              element={<PlaceholderPage title={item.label} />}
+              element={
+                builtPages[`${area.basePath}/${item.path}`] ?? (
+                  <PlaceholderPage title={item.label} />
+                )
+              }
             />
           ))}
         </Route>
