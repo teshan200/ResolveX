@@ -56,3 +56,8 @@ export function initials(name: string): string {
     .slice(0, 2)
     .toUpperCase()
 }
+
+/** Route for an escalation's detail page. Ids look like "#1055"; the "#" is dropped from the URL. */
+export function escalationDetailPath(id: string): string {
+  return `/tenant/escalated/${id.replace('#', '')}`
+}

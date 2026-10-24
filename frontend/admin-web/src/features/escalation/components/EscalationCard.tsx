@@ -1,24 +1,12 @@
-import { ChevronRight, CircleArrowUp, CircleDot, Sparkles, UserCheck } from 'lucide-react'
+import { ChevronRight, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { PriorityBadge, SlaTimer } from '../../../components/ui'
 import { cn } from '../../../components/ui/cn'
-import { formatSince, initials } from '../escalations'
+import { hasEscalationDetail } from '../detail'
+import { escalationDetailPath, formatSince, initials } from '../escalations'
 import type { Escalation } from '../types'
-
-/** Small (20px) status pill used in the Figma escalation list. */
-function SmallStatusPill({ style, icon: Icon, children }: { style: string; icon: typeof CircleDot; children: ReactNode }) {
-  return (
-    <span
-      className={cn(
-        'flex h-5 shrink-0 items-center gap-1 rounded-full px-2 text-xs leading-4 font-semibold whitespace-nowrap',
-        style,
-      )}
-    >
-      <Icon size={12} aria-hidden />
-      {children}
-    </span>
-  )
-}
+import { AiEscalatedPill, EscalatedPill, EscalationStatePill } from './EscalationBadges'
 
 function MetaItem({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -36,7 +24,7 @@ const valueText = 'text-sm leading-5 font-medium whitespace-nowrap'
 export function EscalationCard({ escalation: e }: { escalation: Escalation }) {
   const awaiting = e.state === 'awaiting'
 
-  return (
+  const card = (
     <article
       className={cn(
         'flex flex-col gap-3 rounded-xl bg-surface px-5 py-4',
@@ -46,23 +34,10 @@ export function EscalationCard({ escalation: e }: { escalation: Escalation }) {
       <div className="flex items-center gap-3">
         <p className="shrink-0 font-mono text-[13px] leading-5 font-medium text-content-tertiary">{e.id}</p>
         <h2 className="min-w-0 flex-1 truncate text-base leading-6 font-semibold">{e.title}</h2>
-        <span className="flex shrink-0 items-center gap-1 rounded-full border border-line-brand bg-brand-subtle px-2 py-0.5 text-xs leading-4 font-semibold whitespace-nowrap text-content-brand">
-          <Sparkles size={12} aria-hidden />
-          AI escalated
-        </span>
+        <AiEscalatedPill />
         <PriorityBadge priority={e.priority} />
-        <SmallStatusPill style="bg-status-escalated-bg text-status-escalated-fg" icon={CircleArrowUp}>
-          Escalated
-        </SmallStatusPill>
-        {awaiting ? (
-          <SmallStatusPill style="bg-status-new-bg text-status-new-fg" icon={CircleDot}>
-            Awaiting acknowledgement
-          </SmallStatusPill>
-        ) : (
-          <SmallStatusPill style="bg-status-claimed-bg text-status-claimed-fg" icon={UserCheck}>
-            Acknowledged
-          </SmallStatusPill>
-        )}
+        <EscalatedPill />
+        <EscalationStatePill state={e.state} />
         <ChevronRight size={18} className="shrink-0 text-content-secondary" aria-hidden />
       </div>
 
@@ -93,5 +68,17 @@ export function EscalationCard({ escalation: e }: { escalation: Escalation }) {
         </p>
       </div>
     </article>
+  )
+
+  // Only escalations that have a detail screen in the design are clickable.
+  if (!hasEscalationDetail(e.id)) return card
+  return (
+    <Link
+      to={escalationDetailPath(e.id)}
+      aria-label={`Open escalation ${e.id}: ${e.title}`}
+      className="block rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-focus"
+    >
+      {card}
+    </Link>
   )
 }

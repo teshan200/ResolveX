@@ -4,6 +4,7 @@ import { AppLayout } from '../layout/AppLayout'
 import { areas, navItems } from '../layout/navigation'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
 import { EscalatedToMePage } from '../pages/EscalatedToMePage'
+import { EscalationDetailPage } from '../pages/EscalationDetailPage'
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage'
 import { GoogleSigninPage } from '../pages/GoogleSigninPage'
 import { GoogleSignupPage } from '../pages/GoogleSignupPage'
@@ -55,7 +56,10 @@ export function AppRoutes() {
             />
           ))}
           {area.basePath === '/tenant' && (
-            <Route path="sla-monitoring/:complaintId" element={<SlaComplaintDetailPage />} />
+            <>
+              <Route path="escalated/:escalationId" element={<EscalationDetailPage />} />
+              <Route path="sla-monitoring/:complaintId" element={<SlaComplaintDetailPage />} />
+            </>
           )}
         </Route>
       ))}
