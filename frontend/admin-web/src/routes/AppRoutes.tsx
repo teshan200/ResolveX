@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
 import { areas, navItems } from '../layout/navigation'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
+import { CompaniesPage } from '../pages/CompaniesPage'
 import { EscalatedToMePage } from '../pages/EscalatedToMePage'
 import { EscalationDetailPage } from '../pages/EscalationDetailPage'
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage'
@@ -18,10 +19,12 @@ import { RegisterPage } from '../pages/RegisterPage'
 import { SlaComplaintDetailPage } from '../pages/SlaComplaintDetailPage'
 import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
 import { SlaPoliciesPage } from '../pages/SlaPoliciesPage'
+import { TenantDetailPage } from '../pages/TenantDetailPage'
 import { VerifyEmailPage } from '../pages/VerifyEmailPage'
 
 // Screens that have been built, keyed by full path. Anything else falls back to a placeholder.
 const builtPages: Record<string, ReactElement> = {
+  '/super-admin/companies': <CompaniesPage />,
   '/tenant/escalated': <EscalatedToMePage />,
   '/tenant/sla-monitoring': <SlaMonitoringPage />,
   '/tenant/sla-policies': <SlaPoliciesPage />,
@@ -55,6 +58,9 @@ export function AppRoutes() {
               }
             />
           ))}
+          {area.basePath === '/super-admin' && (
+            <Route path="companies/:companyId" element={<TenantDetailPage />} />
+          )}
           {area.basePath === '/tenant' && (
             <>
               <Route path="escalated/:escalationId" element={<EscalationDetailPage />} />
