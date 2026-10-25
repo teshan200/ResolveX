@@ -5,6 +5,8 @@ import {
   branchTotals,
   branches as seedBranches,
   defaultBranchDetail,
+  employeePageCount,
+  employeeTotals,
   employees as seedEmployees,
   hierarchy as seedHierarchy,
 } from '../features/org/mocks'
@@ -180,6 +182,8 @@ export async function setBranchStatus(id: string, status: ActiveStatus): Promise
 
 // --------------------------------------------------------------- Employees
 
+export type EmployeeSortKey = 'name' | 'level' | 'lastActive'
+
 export interface EmployeeFilter {
   search?: string
   /** A branch id, or 'All'. A Branch Manager's list is always scoped to their own branch. */
@@ -188,6 +192,7 @@ export interface EmployeeFilter {
   /** Hierarchy level number, or 'All'. */
   level?: number | 'All'
   status?: ActiveStatus | 'All'
+  sort?: { key: EmployeeSortKey; direction: 'asc' | 'desc' }
   page?: number
   pageSize?: number
 }
@@ -195,11 +200,13 @@ export interface EmployeeFilter {
 export interface EmployeeRow extends Employee {
   /** Null when the designation is not in the hierarchy. */
   level: number | null
+  branchName: string
 }
 
 export interface EmployeeList {
   items: EmployeeRow[]
   total: number
+  pageCount: number
   counts: { all: number; active: number; inactive: number }
   /** Employees whose designation is no longer in the hierarchy. They are flagged, not changed. */
   needsDesignation: EmployeeRow[]
@@ -207,13 +214,45 @@ export interface EmployeeList {
 
 const withLevel = (e: Employee): EmployeeRow => ({
   ...e,
-  level: e.designation === BRANCH_MANAGER_DESIGNATION ? hierarchyStore.levels.find((l) => l.name === BRANCH_MANAGER_DESIGNATION)?.level ?? null : levelOf(e.designation),
+  level:
+    e.designation === BRANCH_MANAGER_DESIGNATION
+      ? (hierarchyStore.levels.find((l) => l.name === BRANCH_MANAGER_DESIGNATION)?.level ?? null)
+      : levelOf(e.designation),
+  branchName: branchStore.find((b) => b.id === e.branchId)?.name ?? '',
 })
+
+/** Rough "minutes ago" of a last-active label. Only used to sort the column. */
+function minutesAgo(label: string): number {
+  if (label === 'Now' || label.startsWith('Invited')) return 0
+  const minutes = label.match(/^(\d+) min ago$/)
+  if (minutes) return Number(minutes[1])
+  const hours = label.match(/^(\d+) h ago$/)
+  if (hours) return Number(hours[1]) * 60
+  if (label.startsWith('Today')) return 12 * 60
+  if (label === 'Yesterday') return 24 * 60
+  return 10_000
+}
+
+const employeeCounts = (list: Employee[]) => ({
+  all: list.length,
+  active: list.filter((e) => e.status === 'Active').length,
+  inactive: list.filter((e) => e.status === 'Inactive').length,
+})
+
+const seedEmployeeCounts = employeeCounts(seedEmployees)
 
 export async function listEmployees(filter: EmployeeFilter = {}): Promise<EmployeeList> {
   await delay()
   const query = filter.search?.trim().toLowerCase() ?? ''
-  const { page = 1, pageSize = 9, branchId = 'All', designation = 'All', level = 'All', status = 'All' } = filter
+  const {
+    page = 1,
+    pageSize = 9,
+    branchId = 'All',
+    designation = 'All',
+    level = 'All',
+    status = 'All',
+    sort,
+  } = filter
 
   const scoped = employeeStore.filter((e) => branchId === 'All' || e.branchId === branchId).map(withLevel)
   const matched = scoped.filter((e) => {
@@ -224,14 +263,31 @@ export async function listEmployees(filter: EmployeeFilter = {}): Promise<Employ
     return true
   })
 
+  if (sort) {
+    const direction = sort.direction === 'asc' ? 1 : -1
+    const value = (e: EmployeeRow) =>
+      sort.key === 'name' ? e.name.toLowerCase() : sort.key === 'level' ? (e.level ?? 0) : minutesAgo(e.lastActive)
+    matched.sort((x, y) => (value(x) < value(y) ? -1 : value(x) > value(y) ? 1 : 0) * direction)
+  }
+
+  // The sample data holds a few rows, but the screen reports the whole company (486 employees).
+  // Totals start from the Figma figures and follow any change made to the sample rows.
+  const now = employeeCounts(employeeStore)
+  const counts = {
+    all: employeeTotals.all + now.all - seedEmployeeCounts.all,
+    active: employeeTotals.active + now.active - seedEmployeeCounts.active,
+    inactive: employeeTotals.inactive + now.inactive - seedEmployeeCounts.inactive,
+  }
+  const unfiltered = !query && branchId === 'All' && designation === 'All' && level === 'All'
+  const statusTotal = { All: counts.all, Active: counts.active, Inactive: counts.inactive }
+  const total = unfiltered ? statusTotal[status] : matched.length
+  const pageCount = unfiltered && status === 'All' ? employeePageCount : Math.max(1, Math.ceil(total / pageSize))
+
   return {
     items: matched.slice((page - 1) * pageSize, page * pageSize),
-    total: matched.length,
-    counts: {
-      all: scoped.length,
-      active: scoped.filter((e) => e.status === 'Active').length,
-      inactive: scoped.filter((e) => e.status === 'Inactive').length,
-    },
+    total,
+    pageCount,
+    counts,
     needsDesignation: scoped.filter((e) => e.level === null),
   }
 }
@@ -243,15 +299,45 @@ export async function getEmployee(id: string): Promise<EmployeeRow> {
   return withLevel(employee)
 }
 
-/**
- * Designations offered when adding or editing. Only designations placed in the hierarchy are offered,
- * and Branch Manager is left out because it is assigned from Edit employee.
- * An empty list is the "No designations" state.
- */
-export async function listEligibleDesignations(): Promise<string[]> {
-  await delay(150)
-  return placedDesignations(hierarchyStore)
+/** Branch ids and names for the Branch dropdown ("Choose from your company's branches"). */
+export interface BranchOption {
+  id: string
+  name: string
+  managerId: string | null
+  managerName: string | null
 }
+
+export async function listBranchOptions(): Promise<BranchOption[]> {
+  await delay(100)
+  return branchStore.map((b) => ({
+    id: b.id,
+    name: b.name,
+    managerId: b.managerId,
+    managerName: employeeStore.find((e) => e.id === b.managerId)?.name ?? null,
+  }))
+}
+
+export interface DesignationGroup {
+  level: number
+  name: string
+  designations: string[]
+}
+
+/**
+ * Designations offered when adding or editing, grouped by level (highest first).
+ * Only designations placed in the hierarchy are offered, and Branch Manager is left out because it is
+ * assigned from Edit employee. No groups at all is the "No eligible designations" state.
+ */
+export async function listEligibleDesignations(): Promise<DesignationGroup[]> {
+  await delay(100)
+  return ordinaryLevels(hierarchyStore)
+    .filter((l) => l.designations.length > 0)
+    .sort((a, b) => b.level - a.level)
+    .map((l) => ({ level: l.level, name: l.name, designations: [...l.designations] }))
+}
+
+/** How many designations the company has defined but not placed in the hierarchy. */
+export const countUnusedDesignations = () => hierarchyStore.unused.length
 
 export interface NewEmployee {
   name: string
@@ -273,10 +359,11 @@ export async function addEmployee(input: NewEmployee): Promise<EmployeeRow> {
     designation: input.designation,
     branchId: input.branchId,
     status: 'Active',
-    lastActive: 'Just now',
+    lastActive: 'Invited · just now',
     openTickets: 0,
   }
-  employeeStore = [...employeeStore, employee]
+  // New people go to the top of the list.
+  employeeStore = [employee, ...employeeStore]
   const branch = branchStore.find((b) => b.id === input.branchId)
   if (branch) branch.staffCount += 1
   return withLevel(employee)
@@ -290,6 +377,8 @@ export interface EmployeeChanges {
   status?: ActiveStatus
   /** Needed to make someone Branch Manager of a branch that already has one. */
   replaceManager?: boolean
+  /** Designation the replaced Branch Manager moves to. */
+  previousManagerDesignation?: string
 }
 
 export async function updateEmployee(id: string, changes: EmployeeChanges): Promise<EmployeeRow> {
@@ -297,9 +386,10 @@ export async function updateEmployee(id: string, changes: EmployeeChanges): Prom
   const employee = employeeStore.find((e) => e.id === id)
   if (!employee) throw new OrgError('not-found', 'Employee not found')
 
-  const { replaceManager, ...fields } = changes
+  const { replaceManager, previousManagerDesignation, ...fields } = changes
   const designation = fields.designation ?? employee.designation
   const branchId = fields.branchId ?? employee.branchId
+  const wasManager = employee.designation === BRANCH_MANAGER_DESIGNATION
 
   if (designation === BRANCH_MANAGER_DESIGNATION) {
     const branch = branchStore.find((b) => b.id === branchId)
@@ -309,11 +399,25 @@ export async function updateEmployee(id: string, changes: EmployeeChanges): Prom
         throw new OrgError('branch-has-manager', `${branch.name} already has a Branch Manager`)
       }
       const previous = employeeStore.find((e) => e.id === branch.managerId)
-      if (previous) previous.designation = ''
+      if (previous) previous.designation = previousManagerDesignation ?? ''
     }
     if (branch) branch.managerId = id
-  } else if (designation !== employee.designation && !placedDesignations(hierarchyStore).includes(designation)) {
-    throw new OrgError('not-in-hierarchy', `${designation} is not in your hierarchy`)
+  } else {
+    if (designation !== employee.designation && !placedDesignations(hierarchyStore).includes(designation)) {
+      throw new OrgError('not-in-hierarchy', `${designation} is not in your hierarchy`)
+    }
+    // Stepping down from Branch Manager leaves the branch Unassigned.
+    if (wasManager) {
+      const branch = branchStore.find((b) => b.managerId === id)
+      if (branch) branch.managerId = null
+    }
+  }
+
+  if (fields.branchId && fields.branchId !== employee.branchId) {
+    const from = branchStore.find((b) => b.id === employee.branchId)
+    const to = branchStore.find((b) => b.id === fields.branchId)
+    if (from) from.staffCount = Math.max(0, from.staffCount - 1)
+    if (to) to.staffCount += 1
   }
 
   Object.assign(employee, fields)

@@ -8,6 +8,9 @@ export const branchTotals = { all: 32, active: 31, inactive: 1, noManager: 1 }
 /** Page count the Branches screen shows for the full list of 32 branches. */
 export const branchPageCount = 13
 
+/** Page count the Employees screen shows for the full list of 486 employees. */
+export const employeePageCount = 13
+
 export const employeeTotals = { all: 486, active: 471, inactive: 15 }
 
 export const colomboEmployeeTotals = { all: 38, active: 36, inactive: 2 }
@@ -45,12 +48,12 @@ export const employees: Employee[] = [
   { id: 'namal', name: 'Namal Silva', initials: 'NS', email: 'namal.s@spicegarden.lk', designation: 'Cleaner / Housekeeper', branchId: 'colombo', status: 'Active', lastActive: 'Today, 1:52 PM', openTickets: 2 },
   { id: 'dinesh', name: 'Dinesh Kumara', initials: 'DK', email: 'dinesh@spicegarden.lk', designation: 'Waiter / Waitress', branchId: 'colombo', status: 'Active', lastActive: '2 min ago', openTickets: 4 },
   { id: 'ravi', name: 'Ravi Silva', initials: 'RS', email: 'ravi@spicegarden.lk', designation: 'Head Chef / Kitchen Manager', branchId: 'colombo', status: 'Active', lastActive: '1 h ago', openTickets: 2 },
-  { id: 'amali', name: 'Amali Wije', initials: 'AW', email: 'amali@spicegarden.lk', designation: 'Delivery Rider / Driver', branchId: 'colombo', status: 'Active', lastActive: '25 min ago', openTickets: 1 },
-  { id: 'chathura', name: 'Chathura Nanayakkara', initials: 'CN', email: 'chathura@spicegarden.lk', designation: 'Busser / Table Cleaner', branchId: 'colombo', status: 'Inactive', lastActive: '3 Oct 2026', openTickets: 0 },
   { id: 'sachini', name: 'Sachini Bandara', initials: 'SB', email: 'sachini@spicegarden.lk', designation: 'Branch Manager', branchId: 'kandy', status: 'Active', lastActive: '20 min ago', openTickets: 0 },
   { id: 'dilan', name: 'Dilan Jayawardena', initials: 'DJ', email: 'dilan@spicegarden.lk', designation: 'Floor Supervisor', branchId: 'matara', status: 'Active', lastActive: 'Yesterday', openTickets: 0 },
   // Host / Hostess is not in the hierarchy, so this employee has no level and is flagged.
   { id: 'hasini', name: 'Hasini Wijeratne', initials: 'HW', email: 'hasini@spicegarden.lk', designation: 'Host / Hostess', branchId: 'kandy', status: 'Inactive', lastActive: '12 Sep 2026', openTickets: 0 },
+  { id: 'amali', name: 'Amali Wije', initials: 'AW', email: 'amali@spicegarden.lk', designation: 'Delivery Rider / Driver', branchId: 'colombo', status: 'Active', lastActive: '25 min ago', openTickets: 1 },
+  { id: 'chathura', name: 'Chathura Nanayakkara', initials: 'CN', email: 'chathura@spicegarden.lk', designation: 'Busser / Table Cleaner', branchId: 'colombo', status: 'Inactive', lastActive: '3 Oct 2026', openTickets: 0 },
   // Managers of the remaining branches, listed so branch.managerId always resolves.
   { id: 'tharindu', name: 'Tharindu Fernando', initials: 'TF', email: 'tharindu@spicegarden.lk', designation: 'Branch Manager', branchId: 'negombo', status: 'Active', lastActive: '10 min ago', openTickets: 0 },
   { id: 'ruwan', name: 'Ruwan Silva', initials: 'RS', email: 'ruwan@spicegarden.lk', designation: 'Branch Manager', branchId: 'galle', status: 'Active', lastActive: '35 min ago', openTickets: 0 },
