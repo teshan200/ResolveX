@@ -46,7 +46,7 @@ const builtPages: Record<string, ReactElement> = {
   '/super-admin/companies': <CompaniesPage />,
 
   '/branch/ai-review': <AiReviewQueuePage />,
-  '/branch/approvals': <ResolutionApprovalsPage />,
+  
   '/super-admin/subscriptions': <SubscriptionsPage />,
   '/super-admin/plans': <PlansPricingPage />,
   '/super-admin/audit-log': <PlatformAuditLogPage />,
