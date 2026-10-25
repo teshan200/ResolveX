@@ -11,6 +11,7 @@ export interface Column<T> {
   // Fixed width in px. A column without one takes the remaining space.
   width?: number
   sortable?: boolean
+  align?: 'start' | 'center'
   render: (row: T) => ReactNode
 }
 
@@ -28,6 +29,8 @@ interface TableProps<T> {
   sort?: SortState
   onSort?: (key: string) => void
   empty?: ReactNode
+  // Height of a row in px, not counting its bottom border.
+  rowHeight?: number
 }
 
 const cellWidth = (width?: number) => (width ? { width, flex: 'none' } : { flex: '1 1 0%' })
@@ -41,6 +44,7 @@ export function Table<T>({
   sort,
   onSort,
   empty,
+  rowHeight = 58,
 }: TableProps<T>) {
   return (
     <div role="table">
@@ -55,7 +59,10 @@ export function Table<T>({
                 sorted ? (sorted === 'asc' ? 'ascending' : 'descending') : undefined
               }
               style={cellWidth(column.width)}
-              className="flex h-10 min-w-0 items-center gap-1 border-b border-line bg-canvas px-4 text-xs leading-4 font-semibold text-content-secondary"
+              className={cn(
+                'flex h-10 min-w-0 items-center gap-1 border-b border-line bg-canvas px-4 text-xs leading-4 font-semibold text-content-secondary',
+                column.align === 'center' && 'justify-center',
+              )}
             >
               {column.sortable ? (
                 <button
@@ -89,8 +96,11 @@ export function Table<T>({
           <div
             key={column.key}
             role="cell"
-            style={cellWidth(column.width)}
-            className="flex h-14.5 min-w-0 items-center gap-2 overflow-hidden px-4 text-left"
+            style={{ ...cellWidth(column.width), height: rowHeight }}
+            className={cn(
+              'flex min-w-0 items-center gap-2 overflow-hidden px-4 text-left',
+              column.align === 'center' && 'justify-center',
+            )}
           >
             {column.render(row)}
           </div>
