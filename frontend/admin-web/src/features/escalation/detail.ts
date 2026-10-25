@@ -1,4 +1,4 @@
-export type TimelineKind = 'escalated' | 'response' | 'assigned' | 'received'
+export type TimelineKind = 'escalated' | 'response' | 'assigned' | 'received' | 'claimed'
 
 export interface TimelineEntry {
   id: string
