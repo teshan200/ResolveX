@@ -175,7 +175,9 @@ export default function LoginScreen() {
                 </View>
                 <Text style={styles.checkboxLabel}>Remember this device</Text>
               </Pressable>
-              <Text style={styles.forgot}>Forgot?</Text>
+              <Pressable onPress={() => router.push('/forgot-password')} accessibilityRole="link">
+                <Text style={styles.forgot}>Forgot?</Text>
+              </Pressable>
             </View>
           </View>
 
