@@ -1,23 +1,25 @@
 import { Check } from 'lucide-react'
 import { cn } from '../../../components/ui/cn'
-import type { EscalationChip } from '../types'
 
-const chips: { key: EscalationChip; label: string }[] = [
-  { key: 'awaiting', label: 'Awaiting acknowledgement' },
-  { key: 'acknowledged', label: 'Acknowledged' },
-  { key: 'all', label: 'All' },
-]
-
-interface EscalationStatusChipsProps {
-  selected: EscalationChip
-  counts: Record<EscalationChip, number>
-  onSelect: (chip: EscalationChip) => void
+interface EscalationStatusChipsProps<K extends string> {
+  chips: { key: K; label: string }[]
+  selected: K
+  counts: Record<K, number>
+  onSelect: (chip: K) => void
+  /** Accessible name for the group of chips. */
+  label: string
 }
 
 /** Filter chips from the Figma frame: the selected chip is solid brand with a check. */
-export function EscalationStatusChips({ selected, counts, onSelect }: EscalationStatusChipsProps) {
+export function EscalationStatusChips<K extends string>({
+  chips,
+  selected,
+  counts,
+  onSelect,
+  label: groupLabel,
+}: EscalationStatusChipsProps<K>) {
   return (
-    <div role="group" aria-label="Escalation status" className="flex gap-2">
+    <div role="group" aria-label={groupLabel} className="flex gap-2">
       {chips.map(({ key, label }) => {
         const active = key === selected
         return (

@@ -1,5 +1,4 @@
 import { ChevronRight, Sparkles } from 'lucide-react'
-import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { PriorityBadge, SlaTimer } from '../../../components/ui'
 import { cn } from '../../../components/ui/cn'
@@ -7,19 +6,7 @@ import { hasEscalationDetail } from '../detail'
 import { escalationDetailPath, formatSince, initials } from '../escalations'
 import type { Escalation } from '../types'
 import { AiEscalatedPill, EscalatedPill, EscalationStatePill } from './EscalationBadges'
-
-function MetaItem({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="flex flex-col items-start gap-1">
-      <p className="text-[11px] leading-4 font-semibold tracking-[0.66px] whitespace-nowrap text-content-tertiary uppercase">
-        {label}
-      </p>
-      {children}
-    </div>
-  )
-}
-
-const valueText = 'text-sm leading-5 font-medium whitespace-nowrap'
+import { MetaItem, metaValueClass as valueText } from './MetaItem'
 
 export function EscalationCard({ escalation: e }: { escalation: Escalation }) {
   const awaiting = e.state === 'awaiting'
