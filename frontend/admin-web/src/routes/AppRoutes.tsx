@@ -6,6 +6,7 @@ import { AiReviewQueuePage } from '../pages/AiReviewQueuePage'
 import { AnalyticsPage } from '../pages/AnalyticsPage'
 import { AuditLogPage } from '../pages/AuditLogPage'
 import { BranchEmployeesPage } from '../pages/BranchEmployeesPage'
+import { BranchDetailPage } from '../pages/BranchDetailPage'
 import { BranchesPage } from '../pages/BranchesPage'
 import { BranchOverviewPage } from '../pages/BranchOverviewPage'
 import { BranchTicketDetailPage } from '../pages/BranchTicketDetailPage'
@@ -106,6 +107,7 @@ export function AppRoutes() {
           )}
           {area.basePath === '/tenant' && (
             <>
+              <Route path="branches/:branchId" element={<BranchDetailPage />} />
               <Route path="complaints/:complaintId" element={<ComplaintDetailPage />} />
               <Route path="escalated/:escalationId" element={<EscalationDetailPage />} />
               <Route path="sla-monitoring/:complaintId" element={<SlaComplaintDetailPage />} />
