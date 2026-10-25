@@ -1,5 +1,11 @@
 import type { Escalation, EscalationChip, EscalationFilters } from './types'
 
+export const escalatedChips: { key: EscalationChip; label: string }[] = [
+  { key: 'awaiting', label: 'Awaiting acknowledgement' },
+  { key: 'acknowledged', label: 'Acknowledged' },
+  { key: 'all', label: 'All' },
+]
+
 export const defaultFilters: EscalationFilters = {
   search: '',
   branch: 'All branches',

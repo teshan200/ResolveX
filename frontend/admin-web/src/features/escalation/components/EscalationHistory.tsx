@@ -11,9 +11,16 @@ const nodes: Record<TimelineKind, { style: string; icon: LucideIcon }> = {
 }
 
 /** Timeline from the Figma "Complaint history" panel. The last event has no connector. */
-export function EscalationHistory({ entries }: { entries: TimelineEntry[] }) {
+export function EscalationHistory({
+  entries,
+  tight = false,
+}: {
+  entries: TimelineEntry[]
+  /** No gap between events, as in the branch manager's Escalation Inbox. */
+  tight?: boolean
+}) {
   return (
-    <ol className="flex flex-col gap-3">
+    <ol className={cn('flex flex-col', !tight && 'gap-3')}>
       {entries.map((entry, index) => {
         const { style, icon: Icon } = nodes[entry.kind]
         const last = index === entries.length - 1
