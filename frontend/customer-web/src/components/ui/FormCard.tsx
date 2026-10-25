@@ -5,15 +5,18 @@ interface FormCardProps {
   title?: string
   /** Small tag on the right of the heading, e.g. "Required" or "Optional". */
   tag?: 'Required' | 'Optional'
+  /** Outlines the card in red when the question inside has an error. */
+  invalid?: boolean
   children: ReactNode
   className?: string
 }
 
-export function FormCard({ title, tag, children, className }: FormCardProps) {
+export function FormCard({ title, tag, invalid, children, className }: FormCardProps) {
   return (
     <section
       className={cn(
-        'flex flex-col gap-3 rounded-xl border border-line-subtle bg-surface p-4',
+        'flex flex-col gap-3 rounded-xl bg-surface p-4',
+        invalid ? 'border-[1.5px] border-danger-fg' : 'border border-line-subtle',
         className,
       )}
     >

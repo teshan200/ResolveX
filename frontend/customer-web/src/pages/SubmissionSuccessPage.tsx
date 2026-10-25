@@ -115,7 +115,7 @@ export function SubmissionSuccessPage() {
         <Button
           size="lg"
           className="w-full text-base"
-          onClick={() => navigate('/track', { state: { caseId: receipt.caseId } })}
+          onClick={() => navigate('/track', { state: { caseId: receipt.caseId, email: receipt.email } })}
         >
           Track your case
           <ArrowRightIcon className="size-5" />

@@ -34,9 +34,10 @@ export function Textarea({
         maxLength={maxLength}
         aria-invalid={Boolean(error)}
         className={cn(
-          'min-h-[120px] resize-none rounded-md border bg-surface px-3 py-2 text-sm/5 text-content placeholder:text-content-tertiary',
-          'focus:outline-2 focus:outline-line-focus/30',
-          error ? 'border-danger-solid' : 'border-line focus:border-line-focus',
+          'min-h-[120px] resize-none rounded-md bg-surface px-3 py-2 text-sm/5 text-content placeholder:text-content-tertiary',
+          error
+            ? 'border-[1.5px] border-danger-fg shadow-[0_0_0_3px_rgba(220,38,38,0.25)] outline-none'
+            : 'border border-line focus:border-line-focus focus:outline-2 focus:outline-line-focus/30',
           className,
         )}
         {...props}

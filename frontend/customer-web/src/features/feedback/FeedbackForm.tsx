@@ -4,8 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import {
+  AlertCircleIcon,
   ClockIcon,
   LockIcon,
+  MailIcon,
   MoreHorizontalIcon,
   SendIcon,
   SparklesIcon,
@@ -26,6 +28,7 @@ import {
 import { submitFeedback } from '../../services/feedbackService'
 import { LOW_RATING_MAX, MAX_DESCRIPTION, PHOTO_TYPES, dineTypes, problemAreas } from './options'
 import type { ProblemArea } from './options'
+import { validatePhoto } from './photo'
 import { feedbackDefaults, feedbackSchema } from './schema'
 import type { FeedbackFormValues } from './schema'
 
@@ -35,6 +38,15 @@ const areaIcons: Record<ProblemArea, ReactNode> = {
   Cleanliness: <SparklesIcon />,
   'Waiting time': <ClockIcon />,
   Other: <MoreHorizontalIcon />,
+}
+
+function FieldError({ message }: { message: string }) {
+  return (
+    <p role="alert" className="flex items-center gap-1.5 text-xs/4 font-medium text-danger-fg">
+      <AlertCircleIcon className="size-3.5 shrink-0" />
+      {message}
+    </p>
+  )
 }
 
 export function FeedbackForm({ qrId }: { qrId: string }) {
@@ -78,7 +90,7 @@ export function FeedbackForm({ qrId }: { qrId: string }) {
         )}
         {serverError && <AlertBanner title="We couldn’t send your feedback" description={serverError} />}
 
-        <FormCard title="How was your visit today?" tag="Required">
+        <FormCard title="How was your visit today?" tag="Required" invalid={Boolean(errors.rating)}>
           <Controller
             control={control}
             name="rating"
@@ -94,11 +106,7 @@ export function FeedbackForm({ qrId }: { qrId: string }) {
               />
             )}
           />
-          {errors.rating && (
-            <p role="alert" className="text-xs/4 text-danger-fg">
-              {errors.rating.message}
-            </p>
-          )}
+          {errors.rating?.message && <FieldError message={errors.rating.message} />}
         </FormCard>
 
         <FormCard title="How did you dine?">
@@ -152,11 +160,7 @@ export function FeedbackForm({ qrId }: { qrId: string }) {
               </div>
             )}
           />
-          {errors.areas && (
-            <p role="alert" className="text-xs/4 text-danger-fg">
-              {errors.areas.message}
-            </p>
-          )}
+          {errors.areas?.message && <FieldError message={errors.areas.message} />}
         </FormCard>
 
         <FormCard>
@@ -180,7 +184,8 @@ export function FeedbackForm({ qrId }: { qrId: string }) {
                 file={field.value}
                 onChange={field.onChange}
                 accept={PHOTO_TYPES.join(',')}
-                error={errors.photo?.message}
+                hint="JPG, PNG or PDF · up to 10 MB"
+                validate={validatePhoto}
               />
             )}
           />
@@ -200,6 +205,7 @@ export function FeedbackForm({ qrId }: { qrId: string }) {
           <TextField
             label="Email (optional)"
             type="email"
+            leadingIcon={<MailIcon />}
             placeholder="you@example.com"
             autoComplete="email"
             helper="We’ll email you once your complaint is resolved"

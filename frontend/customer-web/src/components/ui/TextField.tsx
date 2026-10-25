@@ -29,9 +29,10 @@ export function TextField({
       </label>
       <div
         className={cn(
-          'flex h-10 items-center gap-2 rounded-md border bg-surface px-3',
-          'focus-within:outline-2 focus-within:outline-line-focus/30',
-          error ? 'border-danger-solid' : 'border-line focus-within:border-line-focus',
+          'flex h-10 items-center gap-2 rounded-md bg-surface px-3',
+          error
+            ? 'border-[1.5px] border-danger-fg shadow-[0_0_0_3px_rgba(220,38,38,0.25)]'
+            : 'border border-line focus-within:border-line-focus focus-within:outline-2 focus-within:outline-line-focus/30',
         )}
       >
         {leadingIcon && (

@@ -1,5 +1,6 @@
 import type { FeedbackFormValues } from '../features/feedback/schema'
 import { mockBranding } from '../mocks/branding'
+import { registerCase } from '../mocks/cases'
 
 // Mock implementation. Replace the body with a real call when the backend is ready.
 
@@ -25,9 +26,13 @@ export async function submitFeedback(
 ): Promise<FeedbackReceipt> {
   await delay()
 
+  // Fixed so the tracking screens can use the same demo case.
+  const caseId = 'RX-1042'
+  // Remembered so the tracking lookup accepts the email the guest just gave.
+  if (values.email) registerCase({ caseId, email: values.email })
+
   return {
-    // Fixed so the tracking screens can use the same demo case.
-    caseId: 'RX-1042',
+    caseId,
     branch: mockBranding.branch,
     table: values.tableNumber || null,
     name: values.name || null,

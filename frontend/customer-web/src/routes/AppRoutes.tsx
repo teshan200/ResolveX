@@ -4,6 +4,7 @@ import { CustomerLayout } from '../layout/CustomerLayout'
 import { GuestFeedbackPage } from '../pages/GuestFeedbackPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { SubmissionSuccessPage } from '../pages/SubmissionSuccessPage'
+import { TrackCasePage } from '../pages/TrackCasePage'
 
 // Route table for the public feedback app. Screens that are not built yet fall back to a placeholder.
 const screens: Array<{ path: string; title: string; element?: ReactElement }> = [
@@ -13,7 +14,7 @@ const screens: Array<{ path: string; title: string; element?: ReactElement }> = 
     title: 'Submission Success',
     element: <SubmissionSuccessPage />,
   },
-  { path: 'track', title: 'Track Your Case' },
+  { path: 'track', title: 'Track Your Case', element: <TrackCasePage /> },
   { path: 'track/:caseId', title: 'Case Detail' },
   { path: 'survey/:caseId', title: 'Post-Resolution Survey' },
   { path: 'survey/:caseId/thanks', title: 'Survey Thank You' },

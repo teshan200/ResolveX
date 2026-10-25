@@ -13,4 +13,4 @@ export const LOW_RATING_MAX = 3
 export const MAX_DESCRIPTION = 1000
 export const MIN_DESCRIPTION = 10
 export const MAX_PHOTO_BYTES = 10 * 1024 * 1024
-export const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
+export const PHOTO_TYPES = ['image/jpeg', 'image/png', 'application/pdf']
