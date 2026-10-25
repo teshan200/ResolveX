@@ -18,6 +18,7 @@ import { PaymentPage } from '../pages/PaymentPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { RegisterPage } from '../pages/RegisterPage'
+import { ReportsPage } from '../pages/ReportsPage'
 import { ResolutionApprovalsPage } from '../pages/ResolutionApprovalsPage'
 import { SlaComplaintDetailPage } from '../pages/SlaComplaintDetailPage'
 import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
@@ -31,6 +32,7 @@ const builtPages: Record<string, ReactElement> = {
   '/branch/escalations': <EscalationInboxPage />,
   '/tenant/analytics': <AnalyticsPage />,
   '/tenant/escalated': <EscalatedToMePage />,
+  '/tenant/reports': <ReportsPage />,
   '/tenant/sla-monitoring': <SlaMonitoringPage />,
   '/tenant/sla-policies': <SlaPoliciesPage />,
 }
