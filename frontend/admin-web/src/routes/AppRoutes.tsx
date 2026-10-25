@@ -16,6 +16,7 @@ import { PaymentPage } from '../pages/PaymentPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { RegisterPage } from '../pages/RegisterPage'
+import { ResolutionApprovalsPage } from '../pages/ResolutionApprovalsPage'
 import { SlaComplaintDetailPage } from '../pages/SlaComplaintDetailPage'
 import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
 import { SlaPoliciesPage } from '../pages/SlaPoliciesPage'
@@ -23,6 +24,7 @@ import { VerifyEmailPage } from '../pages/VerifyEmailPage'
 
 // Screens that have been built, keyed by full path. Anything else falls back to a placeholder.
 const builtPages: Record<string, ReactElement> = {
+  '/branch/approvals': <ResolutionApprovalsPage />,
   '/branch/escalations': <EscalationInboxPage />,
   '/tenant/escalated': <EscalatedToMePage />,
   '/tenant/sla-monitoring': <SlaMonitoringPage />,
