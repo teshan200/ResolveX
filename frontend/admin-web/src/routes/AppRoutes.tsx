@@ -5,6 +5,7 @@ import { areas, navItems } from '../layout/navigation'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
 import { EscalatedToMePage } from '../pages/EscalatedToMePage'
 import { EscalationDetailPage } from '../pages/EscalationDetailPage'
+import { EscalationInboxPage } from '../pages/EscalationInboxPage'
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage'
 import { GoogleSigninPage } from '../pages/GoogleSigninPage'
 import { GoogleSignupPage } from '../pages/GoogleSignupPage'
@@ -22,6 +23,7 @@ import { VerifyEmailPage } from '../pages/VerifyEmailPage'
 
 // Screens that have been built, keyed by full path. Anything else falls back to a placeholder.
 const builtPages: Record<string, ReactElement> = {
+  '/branch/escalations': <EscalationInboxPage />,
   '/tenant/escalated': <EscalatedToMePage />,
   '/tenant/sla-monitoring': <SlaMonitoringPage />,
   '/tenant/sla-policies': <SlaPoliciesPage />,

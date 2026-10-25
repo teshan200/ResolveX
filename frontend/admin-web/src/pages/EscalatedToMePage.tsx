@@ -10,6 +10,7 @@ import {
   applyFilters,
   chipCounts,
   defaultFilters,
+  escalatedChips,
   formatSpan,
   matchesChip,
 } from '../features/escalation/escalations'
@@ -70,7 +71,13 @@ export function EscalatedToMePage() {
 
       <EscalationKpiCards items={kpis} />
       <EscalationFilterBar filters={filters} onChange={setFilters} />
-      <EscalationStatusChips selected={chip} counts={counts} onSelect={setChip} />
+      <EscalationStatusChips
+        label="Escalation status"
+        chips={escalatedChips}
+        selected={chip}
+        counts={counts}
+        onSelect={setChip}
+      />
 
       {visible.length > 0 ? (
         <div className="flex flex-col gap-3">
