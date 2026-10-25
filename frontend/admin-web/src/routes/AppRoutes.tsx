@@ -4,6 +4,9 @@ import { AppLayout } from '../layout/AppLayout'
 import { areas, navItems } from '../layout/navigation'
 import { AiReviewQueuePage } from '../pages/AiReviewQueuePage'
 import { AnalyticsPage } from '../pages/AnalyticsPage'
+import { AuditLogPage } from '../pages/AuditLogPage'
+import { BranchEmployeesPage } from '../pages/BranchEmployeesPage'
+import { BranchesPage } from '../pages/BranchesPage'
 import { BranchOverviewPage } from '../pages/BranchOverviewPage'
 import { BranchTicketDetailPage } from '../pages/BranchTicketDetailPage'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
@@ -11,10 +14,12 @@ import { CompaniesPage } from '../pages/CompaniesPage'
 import { ComplaintDetailPage } from '../pages/ComplaintDetailPage'
 import { EscalatedToMePage } from '../pages/EscalatedToMePage'
 import { EscalationDetailPage } from '../pages/EscalationDetailPage'
+import { EmployeesPage } from '../pages/EmployeesPage'
 import { EscalationInboxPage } from '../pages/EscalationInboxPage'
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage'
 import { GoogleSigninPage } from '../pages/GoogleSigninPage'
 import { GoogleSignupPage } from '../pages/GoogleSignupPage'
+import { HierarchyPage } from '../pages/HierarchyPage'
 import { LandingPage } from '../pages/LandingPage'
 import { LoginPage } from '../pages/LoginPage'
 import { OnboardingSuccessPage } from '../pages/OnboardingSuccessPage'
@@ -53,7 +58,12 @@ const builtPages: Record<string, ReactElement> = {
   '/branch/escalations': <EscalationInboxPage />,
   '/branch/overview': <BranchOverviewPage />,
   '/branch/staff': <StaffWorkloadPage />,
+  '/branch/employees': <BranchEmployeesPage />,
   '/tenant/analytics': <AnalyticsPage />,
+  '/tenant/audit-log': <AuditLogPage />,
+  '/tenant/branches': <BranchesPage />,
+  '/tenant/employees': <EmployeesPage />,
+  '/tenant/hierarchy': <HierarchyPage />,
   '/tenant/escalated': <EscalatedToMePage />,
   '/tenant/reports': <ReportsPage />,
   '/tenant/sla-monitoring': <SlaMonitoringPage />,
