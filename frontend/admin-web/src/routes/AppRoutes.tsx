@@ -2,9 +2,8 @@ import type { ReactElement } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
 import { areas, navItems } from '../layout/navigation'
-import { AiReviewQueuePage } from '../pages/AiReviewQueuePage'
-import { AnalyticsPage } from '../pages/AnalyticsPage'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
+import { CompaniesPage } from '../pages/CompaniesPage'
 import { EscalatedToMePage } from '../pages/EscalatedToMePage'
 import { EscalationDetailPage } from '../pages/EscalationDetailPage'
 import { EscalationInboxPage } from '../pages/EscalationInboxPage'
@@ -18,21 +17,17 @@ import { PaymentPage } from '../pages/PaymentPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { RegisterPage } from '../pages/RegisterPage'
-import { ReportsPage } from '../pages/ReportsPage'
-import { ResolutionApprovalsPage } from '../pages/ResolutionApprovalsPage'
 import { SlaComplaintDetailPage } from '../pages/SlaComplaintDetailPage'
 import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
 import { SlaPoliciesPage } from '../pages/SlaPoliciesPage'
+import { TenantDetailPage } from '../pages/TenantDetailPage'
 import { VerifyEmailPage } from '../pages/VerifyEmailPage'
 
 // Screens that have been built, keyed by full path. Anything else falls back to a placeholder.
 const builtPages: Record<string, ReactElement> = {
-  '/branch/ai-review': <AiReviewQueuePage />,
-  '/branch/approvals': <ResolutionApprovalsPage />,
+  '/super-admin/companies': <CompaniesPage />,
   '/branch/escalations': <EscalationInboxPage />,
-  '/tenant/analytics': <AnalyticsPage />,
   '/tenant/escalated': <EscalatedToMePage />,
-  '/tenant/reports': <ReportsPage />,
   '/tenant/sla-monitoring': <SlaMonitoringPage />,
   '/tenant/sla-policies': <SlaPoliciesPage />,
 }
@@ -65,6 +60,9 @@ export function AppRoutes() {
               }
             />
           ))}
+          {area.basePath === '/super-admin' && (
+            <Route path="companies/:companyId" element={<TenantDetailPage />} />
+          )}
           {area.basePath === '/tenant' && (
             <>
               <Route path="escalated/:escalationId" element={<EscalationDetailPage />} />
