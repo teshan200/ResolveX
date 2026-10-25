@@ -89,3 +89,45 @@ export const recoveryMetrics = [
   { label: 'Guests returning within 60 days', display: '63%', percent: 63, tone: 'brand' },
   { label: 'Repeat complaints', display: '7%', percent: 7, tone: 'warning' },
 ] as const
+
+export interface StaffPerformance {
+  name: string
+  /** Branch and designation, for example "Colombo · Waiter / Waitress". */
+  role: string
+  tickets: number
+  avgAck: string
+  avgResolution: string
+  /** Share of tickets resolved within SLA, 0 to 100. */
+  slaMet: number
+  csat: string
+}
+
+export const staffPerformance: StaffPerformance[] = [
+  {
+    name: 'Dinesh Kumara',
+    role: 'Colombo · Waiter / Waitress',
+    tickets: 48,
+    avgAck: '4 min',
+    avgResolution: '19 min',
+    slaMet: 97,
+    csat: '4.7',
+  },
+  {
+    name: 'Nadeesha Jay',
+    role: 'Colombo · Bar',
+    tickets: 31,
+    avgAck: '5 min',
+    avgResolution: '22 min',
+    slaMet: 94,
+    csat: '4.5',
+  },
+  {
+    name: 'Ruwan Silva',
+    role: 'Galle · Waiter / Waitress',
+    tickets: 44,
+    avgAck: '14 min',
+    avgResolution: '51 min',
+    slaMet: 78,
+    csat: '3.6',
+  },
+]

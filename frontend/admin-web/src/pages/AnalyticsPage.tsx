@@ -6,6 +6,7 @@ import { BranchBars } from '../features/analytics/components/BranchBars'
 import { CategoryDonut } from '../features/analytics/components/CategoryDonut'
 import { ChartCard } from '../features/analytics/components/ChartCard'
 import { ServiceRecoveryCard } from '../features/analytics/components/ServiceRecoveryCard'
+import { StaffPerformanceTable } from '../features/analytics/components/StaffPerformanceTable'
 import { TrendLineChart } from '../features/analytics/components/TrendLineChart'
 import {
   analyticsKpis,
@@ -65,6 +66,8 @@ export function AnalyticsPage() {
         </ChartCard>
         <ServiceRecoveryCard className="w-full shrink-0 lg:w-[420px]" />
       </div>
+
+      <StaffPerformanceTable />
     </div>
   )
 }
