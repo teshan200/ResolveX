@@ -4,6 +4,7 @@ import { Button, Select } from '../../../components/ui'
 import { cn } from '../../../components/ui/cn'
 import { branchScopeOptions, dateRangeOptions, groupByOptions } from '../mocks'
 import type { ReportFormat } from '../mocks'
+import type { ReportOptions } from '../../export/reports'
 
 function Radio({
   label,
@@ -67,8 +68,15 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
   )
 }
 
-/** "Generate: <template>" form. Generating is simulated in this increment: nothing is created yet. */
-export function GeneratePanel({ templateTitle }: { templateTitle: string }) {
+interface GeneratePanelProps {
+  templateTitle: string
+  /** False when the selected template has no sample data to export. */
+  canGenerate: boolean
+  onGenerate: (format: ReportFormat, options: ReportOptions) => void
+}
+
+/** "Generate: <template>" form. CSV downloads a file and PDF opens the print dialog. */
+export function GeneratePanel({ templateTitle, canGenerate, onGenerate }: GeneratePanelProps) {
   const [range, setRange] = useState(dateRangeOptions[1])
   const [branches, setBranches] = useState(branchScopeOptions[0])
   const [groupBy, setGroupBy] = useState(groupByOptions[0])
@@ -96,7 +104,12 @@ export function GeneratePanel({ templateTitle }: { templateTitle: string }) {
         </div>
       </div>
       <Toggle label="Email it to me when ready" checked={email} onChange={setEmail} />
-      <Button className="w-full font-semibold!">
+      <Button
+        className="w-full font-semibold!"
+        disabled={!canGenerate}
+        title={canGenerate ? undefined : 'No sample data for this report in the prototype'}
+        onClick={() => onGenerate(format, { range, branches, groupBy })}
+      >
         <Download size={18} aria-hidden />
         Generate report
       </Button>

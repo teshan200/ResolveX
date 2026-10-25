@@ -18,10 +18,17 @@ import {
 } from '../features/analytics/mocks'
 import type { AnalyticsFilters } from '../features/analytics/mocks'
 import { EscalationKpiCards } from '../features/escalation/components/EscalationKpiCards'
+import { downloadCsv, exportFilename, reportToCsv } from '../features/export/csv'
+import { analyticsReport } from '../features/export/reports'
 
 export function AnalyticsPage() {
   // The Figma design shows one set of figures, so the filters do not change the numbers yet.
   const [filters, setFilters] = useState<AnalyticsFilters>(defaultAnalyticsFilters)
+
+  const exportCsv = () =>
+    downloadCsv(exportFilename('Analytics'), reportToCsv(analyticsReport(filters)))
+  // "Export PDF" opens the browser's print dialog; choose "Save as PDF" there.
+  const exportPdf = () => window.print()
 
   return (
     <div className="flex flex-col gap-6">
@@ -32,12 +39,12 @@ export function AnalyticsPage() {
             Complaints, SLA performance, staff, branches and recovery — filter and export.
           </p>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="font-semibold!">
+        <div className="flex gap-3 print:hidden">
+          <Button variant="outline" className="font-semibold!" onClick={exportCsv}>
             <Download size={18} aria-hidden />
             Export CSV
           </Button>
-          <Button className="font-semibold!">
+          <Button className="font-semibold!" onClick={exportPdf}>
             <FileText size={18} aria-hidden />
             Export PDF
           </Button>
