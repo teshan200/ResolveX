@@ -67,3 +67,25 @@ export const defaultAnalyticsFilters: AnalyticsFilters = {
   category: categoryOptions[0],
   priority: priorityOptions[0],
 }
+
+// Chart data. The points are read off the Figma plots, which are illustrative.
+// Coordinates are in the 380 x 180 plot area, y measured from the top.
+export const trendComplaints = [139, 119, 127, 89, 98, 59, 69, 39]
+export const trendBreaches = [149, 145, 140, 131, 127, 118, 119, 108]
+
+export const categorySlices = [
+  { label: 'Food quality', percent: 38, color: 'var(--color-brand)' },
+  { label: 'Wait time', percent: 24, color: 'var(--color-warning-solid)' },
+  { label: 'Service', percent: 18, color: 'var(--color-info-solid)' },
+  { label: 'Other', percent: 20, color: 'var(--color-neutral-400)' },
+]
+
+/** Bar heights in pixels, highest first (Complaints per 1,000 covers, six branches). */
+export const branchBars = [127.5, 93, 72, 60, 45, 33]
+
+export const recoveryMetrics = [
+  { label: 'Follow-up completion', display: '91%', percent: 91, tone: 'success' },
+  { label: 'Post-resolution CSAT', display: '4.4 / 5', percent: 88, tone: 'brand' },
+  { label: 'Guests returning within 60 days', display: '63%', percent: 63, tone: 'brand' },
+  { label: 'Repeat complaints', display: '7%', percent: 7, tone: 'warning' },
+] as const

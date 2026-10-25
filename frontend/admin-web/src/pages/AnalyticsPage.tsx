@@ -2,7 +2,19 @@ import { useState } from 'react'
 import { Download, FileText } from 'lucide-react'
 import { Button } from '../components/ui'
 import { AnalyticsFilterBar } from '../features/analytics/components/AnalyticsFilterBar'
-import { analyticsKpis, defaultAnalyticsFilters } from '../features/analytics/mocks'
+import { BranchBars } from '../features/analytics/components/BranchBars'
+import { CategoryDonut } from '../features/analytics/components/CategoryDonut'
+import { ChartCard } from '../features/analytics/components/ChartCard'
+import { ServiceRecoveryCard } from '../features/analytics/components/ServiceRecoveryCard'
+import { TrendLineChart } from '../features/analytics/components/TrendLineChart'
+import {
+  analyticsKpis,
+  branchBars,
+  categorySlices,
+  defaultAnalyticsFilters,
+  trendBreaches,
+  trendComplaints,
+} from '../features/analytics/mocks'
 import type { AnalyticsFilters } from '../features/analytics/mocks'
 import { EscalationKpiCards } from '../features/escalation/components/EscalationKpiCards'
 
@@ -33,6 +45,26 @@ export function AnalyticsPage() {
 
       <AnalyticsFilterBar filters={filters} onChange={setFilters} />
       <EscalationKpiCards items={analyticsKpis} gapClass="gap-3" />
+
+      <div className="flex flex-col items-start gap-4 lg:flex-row">
+        <ChartCard title="Complaint trend vs SLA breaches" subtitle="Daily" className="w-full min-w-0 flex-1">
+          <TrendLineChart complaints={trendComplaints} breaches={trendBreaches} />
+        </ChartCard>
+        <ChartCard title="Complaints by category" subtitle="Last 30 days" className="w-full shrink-0 lg:w-[420px]">
+          <CategoryDonut slices={categorySlices} />
+        </ChartCard>
+      </div>
+
+      <div className="flex flex-col items-start gap-4 lg:flex-row">
+        <ChartCard
+          title="Branch comparison"
+          subtitle="Complaints per 1,000 covers"
+          className="w-full min-w-0 flex-1"
+        >
+          <BranchBars heights={branchBars} />
+        </ChartCard>
+        <ServiceRecoveryCard className="w-full shrink-0 lg:w-[420px]" />
+      </div>
     </div>
   )
 }
