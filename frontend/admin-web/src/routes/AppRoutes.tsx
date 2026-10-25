@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
 import { areas, navItems } from '../layout/navigation'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
+import { CompaniesPage } from '../pages/CompaniesPage'
 import { EscalatedToMePage } from '../pages/EscalatedToMePage'
 import { EscalationDetailPage } from '../pages/EscalationDetailPage'
 import { EscalationInboxPage } from '../pages/EscalationInboxPage'
@@ -14,17 +15,28 @@ import { LoginPage } from '../pages/LoginPage'
 import { OnboardingSuccessPage } from '../pages/OnboardingSuccessPage'
 import { PaymentPage } from '../pages/PaymentPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
+import { PlansPricingPage } from '../pages/PlansPricingPage'
+import { PlatformAuditLogPage } from '../pages/PlatformAuditLogPage'
+import { PlatformOverviewPage } from '../pages/PlatformOverviewPage'
 import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { RegisterPage } from '../pages/RegisterPage'
 import { ResolutionApprovalsPage } from '../pages/ResolutionApprovalsPage'
 import { SlaComplaintDetailPage } from '../pages/SlaComplaintDetailPage'
 import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
 import { SlaPoliciesPage } from '../pages/SlaPoliciesPage'
+import { SubscriptionsPage } from '../pages/SubscriptionsPage'
+import { TenantDetailPage } from '../pages/TenantDetailPage'
 import { VerifyEmailPage } from '../pages/VerifyEmailPage'
 
 // Screens that have been built, keyed by full path. Anything else falls back to a placeholder.
 const builtPages: Record<string, ReactElement> = {
+
   '/branch/approvals': <ResolutionApprovalsPage />,
+  '/super-admin/overview': <PlatformOverviewPage />,
+  '/super-admin/companies': <CompaniesPage />,
+  '/super-admin/subscriptions': <SubscriptionsPage />,
+  '/super-admin/plans': <PlansPricingPage />,
+  '/super-admin/audit-log': <PlatformAuditLogPage />,
   '/branch/escalations': <EscalationInboxPage />,
   '/tenant/escalated': <EscalatedToMePage />,
   '/tenant/sla-monitoring': <SlaMonitoringPage />,
@@ -59,6 +71,9 @@ export function AppRoutes() {
               }
             />
           ))}
+          {area.basePath === '/super-admin' && (
+            <Route path="companies/:companyId" element={<TenantDetailPage />} />
+          )}
           {area.basePath === '/tenant' && (
             <>
               <Route path="escalated/:escalationId" element={<EscalationDetailPage />} />
