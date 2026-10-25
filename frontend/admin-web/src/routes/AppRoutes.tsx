@@ -2,6 +2,8 @@ import type { ReactElement } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
 import { areas, navItems } from '../layout/navigation'
+import { AiReviewQueuePage } from '../pages/AiReviewQueuePage'
+import { AnalyticsPage } from '../pages/AnalyticsPage'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
 import { EscalatedToMePage } from '../pages/EscalatedToMePage'
 import { EscalationDetailPage } from '../pages/EscalationDetailPage'
@@ -24,8 +26,10 @@ import { VerifyEmailPage } from '../pages/VerifyEmailPage'
 
 // Screens that have been built, keyed by full path. Anything else falls back to a placeholder.
 const builtPages: Record<string, ReactElement> = {
+  '/branch/ai-review': <AiReviewQueuePage />,
   '/branch/approvals': <ResolutionApprovalsPage />,
   '/branch/escalations': <EscalationInboxPage />,
+  '/tenant/analytics': <AnalyticsPage />,
   '/tenant/escalated': <EscalatedToMePage />,
   '/tenant/sla-monitoring': <SlaMonitoringPage />,
   '/tenant/sla-policies': <SlaPoliciesPage />,

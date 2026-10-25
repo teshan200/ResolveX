@@ -1,19 +1,20 @@
-import { Minus, TrendingDown } from 'lucide-react'
+import { Minus, TrendingDown, TrendingUp } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '../../../components/ui/cn'
 
 export interface EscalationKpi {
   label: string
-  value: number
+  value: number | string
   icon: LucideIcon
-  /** Delta pill: danger shows a falling trend, info shows a flat one. */
-  tone: 'danger' | 'info'
+  /** Delta pill: danger shows a falling trend, success a rising one, info a flat one. */
+  tone: 'danger' | 'success' | 'info'
   delta: string
   note: string
 }
 
 const tones = {
   danger: { pill: 'bg-danger-bg text-danger-fg', icon: TrendingDown },
+  success: { pill: 'bg-success-bg text-success-fg', icon: TrendingUp },
   info: { pill: 'bg-info-bg text-info-fg', icon: Minus },
 }
 
@@ -49,9 +50,16 @@ function KpiCard({ kpi }: { kpi: EscalationKpi }) {
   )
 }
 
-export function EscalationKpiCards({ items }: { items: EscalationKpi[] }) {
+export function EscalationKpiCards({
+  items,
+  gapClass = 'gap-4',
+}: {
+  items: EscalationKpi[]
+  /** Space between cards. The Escalated to me page uses 16px, Analytics uses 12px. */
+  gapClass?: string
+}) {
   return (
-    <div className="flex gap-4">
+    <div className={`flex ${gapClass}`}>
       {items.map((kpi) => (
         <KpiCard key={kpi.label} kpi={kpi} />
       ))}
