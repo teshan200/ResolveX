@@ -1,4 +1,4 @@
-import { CircleArrowUp, CircleDot, Pencil, User } from 'lucide-react'
+import { CircleArrowUp, CircleDot, Pencil, User, UserCheck } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '../../../components/ui/cn'
 import type { TimelineEntry, TimelineKind } from '../detail'
@@ -8,6 +8,7 @@ const nodes: Record<TimelineKind, { style: string; icon: LucideIcon }> = {
   response: { style: 'bg-status-in-progress-bg text-status-in-progress-fg', icon: Pencil },
   assigned: { style: 'bg-status-assigned-bg text-status-assigned-fg', icon: User },
   received: { style: 'bg-status-new-bg text-status-new-fg', icon: CircleDot },
+  claimed: { style: 'bg-status-claimed-bg text-status-claimed-fg', icon: UserCheck },
 }
 
 /** Timeline from the Figma "Complaint history" panel. The last event has no connector. */
