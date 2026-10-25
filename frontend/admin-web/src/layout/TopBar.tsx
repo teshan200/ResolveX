@@ -1,5 +1,5 @@
-import { Bell, ChevronRight, CircleHelp, Search } from 'lucide-react'
-import { Avatar, IconButton } from '../components/ui'
+import { Bell, ChevronRight, CircleHelp } from 'lucide-react'
+import { Avatar, IconButton, SearchField } from '../components/ui'
 
 interface TopBarProps {
   crumb: string[]
@@ -30,17 +30,7 @@ export function TopBar({ crumb, initials, notifications = 5 }: TopBarProps) {
         })}
       </nav>
 
-      <label className="flex h-10 w-70 shrink-0 items-center gap-2 rounded-md border border-line bg-surface px-3 text-content-tertiary focus-within:border-line-focus">
-        <Search size={18} className="shrink-0" />
-        <input
-          type="search"
-          placeholder="Search tickets, cases, branches…"
-          className="min-w-0 flex-1 bg-transparent text-sm leading-5 text-content outline-none placeholder:text-content-tertiary"
-        />
-        <kbd className="rounded-xs bg-muted px-1.5 font-sans text-xs leading-4 font-medium text-content-tertiary">
-          ⌘K
-        </kbd>
-      </label>
+      <SearchField className="w-70" placeholder="Search tickets, cases, branches…" />
 
       <div className="relative flex shrink-0">
         <IconButton icon={Bell} label="Notifications" />

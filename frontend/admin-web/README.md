@@ -56,7 +56,7 @@ The plan flow is Choose Plan (`/choose-plan`), Payment (`/payment`), then Onboar
 | Figma screen | Route | Status | Endpoints |
 |---|---|---|---|
 | SA · Platform Overview | `/super-admin/overview` | Placeholder | `GET /admin/usage` |
-| SA · Companies, Tenant Detail, Suspend Tenant | `/super-admin/companies` | Placeholder | `GET /admin/tenants`, `GET /admin/tenants/{id}`, `POST /admin/tenants/{id}/suspend`, `POST /admin/tenants/{id}/reactivate`, `POST /admin/tenants/{id}/deactivate` |
+| SA · Companies, Tenant Detail, Suspend Tenant | `/super-admin/companies` | Built | `GET /admin/tenants`, `GET /admin/tenants/{id}`, `POST /admin/tenants/{id}/suspend`, `POST /admin/tenants/{id}/reactivate`, `POST /admin/tenants/{id}/deactivate` |
 | SA · Subscriptions | `/super-admin/subscriptions` | Placeholder | `GET /admin/subscriptions` |
 | SA · Plans & Pricing | `/super-admin/plans` | Placeholder | `GET /admin/plans`, `POST /admin/plans`, `PUT /admin/plans/{id}` |
 | SA · Platform Audit Log | `/super-admin/audit-log` | Placeholder | `GET /admin/audit-logs` |
