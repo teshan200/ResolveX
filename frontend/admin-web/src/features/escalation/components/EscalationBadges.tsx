@@ -16,7 +16,7 @@ export function SmallStatusPill({
   return (
     <span
       className={cn(
-        'flex h-5 shrink-0 items-center gap-1 rounded-full px-2 text-xs leading-4 font-semibold whitespace-nowrap',
+        'inline-flex h-5 shrink-0 items-center gap-1 rounded-full px-2 text-xs leading-4 font-semibold whitespace-nowrap',
         style,
       )}
     >
