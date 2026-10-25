@@ -20,6 +20,9 @@ import { LoginPage } from '../pages/LoginPage'
 import { OnboardingSuccessPage } from '../pages/OnboardingSuccessPage'
 import { PaymentPage } from '../pages/PaymentPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
+import { PlansPricingPage } from '../pages/PlansPricingPage'
+import { PlatformAuditLogPage } from '../pages/PlatformAuditLogPage'
+import { PlatformOverviewPage } from '../pages/PlatformOverviewPage'
 import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { RegisterPage } from '../pages/RegisterPage'
 import { ReportsPage } from '../pages/ReportsPage'
@@ -27,15 +30,26 @@ import { ResolutionApprovalsPage } from '../pages/ResolutionApprovalsPage'
 import { SlaComplaintDetailPage } from '../pages/SlaComplaintDetailPage'
 import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
 import { SlaPoliciesPage } from '../pages/SlaPoliciesPage'
+
 import { StaffWorkloadPage } from '../pages/StaffWorkloadPage'
+
+import { SubscriptionsPage } from '../pages/SubscriptionsPage'
+
 import { TenantDetailPage } from '../pages/TenantDetailPage'
 import { VerifyEmailPage } from '../pages/VerifyEmailPage'
 
 // Screens that have been built, keyed by full path. Anything else falls back to a placeholder.
 const builtPages: Record<string, ReactElement> = {
+
+  '/branch/approvals': <ResolutionApprovalsPage />,
+  '/super-admin/overview': <PlatformOverviewPage />,
   '/super-admin/companies': <CompaniesPage />,
+
   '/branch/ai-review': <AiReviewQueuePage />,
   '/branch/approvals': <ResolutionApprovalsPage />,
+  '/super-admin/subscriptions': <SubscriptionsPage />,
+  '/super-admin/plans': <PlansPricingPage />,
+  '/super-admin/audit-log': <PlatformAuditLogPage />,
   '/branch/escalations': <EscalationInboxPage />,
   '/branch/overview': <BranchOverviewPage />,
   '/branch/staff': <StaffWorkloadPage />,

@@ -22,6 +22,7 @@ import {
   Panel,
   PanelRow,
   ProgressBar,
+  StatusPill,
   Table,
   Tag,
 } from '../components/ui'
@@ -34,16 +35,10 @@ import { formatLkr } from '../services/planService'
 import type { CompanyDetail, SuspendRequest, TenantAdmin } from '../types/company'
 
 function TwoFactorBadge({ enabled }: { enabled: boolean }) {
-  const Icon = enabled ? CircleCheck : Ban
   return (
-    <span
-      className={`inline-flex h-5 items-center gap-1 rounded-full px-2 text-xs leading-4 font-semibold ${
-        enabled ? 'bg-status-resolved-bg text-status-resolved-fg' : 'bg-muted text-content-secondary'
-      }`}
-    >
-      <Icon size={12} />
+    <StatusPill tone={enabled ? 'resolved' : 'neutral'} icon={enabled ? CircleCheck : Ban}>
       {enabled ? 'On' : 'Off'}
-    </span>
+    </StatusPill>
   )
 }
 

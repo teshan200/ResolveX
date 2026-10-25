@@ -1,6 +1,14 @@
-import { Minus } from 'lucide-react'
+import { Minus, TrendingDown, TrendingUp } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { cn } from './cn'
+
+export type KpiTrend = 'up' | 'flat' | 'down'
+
+const trends: Record<KpiTrend, { icon: LucideIcon; style: string }> = {
+  up: { icon: TrendingUp, style: 'bg-success-bg text-success-fg' },
+  flat: { icon: Minus, style: 'bg-info-bg text-info-fg' },
+  down: { icon: TrendingDown, style: 'bg-danger-bg text-danger-fg' },
+}
 
 interface KpiCardProps {
   label: string
@@ -8,6 +16,7 @@ interface KpiCardProps {
   icon: LucideIcon
   iconClassName?: string
   delta: string
+  trend?: KpiTrend
   caption: string
 }
 
@@ -17,8 +26,11 @@ export function KpiCard({
   icon: Icon,
   iconClassName = 'text-brand',
   delta,
+  trend = 'flat',
   caption,
 }: KpiCardProps) {
+  const { icon: TrendIcon, style } = trends[trend]
+
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-5">
       <div className="flex items-center justify-between">
@@ -29,8 +41,13 @@ export function KpiCard({
       </div>
       <p className="text-3xl leading-9.5 font-semibold tracking-[-0.3px]">{value}</p>
       <div className="flex items-center gap-2">
-        <span className="flex items-center gap-0.5 rounded-full bg-info-bg px-1.5 text-xs leading-4 font-semibold text-info-fg">
-          <Minus size={12} />
+        <span
+          className={cn(
+            'flex items-center gap-0.5 rounded-full px-1.5 text-xs leading-4 font-semibold',
+            style,
+          )}
+        >
+          <TrendIcon size={12} />
           {delta}
         </span>
         <span className="text-xs leading-4 text-content-tertiary">{caption}</span>

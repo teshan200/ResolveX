@@ -3,7 +3,8 @@ import { cn } from './cn'
 
 interface FilterChipProps {
   label: string
-  count: number
+  // Chips without a number (e.g. event types) leave this out.
+  count?: number
   selected: boolean
   onClick: () => void
 }
@@ -23,14 +24,16 @@ export function FilterChip({ label, count, selected, onClick }: FilterChipProps)
     >
       {selected && <Check size={14} />}
       {label}
-      <span
-        className={cn(
-          'rounded-full px-1.5 text-xs leading-4 font-semibold',
-          selected ? 'bg-brand-hover text-on-brand' : 'bg-muted text-content-secondary',
-        )}
-      >
-        {count}
-      </span>
+      {count !== undefined && (
+        <span
+          className={cn(
+            'rounded-full px-1.5 text-xs leading-4 font-semibold',
+            selected ? 'bg-brand-hover text-on-brand' : 'bg-muted text-content-secondary',
+          )}
+        >
+          {count}
+        </span>
+      )}
     </button>
   )
 }
