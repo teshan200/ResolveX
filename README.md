@@ -1,1 +1,1 @@
-ResolveX - Devora
+ResolveX - Team Devora

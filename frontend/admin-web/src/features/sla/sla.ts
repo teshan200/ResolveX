@@ -1,3 +1,4 @@
+import type { SlaState } from '../../components/ui'
 import type { SlaComplaint, SlaStatus, SlaSummary } from './types'
 
 /** Fixed "current time" for the mock data, so screens look the same on every load. */
@@ -48,6 +49,21 @@ export function summarizeSla(complaints: SlaComplaint[], nowMs: number): SlaSumm
   return summary
 }
 
+/** Route for a complaint's SLA detail page. Ids look like "#1042"; the "#" is dropped from the URL. */
+export function slaDetailPath(complaintId: string): string {
+  return `/tenant/sla-monitoring/${complaintId.replace('#', '')}`
+}
+
+const dateTimeFormat = new Intl.DateTimeFormat('en-GB', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+  timeZone: 'Asia/Colombo',
+})
+
+export function formatDateTime(ms: number): string {
+  return dateTimeFormat.format(ms)
+}
+
 const MINUTE = 60_000
 const HOUR = 60 * MINUTE
 const DAY = 24 * HOUR
@@ -62,4 +78,29 @@ export function formatDuration(ms: number): string {
   if (days > 0) return `${days}d ${hours}h`
   if (hours > 0) return `${hours}h ${minutes}m`
   return `${minutes}m`
+}
+
+/** Maps a complaint's SLA status to the shared SlaTimer state. */
+export function toTimerState(status: SlaStatus): SlaState {
+  if (status === 'On Track') return 'on-track'
+  if (status === 'Warning') return 'warning'
+  if (status === 'Breached') return 'breached'
+  return 'paused'
+}
+
+const pad = (n: number) => String(n).padStart(2, '0')
+
+/** Countdown digits: mm:ss under an hour (as in the Figma SLA Timer), compact h/d beyond that. */
+export function formatTimer(ms: number): string {
+  const abs = Math.abs(ms)
+  if (abs >= HOUR) return formatDuration(abs)
+  const seconds = Math.floor(abs / 1000)
+  return `${pad(Math.floor(seconds / 60))}:${pad(seconds % 60)}`
+}
+
+/** Text shown inside an SLA timer pill or panel. */
+export function timerLabel(timing: SlaTiming): string {
+  if (timing.status === 'Paused') return 'Paused'
+  const digits = formatTimer(timing.remainingMs)
+  return timing.status === 'Breached' ? `${digits} overdue` : `${digits} left`
 }

@@ -24,7 +24,7 @@ export function SlaWatchlist({ complaints, nowMs, limit = 5 }: SlaWatchlistProps
         {rows.map(({ complaint, timing }) => (
           <li
             key={complaint.id}
-            className="grid grid-cols-1 items-center gap-3 px-4 py-3 md:grid-cols-[1fr_auto_220px]"
+            className="grid grid-cols-1 items-center gap-3 px-4 py-3 md:grid-cols-[1fr_auto_auto]"
           >
             <div className="min-w-0">
               <p className="truncate text-sm font-medium">

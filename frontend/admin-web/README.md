@@ -36,28 +36,32 @@ All endpoints are under `/api/v1` and are **proposed**, to be agreed with the ba
 
 | Figma screen | Route | Status | Endpoints |
 |---|---|---|---|
-| Landing Page | `/` | Planned | `GET /plans` |
+| Landing Page | `/` | Built | `GET /plans` |
 | Company Registration | `/register` | Built | `POST /tenants/register` |
 | Email Verification | `/verify-email` | Built | `POST /tenants/verify-email` |
 | Sign up with Google, Connecting | `/signup/google` | Built | Handled by Asgardeo |
-| Login | `/login` | Placeholder | Handled by Asgardeo, then `GET /me` |
-| Sign in with Google, Connecting | `/signin/google` | Planned | Handled by Asgardeo |
-| Forgot / Reset Password | `/forgot-password`, `/reset-password` | Planned | Handled by Asgardeo |
-| Choose Plan | `/choose-plan` | Planned | `GET /plans` |
-| Payment | `/payment` | Planned | `POST /subscription/checkout` (PayHere sandbox) |
-| Onboarding Success | `/onboarding-success` | Planned | `POST /tenants/activate` |
+| Login | `/login` | Built | Handled by Asgardeo, then `GET /me` |
+| Sign in with Google, Connecting | `/signin/google` | Built | Handled by Asgardeo |
+| Forgot / Reset Password | `/forgot-password`, `/reset-password` | Built | Handled by Asgardeo |
+| Choose Plan | `/choose-plan` | Built | `GET /plans` |
+| Payment | `/payment` | Built | `POST /subscription/checkout` (PayHere sandbox) |
+| Onboarding Success | `/onboarding-success` | Built | `POST /tenants/activate` |
 
 Registration uses a mock service (`src/services/registrationService.ts`). To see the error state, register with the email `taken@example.com`.
+
+The plan flow is Choose Plan (`/choose-plan`), Payment (`/payment`), then Onboarding Success. Plans and prices come from `src/services/planService.ts`, and the payment is a mock sandbox in `src/services/paymentService.ts`. In the Payment form, use the card `4242 4242 4242 4242` to succeed, or `4000 0000 0000 0002` to see a declined payment.
 
 ### Super Admin (`/super-admin`)
 
 | Figma screen | Route | Status | Endpoints |
 |---|---|---|---|
-| SA · Platform Overview | `/super-admin/overview` | Placeholder | `GET /admin/usage` |
-| SA · Companies, Tenant Detail, Suspend Tenant | `/super-admin/companies` | Placeholder | `GET /admin/tenants`, `GET /admin/tenants/{id}`, `POST /admin/tenants/{id}/suspend`, `POST /admin/tenants/{id}/reactivate`, `POST /admin/tenants/{id}/deactivate` |
-| SA · Subscriptions | `/super-admin/subscriptions` | Placeholder | `GET /admin/subscriptions` |
-| SA · Plans & Pricing | `/super-admin/plans` | Placeholder | `GET /admin/plans`, `POST /admin/plans`, `PUT /admin/plans/{id}` |
-| SA · Platform Audit Log | `/super-admin/audit-log` | Placeholder | `GET /admin/audit-logs` |
+| SA · Platform Overview | `/super-admin/overview` | Built | `GET /admin/usage` |
+| SA · Companies, Tenant Detail, Suspend Tenant | `/super-admin/companies` | Built | `GET /admin/tenants`, `GET /admin/tenants/{id}`, `POST /admin/tenants/{id}/suspend`, `POST /admin/tenants/{id}/reactivate`, `POST /admin/tenants/{id}/deactivate` |
+| SA · Subscriptions | `/super-admin/subscriptions` | Built | `GET /admin/subscriptions` |
+| SA · Plans & Pricing | `/super-admin/plans` | Built | `GET /admin/plans`, `POST /admin/plans`, `PUT /admin/plans/{id}` |
+| SA · Platform Audit Log | `/super-admin/audit-log` | Built | `GET /admin/audit-logs` |
+| Admin users (sidebar only, no Figma screen) | `/super-admin/admin-users` | Placeholder | Not planned |
+| Settings (sidebar only, no Figma screen) | `/super-admin/settings` | Placeholder | Not planned |
 
 ### Tenant Admin (`/tenant`)
 
@@ -76,7 +80,9 @@ Registration uses a mock service (`src/services/registrationService.ts`). To see
 | TA · Reports | `/tenant/reports` | Placeholder | `GET /reports`, `GET /reports/{id}/export?format=pdf\|csv` |
 | TA · Audit Log | `/tenant/audit-log` | Placeholder | `GET /audit-logs` |
 | TA · Billing & Plan, Payment Failed | `/tenant/billing` | Placeholder | `GET /subscription`, `POST /subscription/checkout`, `POST /subscription/upgrade`, `POST /subscription/downgrade`, `POST /subscription/renew` |
-| TA · Settings, Branding / Email Delivery | `/tenant/settings` | Placeholder | `GET /me`, `PATCH /me` |
+| TA · Settings, Branding | `/tenant/settings` | Placeholder | `GET /me`, `PATCH /me` |
+| TA · Email Delivery | `/tenant/email-delivery` | Placeholder | Not in the API list yet |
+| SLA Monitoring (added by the SLA engine feature, not in the Figma sidebar) | `/tenant/sla-monitoring` | Built | Mock data only |
 
 ### Branch Manager (`/branch`)
 
@@ -90,6 +96,8 @@ Registration uses a mock service (`src/services/registrationService.ts`). To see
 | BM · Staff & Workload | `/branch/staff` | Placeholder | `GET /analytics/staff` |
 | BM · Employees, Add Employee, Employee Detail | `/branch/employees` | Placeholder | `GET /employees`, `POST /employees`, `GET /employees/{id}` |
 | BM · QR Codes, Generate QR Codes, Rename QR Code | `/branch/qr-codes` | Placeholder | `GET /qr-codes`, `POST /qr-codes`, `PATCH /qr-codes/{id}` |
+| Branch analytics (sidebar only, no Figma screen) | `/branch/analytics` | Placeholder | `GET /analytics/branches` |
+| Reports (sidebar only, no Figma screen) | `/branch/reports` | Placeholder | `GET /reports`, `GET /reports/{id}/export?format=pdf\|csv` |
 
 ### Shared (all roles)
 
