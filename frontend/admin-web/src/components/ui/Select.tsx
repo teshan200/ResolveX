@@ -8,10 +8,12 @@ interface SelectProps extends ComponentProps<'select'> {
   error?: string
   // Shows a warning icon before the error text.
   errorIcon?: boolean
+  // Keeps the red border but leaves the message to the caller.
+  hideErrorText?: boolean
   options: string[]
 }
 
-export function Select({ label, error, errorIcon, options, className, id, ...props }: SelectProps) {
+export function Select({ label, error, errorIcon, hideErrorText, options, className, id, ...props }: SelectProps) {
   const generatedId = useId()
   const selectId = id ?? generatedId
 
@@ -52,7 +54,7 @@ export function Select({ label, error, errorIcon, options, className, id, ...pro
         </select>
         <ChevronDown size={18} className="pointer-events-none absolute right-3" />
       </div>
-      {error && (
+      {error && !hideErrorText && (
         <p className={cn('text-xs text-danger-fg', errorIcon && 'flex items-center gap-1.5')}>
           {errorIcon && <CircleAlert size={14} className="shrink-0" />}
           {error}

@@ -9,9 +9,11 @@ interface ModalProps {
   onClose: () => void
   children: ReactNode
   footer?: ReactNode
+  // 'lg' is the wider dialog used for longer content.
+  size?: 'md' | 'lg'
 }
 
-export function Modal({ open, title, onClose, children, footer }: ModalProps) {
+export function Modal({ open, title, onClose, children, footer, size = 'md' }: ModalProps) {
   const titleId = useId()
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export function Modal({ open, title, onClose, children, footer }: ModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="w-full max-w-110 overflow-hidden rounded-xl bg-surface shadow-[0_24px_48px_-12px_rgba(11,19,18,0.16)]"
+        className={`w-full ${size === 'lg' ? 'max-w-150' : 'max-w-110'} overflow-hidden rounded-xl bg-surface shadow-[0_24px_48px_-12px_rgba(11,19,18,0.16)]`}
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 pt-6 pb-2">

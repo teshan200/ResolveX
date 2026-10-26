@@ -8,6 +8,7 @@ import {
   colomboEmployeeTotals,
   employeePageCount,
   employeeProfiles,
+  employeesPerDesignation,
   employeeTotals,
   employees as seedEmployees,
   hierarchy as seedHierarchy,
@@ -472,34 +473,73 @@ export async function removeEmployee(id: string): Promise<void> {
 
 export interface HierarchyCheck {
   label: string
-  ok: boolean
+  /** Green tick, red cross (blocks saving) or orange warning (does not block). */
+  state: 'ok' | 'error' | 'warn'
+}
+
+export interface HierarchyValidation {
+  checks: HierarchyCheck[]
+  /** Number of red checks. Saving is blocked until it is 0. */
+  issues: number
+  valid: boolean
 }
 
 /** The "Check & save" list on Configure hierarchy. An invalid configuration can't be saved. */
-export function validateHierarchy(draft: Hierarchy, allDesignations = placedDesignations(seedHierarchy).concat(seedHierarchy.unused)): {
-  checks: HierarchyCheck[]
-  valid: boolean
-} {
+export function validateHierarchy(draft: Hierarchy): HierarchyValidation {
   const ordinary = ordinaryLevels(draft)
   const n = ordinary.length
-  const numbers = ordinary.map((l) => l.level).sort((a, b) => a - b)
+  const numbers = ordinary.map((l) => l.level).sort((x, y) => x - y)
   const hasLevelOne = numbers[0] === 1
   const noGaps = numbers.every((value, index) => value === index + 1)
-  const everyLevelFilled = ordinary.every((l) => l.name.trim() !== '' && l.designations.length > 0)
   const placed = ordinary.flatMap((l) => l.designations)
   const eachOnce = new Set(placed).size === placed.length
+  const total = placed.length + draft.unused.length
   const flagged = seedEmployeesWithoutLevel(draft)
 
   const checks: HierarchyCheck[] = [
-    { label: 'Level 1 exists and is the lowest level', ok: hasLevelOne },
-    { label: n > 0 ? `Levels run 1 to ${n} with no gaps` : 'Levels run 1 to n with no gaps', ok: noGaps },
-    { label: `Branch Manager is Level ${n + 1} (n+1) · Tenant Admin is Level ${n + 2} (n+2)`, ok: true },
-    { label: 'Every level has a name and at least one designation', ok: everyLevelFilled },
-    { label: `${placed.length} of ${allDesignations.length} designations in use · each on one level`, ok: eachOnce },
-    // A warning, not a blocker: affected employees are flagged and left unchanged.
-    { label: `${flagged} employee${flagged === 1 ? '' : 's'} will need a valid designation (flagged, not changed)`, ok: flagged === 0 },
+    { label: 'Level 1 exists and is the lowest level', state: hasLevelOne ? 'ok' : 'error' },
+    { label: n > 0 ? `Levels run 1 to ${n} with no gaps` : 'Levels run 1 to n with no gaps', state: noGaps ? 'ok' : 'error' },
+    { label: `Branch Manager is Level ${n + 1} (n+1) · Tenant Admin is Level ${n + 2} (n+2)`, state: 'ok' },
   ]
-  return { checks, valid: hasLevelOne && noGaps && everyLevelFilled && eachOnce }
+
+  // Name and designation problems are listed per level, highest level first.
+  const levelProblems: HierarchyCheck[] = []
+  for (const level of [...ordinary].sort((x, y) => y.level - x.level)) {
+    if (level.name.trim() === '') {
+      levelProblems.push({ label: `Level ${level.level} needs a name`, state: 'error' })
+    }
+    if (level.designations.length === 0) {
+      levelProblems.push({
+        label: `Level ${level.level} has no designations — assign one or remove the level`,
+        state: 'error',
+      })
+    }
+  }
+  if (levelProblems.length === 0) {
+    checks.push(
+      { label: 'Every level has a name and at least one designation', state: 'ok' },
+      { label: `${placed.length} of ${total} designations in use · each on one level`, state: eachOnce ? 'ok' : 'error' },
+    )
+  } else {
+    checks.push(...levelProblems)
+  }
+
+  // A warning, not a blocker: affected employees are flagged and left unchanged.
+  checks.push({
+    label:
+      flagged > 0
+        ? `${flagged} employee${flagged === 1 ? '' : 's'} will need a valid designation (flagged, not changed)`
+        : 'No employee needs a new designation',
+    state: flagged > 0 ? 'warn' : 'ok',
+  })
+
+  const issues = checks.filter((check) => check.state === 'error').length
+  return { checks, issues, valid: issues === 0 }
+}
+
+/** How many employees hold any of these designations. */
+export function countEmployeesWith(designations: string[]): number {
+  return designations.reduce((sum, name) => sum + (employeesPerDesignation[name] ?? 0), 0)
 }
 
 function seedEmployeesWithoutLevel(draft: Hierarchy) {
@@ -512,16 +552,31 @@ export async function getHierarchy(): Promise<Hierarchy> {
   return structuredClone(hierarchyStore)
 }
 
-/** Removing a level renumbers the ones above it, so levels always run 1..n. Its designations become unused. */
-export function removeLevel(draft: Hierarchy, level: number): Hierarchy {
+/**
+ * Removing a level renumbers the ones above it, so levels always run 1..n.
+ * Its designations either move to Level 1 (moveToLowest) or leave the hierarchy and become unused.
+ */
+export function removeLevel(draft: Hierarchy, level: number, moveToLowest = false): Hierarchy {
   const target = draft.levels.find((l) => l.level === level && !l.reserved)
   if (!target) throw new OrgError('invalid-hierarchy', 'Only ordinary levels above Level 1 can be removed')
   if (level === 1) throw new OrgError('invalid-hierarchy', 'Level 1 is required')
 
   const ordinary = ordinaryLevels(draft)
     .filter((l) => l.level !== level)
-    .map((l): HierarchyLevel => ({ ...l, level: l.level > level ? l.level - 1 : l.level }))
-  return reserveTop(ordinary, [...draft.unused, ...target.designations])
+    .map((l): HierarchyLevel => ({
+      ...l,
+      level: l.level > level ? l.level - 1 : l.level,
+      designations: moveToLowest && l.level === 1 ? [...l.designations, ...target.designations] : l.designations,
+    }))
+  return reserveTop(ordinary, moveToLowest ? draft.unused : [...draft.unused, ...target.designations])
+}
+
+/** Changes the name of an ordinary level. */
+export function renameLevel(draft: Hierarchy, level: number, name: string): Hierarchy {
+  return reserveTop(
+    ordinaryLevels(draft).map((l) => (l.level === level ? { ...l, name } : l)),
+    draft.unused,
+  )
 }
 
 /** Adds an empty ordinary level on top of the current ones. */
