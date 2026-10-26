@@ -1,5 +1,5 @@
 // Sample data for the Branches, Employees and Hierarchy screens. No backend is connected.
-import type { Branch, BranchDetail, Employee, Hierarchy } from './types'
+import type { Branch, BranchDetail, Employee, Hierarchy, ProfileComplaint } from './types'
 
 export const BRANCH_MANAGER_DESIGNATION = 'Branch Manager'
 
@@ -59,6 +59,35 @@ export const employees: Employee[] = [
   { id: 'ruwan', name: 'Ruwan Silva', initials: 'RS', email: 'ruwan@spicegarden.lk', designation: 'Branch Manager', branchId: 'galle', status: 'Active', lastActive: '35 min ago', openTickets: 0 },
   { id: 'ishara', name: 'Ishara Gamage', initials: 'IG', email: 'ishara@spicegarden.lk', designation: 'Branch Manager', branchId: 'nuwara-eliya', status: 'Active', lastActive: '1 h ago', openTickets: 0 },
 ]
+
+/** SLA figure and assigned complaints on an employee's profile (Branch Manager view). */
+export const employeeProfiles: Record<string, { slaMet: string; complaints: ProfileComplaint[] }> = {
+  dinesh: {
+    slaMet: '97%',
+    complaints: [
+      { id: '#1042', title: 'Food was cold', state: 'Claimed' },
+      { id: '#1038', title: 'Wrong order delivered', state: 'Escalated' },
+      { id: '#1036', title: 'Delivery missing items', state: 'Resolved' },
+    ],
+  },
+  kavinda: {
+    slaMet: '95%',
+    complaints: [
+      { id: '#1044', title: 'Long wait for a table', state: 'Claimed' },
+      { id: '#1031', title: 'Cutlery not clean', state: 'Resolved' },
+    ],
+  },
+  nimal: { slaMet: '96%', complaints: [{ id: '#1040', title: 'Table not cleaned', state: 'Claimed' }] },
+  ravi: {
+    slaMet: '82%',
+    complaints: [
+      { id: '#1041', title: 'Dish served undercooked', state: 'Escalated' },
+      { id: '#1035', title: 'Wrong order delivered', state: 'Claimed' },
+    ],
+  },
+  namal: { slaMet: '94%', complaints: [{ id: '#1039', title: 'Restroom not clean', state: 'Claimed' }] },
+  amali: { slaMet: '90%', complaints: [{ id: '#1037', title: 'Delivery missing items', state: 'Claimed' }] },
+}
 
 export const hierarchy: Hierarchy = {
   levels: [

@@ -11,10 +11,12 @@ interface DesignationPickerProps {
   /** Designations the company defined but did not place on a level. */
   unusedCount: number
   error?: string
+  /** 'branch' is the Branch Manager's wording: they can't edit the hierarchy, so there is no link to it. */
+  variant?: 'tenant' | 'branch'
 }
 
 // Searchable designation list grouped by hierarchy level. Empty groups is the "No eligible designations" state.
-export function DesignationPicker({ groups, value, onChange, unusedCount, error }: DesignationPickerProps) {
+export function DesignationPicker({ groups, value, onChange, unusedCount, error, variant = 'tenant' }: DesignationPickerProps) {
   const empty = groups.length === 0
   const [open, setOpen] = useState(empty)
   const [query, setQuery] = useState('')
@@ -70,17 +72,29 @@ export function DesignationPicker({ groups, value, onChange, unusedCount, error 
           {empty ? (
             <div className="flex flex-col items-center gap-1 px-6 py-5 text-center">
               <Network size={20} className="text-content-tertiary" />
-              <p className="text-[13px] leading-4.5 font-semibold">No eligible designations yet</p>
-              <p className="text-xs leading-4 text-content-secondary">
-                Designations become available once you add them to a level in Hierarchy.
-              </p>
-              <Link
-                to="/tenant/hierarchy"
-                className="mt-2 inline-flex h-8 items-center gap-1.5 rounded-md bg-brand-subtle px-3 text-[13px] font-medium text-content-brand hover:bg-brand-muted"
-              >
-                <Settings size={16} />
-                Configure hierarchy
-              </Link>
+              {variant === 'branch' ? (
+                <>
+                  <p className="text-[13px] leading-4.5 font-semibold">No designations available yet</p>
+                  <p className="text-xs leading-4 text-content-secondary">
+                    Your Tenant Admin needs to add designations to the company hierarchy (Tenant Admin › Hierarchy)
+                    before you can add employees.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-[13px] leading-4.5 font-semibold">No eligible designations yet</p>
+                  <p className="text-xs leading-4 text-content-secondary">
+                    Designations become available once you add them to a level in Hierarchy.
+                  </p>
+                  <Link
+                    to="/tenant/hierarchy"
+                    className="mt-2 inline-flex h-8 items-center gap-1.5 rounded-md bg-brand-subtle px-3 text-[13px] font-medium text-content-brand hover:bg-brand-muted"
+                  >
+                    <Settings size={16} />
+                    Configure hierarchy
+                  </Link>
+                </>
+              )}
             </div>
           ) : (
             <>
@@ -133,8 +147,9 @@ export function DesignationPicker({ groups, value, onChange, unusedCount, error 
               </ul>
               <p className="flex gap-2 border-t border-line-subtle px-4 py-3 text-xs leading-4 text-content-secondary">
                 <Info size={14} className="mt-px shrink-0 text-content-tertiary" />
-                Make someone a Branch Manager from Edit employee › Role. {unusedCount} designations aren’t in your
-                hierarchy.
+                {variant === 'branch'
+                  ? 'Only designations in your company’s hierarchy are listed.'
+                  : `Make someone a Branch Manager from Edit employee › Role. ${unusedCount} designations aren’t in your hierarchy.`}
               </p>
             </>
           )}

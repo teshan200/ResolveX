@@ -88,9 +88,10 @@ export function EmployeesPage() {
       status,
       sort: sort ? { key: sort.key as EmployeeSortKey, direction: sort.direction } : undefined,
       page,
-      pageSize: PAGE_SIZE,
+      // The row that was just added or promoted is shown on top as an extra row.
+      pageSize: PAGE_SIZE + (highlight ? 1 : 0),
     }).then(setList)
-  }, [search, branch, branchId, designation, levelFilter, status, sort, page])
+  }, [search, branch, branchId, designation, levelFilter, status, sort, page, highlight])
 
   useEffect(() => {
     loadReferenceData()
@@ -224,16 +225,11 @@ export function EmployeesPage() {
     },
   ]
 
-  const items = list?.items ?? []
-  // A person who was just added or promoted stays visible at the top, whatever page they belong to.
-  const rows =
-    highlight && page === 1 && !items.some((e) => e.id === highlight.id)
-      ? [items.find((e) => e.id === highlight.id) ?? highlight, ...items]
-      : items
+  const rows = list?.items ?? []
   const start = (page - 1) * PAGE_SIZE + 1
   const total = list?.total ?? 0
-  const summary = items.length
-    ? `Showing ${start}–${start + items.length - 1} of ${total} employees`
+  const summary = rows.length
+    ? `Showing ${start}–${start + Math.min(rows.length, PAGE_SIZE) - 1} of ${total} employees`
     : 'No employees to show'
 
   const flagged = list?.needsDesignation ?? []
