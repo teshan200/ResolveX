@@ -10,6 +10,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
 import { PROTECTED_ROUTES } from '@/constants/session';
+import { AvailabilityProvider } from '@/hooks/use-availability';
 import { NotificationsProvider } from '@/hooks/use-notifications';
 import { SessionProvider, useSession } from '@/hooks/use-session';
 
@@ -36,7 +37,9 @@ export default function RootLayout() {
   return (
     <SessionProvider>
       <NotificationsProvider>
-        <SessionGate />
+        <AvailabilityProvider>
+          <SessionGate />
+        </AvailabilityProvider>
       </NotificationsProvider>
     </SessionProvider>
   );
