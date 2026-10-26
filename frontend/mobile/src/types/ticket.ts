@@ -1,6 +1,6 @@
 export type TicketPriority = 'critical' | 'high' | 'medium';
 
-export type TicketStatus = 'assigned' | 'inProgress' | 'escalated';
+export type TicketStatus = 'assigned' | 'claimed' | 'inProgress' | 'escalated';
 
 export type SlaState = 'onTrack' | 'warning' | 'breached';
 

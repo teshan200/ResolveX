@@ -69,6 +69,7 @@ export const Brand = {
   textPrimary: '#162120',
   textSecondary: '#4e5d5b',
   textTertiary: '#6b7b79',
+  textDisabled: '#94a3a1',
   textLink: '#1b7266',
   borderDefault: '#dde4e3',
   borderStrong: '#c3cdcc',
@@ -104,6 +105,7 @@ export const TicketColors = {
   },
   status: {
     assigned: { bg: '#f5f3ff', fg: '#6d28d9' },
+    claimed: { bg: '#eef8f6', fg: '#155e54' },
     inProgress: { bg: '#fffbeb', fg: '#b45309' },
     escalated: { bg: '#fef2f2', fg: '#b91c1c' },
   },

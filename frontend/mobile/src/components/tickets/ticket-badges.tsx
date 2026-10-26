@@ -13,6 +13,7 @@ const PRIORITY: Record<TicketPriority, { label: string; icon: ImageSource }> = {
 
 const STATUS: Record<TicketStatus, { label: string; icon: ImageSource }> = {
   assigned: { label: 'Assigned', icon: require('@/assets/images/home/status-assigned.svg') },
+  claimed: { label: 'Claimed', icon: require('@/assets/images/home/status-claimed.svg') },
   inProgress: { label: 'In Progress', icon: require('@/assets/images/home/status-in-progress.svg') },
   escalated: { label: 'Escalated', icon: require('@/assets/images/home/status-escalated.svg') },
 };

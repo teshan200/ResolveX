@@ -1,9 +1,10 @@
 import { Image } from 'expo-image';
+import type { ImageSource } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { PriorityBadge, SlaTimer, StatusBadge } from '@/components/tickets/ticket-badges';
 import { Brand, InterFonts, MonoFonts, Radius, Spacing, TicketColors } from '@/constants/theme';
-import type { TicketSummary } from '@/types/ticket';
+import type { TicketStatus, TicketSummary } from '@/types/ticket';
 
 type TicketCardProps = {
   ticket: TicketSummary;
@@ -11,15 +12,34 @@ type TicketCardProps = {
   onPress?: (ticket: TicketSummary) => void;
 };
 
-/** Critical tickets get the primary "Resolve" action; others get a subtle "Review". */
-function getAction(ticket: TicketSummary) {
-  return ticket.priority === 'critical'
-    ? { label: 'Resolve', primary: true }
-    : { label: 'Review', primary: false };
-}
+type TicketAction = {
+  label: string;
+  variant: 'primary' | 'subtle' | 'disabled';
+  chevron: ImageSource;
+};
+
+const CHEVRON_GREEN = require('@/assets/images/home/chevron-right-green.svg');
+const CHEVRON_WHITE = require('@/assets/images/home/chevron-right-white.svg');
+
+// The action button follows the ticket's status. "Claim" uses the green chevron exactly as the
+// Figma instance does (it sits on the green button, so it is not visible there).
+// "Review" for in-progress tickets comes from the previous design; the latest frame does not show one.
+const ACTIONS: Record<TicketStatus, TicketAction> = {
+  assigned: { label: 'Claim', variant: 'primary', chevron: CHEVRON_GREEN },
+  claimed: { label: 'Update', variant: 'subtle', chevron: CHEVRON_GREEN },
+  inProgress: { label: 'Review', variant: 'subtle', chevron: CHEVRON_GREEN },
+  escalated: { label: 'View only', variant: 'disabled', chevron: CHEVRON_WHITE },
+};
+
+const ACTION_STYLES = {
+  primary: { container: 'actionPrimary', text: 'actionTextPrimary' },
+  subtle: { container: 'actionSubtle', text: 'actionTextSubtle' },
+  disabled: { container: 'actionDisabled', text: 'actionTextDisabled' },
+} as const;
 
 export function TicketCard({ ticket, onPress }: TicketCardProps) {
-  const action = getAction(ticket);
+  const action = ACTIONS[ticket.status];
+  const actionStyle = ACTION_STYLES[action.variant];
 
   return (
     <Pressable
@@ -58,20 +78,9 @@ export function TicketCard({ ticket, onPress }: TicketCardProps) {
 
         <View style={styles.footer}>
           <StatusBadge status={ticket.status} />
-          <View style={[styles.action, action.primary ? styles.actionPrimary : styles.actionSubtle]}>
-            <Text
-              style={[styles.actionText, action.primary ? styles.actionTextPrimary : styles.actionTextSubtle]}>
-              {action.label}
-            </Text>
-            <Image
-              source={
-                action.primary
-                  ? require('@/assets/images/home/chevron-right-white.svg')
-                  : require('@/assets/images/home/chevron-right-green.svg')
-              }
-              style={styles.actionIcon}
-              contentFit="contain"
-            />
+          <View style={[styles.action, styles[actionStyle.container]]}>
+            <Text style={[styles.actionText, styles[actionStyle.text]]}>{action.label}</Text>
+            <Image source={action.chevron} style={styles.actionIcon} contentFit="contain" />
           </View>
         </View>
       </View>
@@ -164,6 +173,11 @@ const styles = StyleSheet.create({
   actionSubtle: {
     backgroundColor: Brand.bgBrandSubtle,
   },
+  actionDisabled: {
+    backgroundColor: Brand.bgMuted,
+    borderWidth: 1,
+    borderColor: Brand.borderSubtle,
+  },
   actionText: {
     fontFamily: InterFonts.medium,
     fontSize: 13,
@@ -174,6 +188,9 @@ const styles = StyleSheet.create({
   },
   actionTextSubtle: {
     color: Brand.textBrand,
+  },
+  actionTextDisabled: {
+    color: Brand.textDisabled,
   },
   actionIcon: {
     width: 16,
