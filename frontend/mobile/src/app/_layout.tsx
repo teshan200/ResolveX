@@ -9,7 +9,7 @@ import { router, Stack, usePathname } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
-import { PROTECTED_ROUTES } from '@/constants/session';
+import { isProtectedRoute } from '@/constants/session';
 import { AvailabilityProvider } from '@/hooks/use-availability';
 import { NotificationsProvider } from '@/hooks/use-notifications';
 import { SessionProvider, useSession } from '@/hooks/use-session';
@@ -52,7 +52,7 @@ function SessionGate() {
   useEffect(() => {
     if (status === 'expired' && pathname !== '/session-expired') {
       router.replace('/session-expired');
-    } else if (status === 'signedOut' && PROTECTED_ROUTES.includes(pathname)) {
+    } else if (status === 'signedOut' && isProtectedRoute(pathname)) {
       router.replace('/login');
     }
   }, [status, pathname]);

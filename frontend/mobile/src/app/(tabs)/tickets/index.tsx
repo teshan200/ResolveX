@@ -7,10 +7,12 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { AppBar } from '@/components/app-bar';
 import { FilterSortSheet } from '@/components/tickets/filter-sort-sheet';
 import { TicketCard } from '@/components/tickets/ticket-card';
+import type { TicketActionId } from '@/components/tickets/ticket-card';
 import { TicketEmptyState } from '@/components/tickets/ticket-empty-state';
 import { ActiveFilters, TicketsToolbar } from '@/components/tickets/tickets-toolbar';
 import { Brand, InterFonts, Spacing } from '@/constants/theme';
 import { useTickets } from '@/hooks/use-tickets';
+import type { TicketSummary } from '@/types/ticket';
 import type { TicketFilters, TicketSort } from '@/types/ticket-filters';
 import {
   DEFAULT_FILTERS,
@@ -24,6 +26,12 @@ import {
 } from '@/utils/tickets';
 
 const FIGMA_STATUS_BAR_HEIGHT = 44;
+
+// Only "Update" has a screen so far; Claim and Resolve are not built yet.
+const ACTION_HANDLERS: Partial<Record<TicketActionId, (ticket: TicketSummary) => void>> = {
+  update: (ticket) =>
+    router.push({ pathname: '/tickets/[id]/update-progress', params: { id: ticket.id } }),
+};
 
 export default function TicketsScreen() {
   const { status, tickets, reload } = useTickets();
@@ -102,7 +110,7 @@ export default function TicketsScreen() {
             ) : (
               <View style={styles.list}>
                 {visibleTickets.map((ticket) => (
-                  <TicketCard key={ticket.id} ticket={ticket} />
+                  <TicketCard key={ticket.id} ticket={ticket} actionHandlers={ACTION_HANDLERS} />
                 ))}
               </View>
             )}

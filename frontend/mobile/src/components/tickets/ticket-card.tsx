@@ -6,13 +6,18 @@ import { PriorityBadge, SlaTimer, StatusBadge } from '@/components/tickets/ticke
 import { Brand, InterFonts, MonoFonts, Radius, Spacing, TicketColors } from '@/constants/theme';
 import type { TicketStatus, TicketSummary } from '@/types/ticket';
 
+export type TicketActionId = 'claim' | 'update' | 'resolve' | 'viewOnly';
+
 type TicketCardProps = {
   ticket: TicketSummary;
-  /** Called when the card or its action button is pressed. */
+  /** Called when the card is pressed. */
   onPress?: (ticket: TicketSummary) => void;
+  /** Makes the action button pressable for the actions that have a handler. */
+  actionHandlers?: Partial<Record<TicketActionId, (ticket: TicketSummary) => void>>;
 };
 
 type TicketAction = {
+  id: TicketActionId;
   label: string;
   variant: 'primary' | 'subtle' | 'disabled';
   chevron: ImageSource;
@@ -24,12 +29,17 @@ const CHEVRON_WHITE = require('@/assets/images/home/chevron-right-white.svg');
 // The primary buttons use the green chevron exactly as the Figma instances do (it sits on the
 // green button, so it is not visible there).
 const ACTIONS: Partial<Record<TicketStatus, TicketAction>> = {
-  assigned: { label: 'Claim', variant: 'primary', chevron: CHEVRON_GREEN },
-  claimed: { label: 'Update', variant: 'subtle', chevron: CHEVRON_GREEN },
-  inProgress: { label: 'Resolve', variant: 'primary', chevron: CHEVRON_GREEN },
+  assigned: { id: 'claim', label: 'Claim', variant: 'primary', chevron: CHEVRON_GREEN },
+  claimed: { id: 'update', label: 'Update', variant: 'subtle', chevron: CHEVRON_GREEN },
+  inProgress: { id: 'resolve', label: 'Resolve', variant: 'primary', chevron: CHEVRON_GREEN },
 };
 
-const VIEW_ONLY: TicketAction = { label: 'View only', variant: 'disabled', chevron: CHEVRON_WHITE };
+const VIEW_ONLY: TicketAction = {
+  id: 'viewOnly',
+  label: 'View only',
+  variant: 'disabled',
+  chevron: CHEVRON_WHITE,
+};
 
 /**
  * Per the Figma note, escalated and SLA-breached tickets are view only. Resolved and closed
@@ -51,8 +61,9 @@ const ACTION_STYLES = {
   disabled: { container: 'actionDisabled', text: 'actionTextDisabled' },
 } as const;
 
-export function TicketCard({ ticket, onPress }: TicketCardProps) {
+export function TicketCard({ ticket, onPress, actionHandlers }: TicketCardProps) {
   const action = getAction(ticket);
+  const onActionPress = action ? actionHandlers?.[action.id] : undefined;
 
   return (
     <Pressable
@@ -93,12 +104,17 @@ export function TicketCard({ ticket, onPress }: TicketCardProps) {
         <View style={styles.footer}>
           <StatusBadge status={ticket.status} />
           {action && (
-            <View style={[styles.action, styles[ACTION_STYLES[action.variant].container]]}>
+            <Pressable
+              accessibilityRole={onActionPress ? 'button' : undefined}
+              accessibilityLabel={onActionPress ? `${action.label} ${ticket.ticketNumber}` : undefined}
+              disabled={!onActionPress}
+              onPress={() => onActionPress?.(ticket)}
+              style={[styles.action, styles[ACTION_STYLES[action.variant].container]]}>
               <Text style={[styles.actionText, styles[ACTION_STYLES[action.variant].text]]}>
                 {action.label}
               </Text>
               <Image source={action.chevron} style={styles.actionIcon} contentFit="contain" />
-            </View>
+            </Pressable>
           )}
         </View>
       </View>

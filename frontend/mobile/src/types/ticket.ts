@@ -10,6 +10,16 @@ export type TicketStatus =
 
 export type SlaState = 'onTrack' | 'warning' | 'breached' | 'met';
 
+/** The statuses a staff member can move a ticket between on the "Update progress" screen. */
+export type ProgressStatus = Extract<TicketStatus, 'claimed' | 'inProgress'>;
+
+/** What the "Update progress" form submits. */
+export type TicketProgressUpdate = {
+  status: ProgressStatus;
+  /** What the staff member did. Optional, up to 250 characters. */
+  note: string;
+};
+
 /** The ticket fields shown on list cards. */
 export type TicketSummary = {
   id: string;
