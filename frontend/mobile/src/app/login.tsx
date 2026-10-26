@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 
 import { Brand, FigmaSpace, InterFonts, Radius, Ring, Spacing } from '@/constants/theme';
+import { useSession } from '@/hooks/use-session';
 
 const FIGMA_STATUS_BAR_HEIGHT = 44;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,6 +41,7 @@ function validatePassword(value: string) {
 }
 
 export default function LoginScreen() {
+  const { signIn } = useSession();
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [rememberDevice, setRememberDevice] = useState(true);
@@ -69,6 +71,8 @@ export default function LoginScreen() {
     };
     setErrors(nextErrors);
     if (!nextErrors.identifier && !nextErrors.password) {
+      // Local validation only: there is no backend authentication yet.
+      signIn();
       router.replace('/home');
     }
   }

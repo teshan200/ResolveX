@@ -2,8 +2,11 @@ import { router } from 'expo-router';
 import { Image } from 'expo-image';
 import { StyleSheet, Text, View } from 'react-native';
 import { Brand, InterFonts, Radius, Spacing } from '@/constants/theme';
+import { useSession } from '@/hooks/use-session';
 
 export default function HomeScreen() {
+  const { signOut } = useSession();
+
   return (
     <View style={styles.container}>
       {/* Placeholder logo */}
@@ -15,7 +18,10 @@ export default function HomeScreen() {
       <Text style={styles.title}>Welcome to ResolveX Staff</Text>
       <Text style={styles.subtitle}>This is a minimal home screen placeholder.</Text>
       {/* Simple navigation back to login for testing */}
-      <Text style={styles.link} onPress={() => router.replace('/login')}>
+      <Text style={styles.link} onPress={() => {
+        signOut();
+        router.replace('/login');
+      }}>
         ← Back to Sign‑in
       </Text>
     </View>
