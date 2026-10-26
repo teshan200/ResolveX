@@ -20,6 +20,7 @@ import { EscalationInboxPage } from '../pages/EscalationInboxPage'
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage'
 import { GoogleSigninPage } from '../pages/GoogleSigninPage'
 import { GoogleSignupPage } from '../pages/GoogleSignupPage'
+import { HierarchyConfigurePage } from '../pages/HierarchyConfigurePage'
 import { HierarchyPage } from '../pages/HierarchyPage'
 import { LandingPage } from '../pages/LandingPage'
 import { LoginPage } from '../pages/LoginPage'
@@ -108,6 +109,7 @@ export function AppRoutes() {
           {area.basePath === '/tenant' && (
             <>
               <Route path="branches/:branchId" element={<BranchDetailPage />} />
+              <Route path="hierarchy/configure" element={<HierarchyConfigurePage />} />
               <Route path="complaints/:complaintId" element={<ComplaintDetailPage />} />
               <Route path="escalated/:escalationId" element={<EscalationDetailPage />} />
               <Route path="sla-monitoring/:complaintId" element={<SlaComplaintDetailPage />} />

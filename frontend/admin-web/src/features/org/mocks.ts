@@ -89,6 +89,22 @@ export const employeeProfiles: Record<string, { slaMet: string; complaints: Prof
   amali: { slaMet: '90%', complaints: [{ id: '#1037', title: 'Delivery missing items', state: 'Claimed' }] },
 }
 
+/** Employees per designation. Shown when a level is removed ("4 designations (41 employees) sit on this level"). */
+export const employeesPerDesignation: Record<string, number> = {
+  'Floor Supervisor': 14,
+  'Head Waiter': 12,
+  'Head Chef / Kitchen Manager': 9,
+  'Cleaning Supervisor': 11,
+  'Delivery Supervisor': 9,
+  'Waiter / Waitress': 96,
+  'Busser / Table Cleaner': 38,
+  'Cashier / POS Operator': 24,
+  'Cleaner / Housekeeper': 52,
+  'Delivery Rider / Driver': 33,
+  'General Chef / Line Cook': 47,
+  'Host / Hostess': 1,
+}
+
 export const hierarchy: Hierarchy = {
   levels: [
     { level: 5, name: 'Tenant Admin', reserved: true, designations: [] },
