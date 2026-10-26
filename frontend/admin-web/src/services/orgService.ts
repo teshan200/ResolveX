@@ -5,12 +5,14 @@ import {
   branchTotals,
   branches as seedBranches,
   defaultBranchDetail,
+  colomboEmployeeTotals,
   employeePageCount,
+  employeeProfiles,
   employeeTotals,
   employees as seedEmployees,
   hierarchy as seedHierarchy,
 } from '../features/org/mocks'
-import type { ActiveStatus, Branch, BranchDetail, Employee, Hierarchy, HierarchyLevel } from '../features/org/types'
+import type { ActiveStatus, Branch, BranchDetail, Employee, ProfileComplaint, Hierarchy, HierarchyLevel } from '../features/org/types'
 
 // Mock implementation. Replace the bodies with real calls when the backend is ready.
 
@@ -193,6 +195,8 @@ export interface EmployeeFilter {
   level?: number | 'All'
   status?: ActiveStatus | 'All'
   sort?: { key: EmployeeSortKey; direction: 'asc' | 'desc' }
+  /** Employee ids to list first, in this order. Everyone else follows in their usual order. */
+  order?: string[]
   page?: number
   pageSize?: number
 }
@@ -239,8 +243,6 @@ const employeeCounts = (list: Employee[]) => ({
   inactive: list.filter((e) => e.status === 'Inactive').length,
 })
 
-const seedEmployeeCounts = employeeCounts(seedEmployees)
-
 export async function listEmployees(filter: EmployeeFilter = {}): Promise<EmployeeList> {
   await delay()
   const query = filter.search?.trim().toLowerCase() ?? ''
@@ -252,6 +254,7 @@ export async function listEmployees(filter: EmployeeFilter = {}): Promise<Employ
     level = 'All',
     status = 'All',
     sort,
+    order,
   } = filter
 
   const scoped = employeeStore.filter((e) => branchId === 'All' || e.branchId === branchId).map(withLevel)
@@ -270,15 +273,25 @@ export async function listEmployees(filter: EmployeeFilter = {}): Promise<Employ
     matched.sort((x, y) => (value(x) < value(y) ? -1 : value(x) > value(y) ? 1 : 0) * direction)
   }
 
+  if (order && !sort) {
+    const rank = (id: string) => order.indexOf(id)
+    matched.sort((x, y) => rank(x.id) - rank(y.id))
+  }
+
   // The sample data holds a few rows, but the screen reports the whole company (486 employees).
   // Totals start from the Figma figures and follow any change made to the sample rows.
-  const now = employeeCounts(employeeStore)
-  const counts = {
-    all: employeeTotals.all + now.all - seedEmployeeCounts.all,
-    active: employeeTotals.active + now.active - seedEmployeeCounts.active,
-    inactive: employeeTotals.inactive + now.inactive - seedEmployeeCounts.inactive,
-  }
-  const unfiltered = !query && branchId === 'All' && designation === 'All' && level === 'All'
+  // The whole company starts from 486 and the Colombo branch from 38. Other branches count their rows.
+  const baseline = branchId === 'All' ? employeeTotals : branchId === 'colombo' ? colomboEmployeeTotals : null
+  const now = employeeCounts(employeeStore.filter((e) => branchId === 'All' || e.branchId === branchId))
+  const seed = employeeCounts(seedEmployees.filter((e) => branchId === 'All' || e.branchId === branchId))
+  const counts = baseline
+    ? {
+        all: baseline.all + now.all - seed.all,
+        active: baseline.active + now.active - seed.active,
+        inactive: baseline.inactive + now.inactive - seed.inactive,
+      }
+    : now
+  const unfiltered = !query && baseline !== null && designation === 'All' && level === 'All'
   const statusTotal = { All: counts.all, Active: counts.active, Inactive: counts.inactive }
   const total = unfiltered ? statusTotal[status] : matched.length
   const pageCount = unfiltered && status === 'All' ? employeePageCount : Math.max(1, Math.ceil(total / pageSize))
@@ -297,6 +310,24 @@ export async function getEmployee(id: string): Promise<EmployeeRow> {
   const employee = employeeStore.find((e) => e.id === id)
   if (!employee) throw new OrgError('not-found', 'Employee not found')
   return withLevel(employee)
+}
+
+export interface EmployeeProfile {
+  employee: EmployeeRow
+  slaMet: string
+  complaints: ProfileComplaint[]
+}
+
+export async function getEmployeeProfile(id: string): Promise<EmployeeProfile> {
+  await delay(150)
+  const employee = employeeStore.find((e) => e.id === id)
+  if (!employee) throw new OrgError('not-found', 'Employee not found')
+  const profile = employeeProfiles[id]
+  return {
+    employee: withLevel(employee),
+    slaMet: profile?.slaMet ?? '—',
+    complaints: profile?.complaints ?? [],
+  }
 }
 
 /** Branch ids and names for the Branch dropdown ("Choose from your company's branches"). */
@@ -344,6 +375,7 @@ export interface NewEmployee {
   email: string
   designation: string
   branchId: string
+  status?: ActiveStatus
 }
 
 export async function addEmployee(input: NewEmployee): Promise<EmployeeRow> {
@@ -358,7 +390,7 @@ export async function addEmployee(input: NewEmployee): Promise<EmployeeRow> {
     email: input.email,
     designation: input.designation,
     branchId: input.branchId,
-    status: 'Active',
+    status: input.status ?? 'Active',
     lastActive: 'Invited · just now',
     openTickets: 0,
   }

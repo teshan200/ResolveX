@@ -49,3 +49,12 @@ export interface Hierarchy {
   /** Designations the company has defined but not placed on any level. */
   unused: string[]
 }
+
+export type ComplaintState = 'Claimed' | 'Escalated' | 'Resolved'
+
+/** A complaint shown on an employee's profile. */
+export interface ProfileComplaint {
+  id: string
+  title: string
+  state: ComplaintState
+}
