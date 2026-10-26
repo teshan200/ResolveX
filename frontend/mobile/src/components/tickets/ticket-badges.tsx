@@ -9,6 +9,7 @@ const PRIORITY: Record<TicketPriority, { label: string; icon: ImageSource }> = {
   critical: { label: 'CRITICAL', icon: require('@/assets/images/home/priority-critical.svg') },
   high: { label: 'HIGH', icon: require('@/assets/images/home/priority-high.svg') },
   medium: { label: 'MEDIUM', icon: require('@/assets/images/home/priority-medium.svg') },
+  normal: { label: 'NORMAL', icon: require('@/assets/images/home/priority-normal.svg') },
 };
 
 const STATUS: Record<TicketStatus, { label: string; icon: ImageSource }> = {
@@ -16,12 +17,16 @@ const STATUS: Record<TicketStatus, { label: string; icon: ImageSource }> = {
   claimed: { label: 'Claimed', icon: require('@/assets/images/home/status-claimed.svg') },
   inProgress: { label: 'In Progress', icon: require('@/assets/images/home/status-in-progress.svg') },
   escalated: { label: 'Escalated', icon: require('@/assets/images/home/status-escalated.svg') },
+  resolved: { label: 'Resolved', icon: require('@/assets/images/home/status-resolved.svg') },
+  closed: { label: 'Closed', icon: require('@/assets/images/home/status-closed.svg') },
 };
 
 const SLA_ICON: Record<SlaState, ImageSource> = {
   onTrack: require('@/assets/images/home/sla-on-track.svg'),
   warning: require('@/assets/images/home/sla-warning.svg'),
   breached: require('@/assets/images/home/sla-breached.svg'),
+  // "SLA met" reuses the on-track icon, as in Figma.
+  met: require('@/assets/images/home/sla-on-track.svg'),
 };
 
 export function PriorityBadge({ priority }: { priority: TicketPriority }) {

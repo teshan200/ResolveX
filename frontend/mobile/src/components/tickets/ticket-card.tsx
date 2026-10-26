@@ -21,15 +21,29 @@ type TicketAction = {
 const CHEVRON_GREEN = require('@/assets/images/home/chevron-right-green.svg');
 const CHEVRON_WHITE = require('@/assets/images/home/chevron-right-white.svg');
 
-// The action button follows the ticket's status. "Claim" uses the green chevron exactly as the
-// Figma instance does (it sits on the green button, so it is not visible there).
-// "Review" for in-progress tickets comes from the previous design; the latest frame does not show one.
-const ACTIONS: Record<TicketStatus, TicketAction> = {
+// The primary buttons use the green chevron exactly as the Figma instances do (it sits on the
+// green button, so it is not visible there).
+const ACTIONS: Partial<Record<TicketStatus, TicketAction>> = {
   assigned: { label: 'Claim', variant: 'primary', chevron: CHEVRON_GREEN },
   claimed: { label: 'Update', variant: 'subtle', chevron: CHEVRON_GREEN },
-  inProgress: { label: 'Review', variant: 'subtle', chevron: CHEVRON_GREEN },
-  escalated: { label: 'View only', variant: 'disabled', chevron: CHEVRON_WHITE },
+  inProgress: { label: 'Resolve', variant: 'primary', chevron: CHEVRON_GREEN },
 };
+
+const VIEW_ONLY: TicketAction = { label: 'View only', variant: 'disabled', chevron: CHEVRON_WHITE };
+
+/**
+ * Per the Figma note, escalated and SLA-breached tickets are view only. Resolved and closed
+ * tickets have no action.
+ */
+function getAction(ticket: TicketSummary): TicketAction | null {
+  if (ticket.status === 'resolved' || ticket.status === 'closed') {
+    return null;
+  }
+  if (ticket.status === 'escalated' || ticket.sla.state === 'breached') {
+    return VIEW_ONLY;
+  }
+  return ACTIONS[ticket.status] ?? null;
+}
 
 const ACTION_STYLES = {
   primary: { container: 'actionPrimary', text: 'actionTextPrimary' },
@@ -38,13 +52,13 @@ const ACTION_STYLES = {
 } as const;
 
 export function TicketCard({ ticket, onPress }: TicketCardProps) {
-  const action = ACTIONS[ticket.status];
-  const actionStyle = ACTION_STYLES[action.variant];
+  const action = getAction(ticket);
 
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={`${ticket.ticketNumber} ${ticket.title}, ${ticket.priority} priority`}
+      disabled={!onPress}
       onPress={() => onPress?.(ticket)}
       style={styles.card}>
       <View style={[styles.stripe, { backgroundColor: TicketColors.priority[ticket.priority].solid }]} />
@@ -78,10 +92,14 @@ export function TicketCard({ ticket, onPress }: TicketCardProps) {
 
         <View style={styles.footer}>
           <StatusBadge status={ticket.status} />
-          <View style={[styles.action, styles[actionStyle.container]]}>
-            <Text style={[styles.actionText, styles[actionStyle.text]]}>{action.label}</Text>
-            <Image source={action.chevron} style={styles.actionIcon} contentFit="contain" />
-          </View>
+          {action && (
+            <View style={[styles.action, styles[ACTION_STYLES[action.variant].container]]}>
+              <Text style={[styles.actionText, styles[ACTION_STYLES[action.variant].text]]}>
+                {action.label}
+              </Text>
+              <Image source={action.chevron} style={styles.actionIcon} contentFit="contain" />
+            </View>
+          )}
         </View>
       </View>
     </Pressable>
