@@ -1,10 +1,14 @@
 import {
   BRANCH_MANAGER_DESIGNATION,
+  branchDetails,
+  branchPageCount,
+  branchTotals,
   branches as seedBranches,
+  defaultBranchDetail,
   employees as seedEmployees,
   hierarchy as seedHierarchy,
 } from '../features/org/mocks'
-import type { ActiveStatus, Branch, Employee, Hierarchy, HierarchyLevel } from '../features/org/types'
+import type { ActiveStatus, Branch, BranchDetail, Employee, Hierarchy, HierarchyLevel } from '../features/org/types'
 
 // Mock implementation. Replace the bodies with real calls when the backend is ready.
 
@@ -52,18 +56,32 @@ export function levelOf(designation: string): number | null {
 
 export interface BranchFilter {
   search?: string
-  /** 'any' | 'none' (no manager) | an employee id. */
+  /** 'any' | 'assigned' | 'none' (no manager) | an employee id. */
   manager?: string
   status?: ActiveStatus | 'All' | 'No manager'
   page?: number
   pageSize?: number
 }
 
+export interface BranchRow extends Branch {
+  manager: Employee | null
+}
+
 export interface BranchList {
-  items: Branch[]
+  items: BranchRow[]
   total: number
+  pageCount: number
   counts: { all: number; active: number; inactive: number; noManager: number }
 }
+
+const branchCounts = (list: Branch[]) => ({
+  all: list.length,
+  active: list.filter((b) => b.status === 'Active').length,
+  inactive: list.filter((b) => b.status === 'Inactive').length,
+  noManager: list.filter((b) => b.managerId === null).length,
+})
+
+const seedBranchCounts = branchCounts(seedBranches)
 
 export async function listBranches(filter: BranchFilter = {}): Promise<BranchList> {
   await delay()
@@ -73,21 +91,53 @@ export async function listBranches(filter: BranchFilter = {}): Promise<BranchLis
   const matched = branchStore.filter((b) => {
     if (query && !`${b.name} ${b.address} ${b.email}`.toLowerCase().includes(query)) return false
     if (manager === 'none' && b.managerId !== null) return false
-    if (manager !== 'any' && manager !== 'none' && b.managerId !== manager) return false
+    if (manager === 'assigned' && b.managerId === null) return false
+    if (!['any', 'none', 'assigned'].includes(manager) && b.managerId !== manager) return false
     if (status === 'No manager') return b.managerId === null
     if (status !== 'All') return b.status === status
     return true
   })
 
+  // The sample data holds a few rows, but the screen reports the full company (32 branches).
+  // The totals start from the Figma figures and follow any change made to the sample rows.
+  const now = branchCounts(branchStore)
+  const counts = {
+    all: branchTotals.all + now.all - seedBranchCounts.all,
+    active: branchTotals.active + now.active - seedBranchCounts.active,
+    inactive: branchTotals.inactive + now.inactive - seedBranchCounts.inactive,
+    noManager: branchTotals.noManager + now.noManager - seedBranchCounts.noManager,
+  }
+  const unfiltered = !query && manager === 'any'
+  const statusTotal = { All: counts.all, Active: counts.active, Inactive: counts.inactive, 'No manager': counts.noManager }
+  const total = unfiltered ? statusTotal[status] : matched.length
+  const pageCount = unfiltered && status === 'All' ? branchPageCount : Math.max(1, Math.ceil(total / pageSize))
+
   return {
-    items: matched.slice((page - 1) * pageSize, page * pageSize),
-    total: matched.length,
-    counts: {
-      all: branchStore.length,
-      active: branchStore.filter((b) => b.status === 'Active').length,
-      inactive: branchStore.filter((b) => b.status === 'Inactive').length,
-      noManager: branchStore.filter((b) => b.managerId === null).length,
-    },
+    items: matched.slice((page - 1) * pageSize, page * pageSize).map((b) => ({
+      ...b,
+      manager: employeeStore.find((e) => e.id === b.managerId) ?? null,
+    })),
+    total,
+    pageCount,
+    counts,
+  }
+}
+
+export interface BranchDetailResult {
+  branch: Branch
+  manager: EmployeeRow | null
+  detail: BranchDetail
+}
+
+export async function getBranchDetail(id: string): Promise<BranchDetailResult> {
+  await delay()
+  const branch = branchStore.find((b) => b.id === id)
+  if (!branch) throw new OrgError('not-found', 'Branch not found')
+  const manager = employeeStore.find((e) => e.id === branch.managerId)
+  return {
+    branch: structuredClone(branch),
+    manager: manager ? withLevel(manager) : null,
+    detail: structuredClone(branchDetails[id] ?? defaultBranchDetail),
   }
 }
 
@@ -99,16 +149,19 @@ export async function getBranch(id: string): Promise<Branch> {
 }
 
 /** A branch can be added without a manager. It shows as Unassigned until one is set in Employees. */
-export async function addBranch(input: Pick<Branch, 'name' | 'address' | 'phone' | 'email'>): Promise<Branch> {
+export async function addBranch(
+  input: Pick<Branch, 'name' | 'address' | 'phone' | 'email'> & { status?: ActiveStatus },
+): Promise<Branch> {
   await delay()
-  const branch: Branch = { ...input, id: slug(input.name), managerId: null, staffCount: 0, status: 'Active' }
+  const { status = 'Active', ...fields } = input
+  const branch: Branch = { ...fields, id: slug(input.name), managerId: null, staffCount: 0, status }
   branchStore = [...branchStore, branch]
   return branch
 }
 
 export async function updateBranch(
   id: string,
-  changes: Partial<Pick<Branch, 'name' | 'address' | 'phone' | 'email'>>,
+  changes: Partial<Pick<Branch, 'name' | 'address' | 'phone' | 'email' | 'status'>>,
 ): Promise<Branch> {
   await delay()
   const branch = branchStore.find((b) => b.id === id)

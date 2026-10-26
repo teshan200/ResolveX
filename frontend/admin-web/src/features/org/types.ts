@@ -12,6 +12,16 @@ export interface Branch {
   status: ActiveStatus
 }
 
+/** Extra figures shown on the Branch detail screen. */
+export interface BranchDetail {
+  createdAt: string
+  /** When the current Branch Manager was assigned. Null while the branch is Unassigned. */
+  managerSince: string | null
+  qrCodes: number
+  openComplaints: number
+  slaBreachRate: string
+}
+
 export interface Employee {
   id: string
   name: string

@@ -1,9 +1,12 @@
 // Sample data for the Branches, Employees and Hierarchy screens. No backend is connected.
-import type { Branch, Employee, Hierarchy } from './types'
+import type { Branch, BranchDetail, Employee, Hierarchy } from './types'
 
 export const BRANCH_MANAGER_DESIGNATION = 'Branch Manager'
 
 export const branchTotals = { all: 32, active: 31, inactive: 1, noManager: 1 }
+
+/** Page count the Branches screen shows for the full list of 32 branches. */
+export const branchPageCount = 13
 
 export const employeeTotals = { all: 486, active: 471, inactive: 15 }
 
@@ -17,6 +20,23 @@ export const branches: Branch[] = [
   { id: 'nuwara-eliya', name: 'Nuwara Eliya', address: 'Grand Hotel Rd, Nuwara Eliya', phone: '+94 52 222 5566', email: 'nuwaraeliya@spicegarden.lk', managerId: 'ishara', staffCount: 14, status: 'Active' },
   { id: 'matara', name: 'Matara', address: 'Beach Rd, Matara', phone: '+94 41 222 6677', email: 'matara@spicegarden.lk', managerId: null, staffCount: 0, status: 'Inactive' },
 ]
+
+export const defaultBranchDetail: BranchDetail = {
+  createdAt: '14 Mar 2026',
+  managerSince: null,
+  qrCodes: 0,
+  openComplaints: 0,
+  slaBreachRate: '0%',
+}
+
+export const branchDetails: Record<string, BranchDetail> = {
+  colombo: { createdAt: '14 Mar 2026', managerSince: '14 Mar 2026', qrCodes: 7, openComplaints: 9, slaBreachRate: '2.1%' },
+  negombo: { createdAt: '02 Apr 2026', managerSince: '02 Apr 2026', qrCodes: 4, openComplaints: 3, slaBreachRate: '1.4%' },
+  kandy: { createdAt: '19 Apr 2026', managerSince: '19 Apr 2026', qrCodes: 6, openComplaints: 5, slaBreachRate: '3.0%' },
+  galle: { createdAt: '08 May 2026', managerSince: '08 May 2026', qrCodes: 5, openComplaints: 4, slaBreachRate: '1.9%' },
+  'nuwara-eliya': { createdAt: '21 May 2026', managerSince: '21 May 2026', qrCodes: 3, openComplaints: 2, slaBreachRate: '0.8%' },
+  matara: { createdAt: '11 Jun 2026', managerSince: null, qrCodes: 0, openComplaints: 0, slaBreachRate: '0%' },
+}
 
 export const employees: Employee[] = [
   { id: 'ayesha', name: 'Ayesha Perera', initials: 'AP', email: 'ayesha@spicegarden.lk', designation: 'Branch Manager', branchId: 'colombo', status: 'Active', lastActive: 'Now', openTickets: 0 },
