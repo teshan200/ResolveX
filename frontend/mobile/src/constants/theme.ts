@@ -74,6 +74,12 @@ export const Brand = {
   borderStrong: '#c3cdcc',
   borderFocus: '#4aaa9c',
   dangerFg: '#b91c1c',
+  bgBrandMuted: '#d5efea',
+  bgBrandSubtle: '#eef8f6',
+  bgMuted: '#edf1f1',
+  borderSubtle: '#edf1f1',
+  textBrand: '#155e54',
+  dangerSolid: '#dc2626',
 } as const;
 
 export const Ring = {
@@ -84,8 +90,30 @@ export const Ring = {
 export const Radius = {
   xs: 4,
   md: 8,
+  lg: 12,
   xl: 16,
   xl2: 24,
+} as const;
+
+/** Ticket priority, status and SLA colours from the Figma badge components. */
+export const TicketColors = {
+  priority: {
+    critical: { bg: '#fef2f2', fg: '#b91c1c', solid: '#dc2626' },
+    high: { bg: '#fff7ed', fg: '#c2410c', solid: '#ea580c' },
+    medium: { bg: '#fffbeb', fg: '#b45309', solid: '#d97706' },
+  },
+  status: {
+    assigned: { bg: '#f5f3ff', fg: '#6d28d9' },
+    inProgress: { bg: '#fffbeb', fg: '#b45309' },
+    escalated: { bg: '#fef2f2', fg: '#b91c1c' },
+  },
+  sla: {
+    onTrack: { bg: '#f0fdf4', fg: '#15803d' },
+    warning: { bg: '#fffbeb', fg: '#b45309' },
+    breached: { bg: '#fef2f2', fg: '#b91c1c' },
+  },
+  successBg: '#f0fdf4',
+  successFg: '#15803d',
 } as const;
 
 export const FigmaSpace = {
@@ -98,6 +126,10 @@ export const InterFonts = {
   regular: 'Inter_400Regular',
   medium: 'Inter_500Medium',
   semiBold: 'Inter_600SemiBold',
+} as const;
+
+export const MonoFonts = {
+  medium: 'JetBrainsMono_500Medium',
 } as const;
 
 export const BottomTabInset =Platform.select({ ios: 50, android: 80 }) ?? 0;

@@ -4,11 +4,13 @@ import {
   Inter_600SemiBold,
   useFonts,
 } from '@expo-google-fonts/inter';
+import { JetBrainsMono_500Medium } from '@expo-google-fonts/jetbrains-mono';
 import { router, Stack, usePathname } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
 import { PROTECTED_ROUTES } from '@/constants/session';
+import { NotificationsProvider } from '@/hooks/use-notifications';
 import { SessionProvider, useSession } from '@/hooks/use-session';
 
 SplashScreen.preventAutoHideAsync();
@@ -18,6 +20,7 @@ export default function RootLayout() {
     Inter_400Regular,
     Inter_500Medium,
     Inter_600SemiBold,
+    JetBrainsMono_500Medium,
   });
 
   useEffect(() => {
@@ -32,7 +35,9 @@ export default function RootLayout() {
 
   return (
     <SessionProvider>
-      <SessionGate />
+      <NotificationsProvider>
+        <SessionGate />
+      </NotificationsProvider>
     </SessionProvider>
   );
 }
