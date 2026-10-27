@@ -5,6 +5,7 @@ import { areas, navItems } from '../layout/navigation'
 import { AdminUsersPage } from '../pages/AdminUsersPage'
 import { AiReviewQueuePage } from '../pages/AiReviewQueuePage'
 import { AnalyticsPage } from '../pages/AnalyticsPage'
+import { BillingPage } from '../pages/BillingPage'
 import { BranchEmployeesPage } from '../pages/BranchEmployeesPage'
 import { BranchDetailPage } from '../pages/BranchDetailPage'
 import { BranchesPage } from '../pages/BranchesPage'
@@ -17,6 +18,11 @@ import { CompaniesPage } from '../pages/CompaniesPage'
 import { ComplaintDetailPage } from '../pages/ComplaintDetailPage'
 import { ComplaintsOverviewPage } from '../pages/ComplaintsOverviewPage'
 import { EscalatedToMePage } from '../pages/EscalatedToMePage'
+import { FeedbackFormsPage } from '../pages/FeedbackFormsPage'
+import { FormBuilderPage } from '../pages/FormBuilderPage'
+import { QrCodesPage } from '../pages/QrCodesPage'
+import { SettingsPage } from '../pages/SettingsPage'
+import { TenantDashboardPage } from '../pages/TenantDashboardPage'
 import { EscalationDetailPage } from '../pages/EscalationDetailPage'
 import { EmployeesPage } from '../pages/EmployeesPage'
 import { EscalationInboxPage } from '../pages/EscalationInboxPage'
@@ -67,6 +73,11 @@ const builtPages: Record<string, ReactElement> = {
   '/branch/staff': <StaffWorkloadPage />,
   '/branch/tickets': <BranchTicketsPage />,
   '/branch/employees': <BranchEmployeesPage />,
+  '/tenant/dashboard': <TenantDashboardPage />,
+  '/tenant/feedback-forms': <FeedbackFormsPage />,
+  '/tenant/qr-codes': <QrCodesPage />,
+  '/tenant/billing': <BillingPage />,
+  '/tenant/settings': <SettingsPage />,
   '/tenant/analytics': <AnalyticsPage />,
 
   '/tenant/complaints': <ComplaintsOverviewPage />,
@@ -117,6 +128,7 @@ export function AppRoutes() {
             <>
               <Route path="branches/:branchId" element={<BranchDetailPage />} />
               <Route path="hierarchy/configure" element={<HierarchyConfigurePage />} />
+              <Route path="feedback-forms/:formId" element={<FormBuilderPage />} />
               <Route path="complaints/:complaintId" element={<ComplaintDetailPage />} />
               <Route path="escalated/:escalationId" element={<EscalationDetailPage />} />
             </>
