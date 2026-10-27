@@ -180,13 +180,6 @@ export const tenantAdminArea: NavArea = {
           icon: Timer,
           crumb: ['Configuration', 'SLA policies'],
         },
-        // Built by the SLA engine feature; not part of the Figma sidebar.
-        {
-          label: 'SLA monitoring',
-          path: 'sla-monitoring',
-          icon: Activity,
-          crumb: ['Configuration', 'SLA monitoring'],
-        },
         {
           label: 'Billing & plan',
           path: 'billing',

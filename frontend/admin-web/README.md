@@ -81,7 +81,6 @@ The plan flow is Choose Plan (`/choose-plan`), Payment (`/payment`), then Onboar
 | TA · Audit Log | `/tenant/audit-log` | Placeholder | `GET /audit-logs` |
 | TA · Billing & Plan, Payment Failed | `/tenant/billing` | Placeholder | `GET /subscription`, `POST /subscription/checkout`, `POST /subscription/upgrade`, `POST /subscription/downgrade`, `POST /subscription/renew` |
 | TA · Settings, Branding | `/tenant/settings` | Placeholder | `GET /me`, `PATCH /me` |
-| SLA Monitoring (added by the SLA engine feature, not in the Figma sidebar) | `/tenant/sla-monitoring` | Built | Mock data only |
 
 ### Branch Manager (`/branch`)
 

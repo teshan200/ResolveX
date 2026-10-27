@@ -38,8 +38,6 @@ import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { RegisterPage } from '../pages/RegisterPage'
 import { ReportsPage } from '../pages/ReportsPage'
 import { ResolutionApprovalsPage } from '../pages/ResolutionApprovalsPage'
-import { SlaComplaintDetailPage } from '../pages/SlaComplaintDetailPage'
-import { SlaMonitoringPage } from '../pages/SlaMonitoringPage'
 import { SlaPoliciesPage } from '../pages/SlaPoliciesPage'
 
 import { StaffWorkloadPage } from '../pages/StaffWorkloadPage'
@@ -78,7 +76,6 @@ const builtPages: Record<string, ReactElement> = {
   '/tenant/hierarchy': <HierarchyPage />,
   '/tenant/escalated': <EscalatedToMePage />,
   '/tenant/reports': <ReportsPage />,
-  '/tenant/sla-monitoring': <SlaMonitoringPage />,
   '/tenant/sla-policies': <SlaPoliciesPage />,
 }
 
@@ -122,7 +119,6 @@ export function AppRoutes() {
               <Route path="hierarchy/configure" element={<HierarchyConfigurePage />} />
               <Route path="complaints/:complaintId" element={<ComplaintDetailPage />} />
               <Route path="escalated/:escalationId" element={<EscalationDetailPage />} />
-              <Route path="sla-monitoring/:complaintId" element={<SlaComplaintDetailPage />} />
             </>
           )}
         </Route>
