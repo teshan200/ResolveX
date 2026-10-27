@@ -13,16 +13,21 @@ import {
   Tag,
 } from '../components/ui'
 import type { Column } from '../components/ui'
-import { ReviewToast } from '../features/ai-review/components/ReviewToast'
+import { BackToShiftCell, ShiftActionCell } from '../features/org/components/BreakControls'
 import { BranchEmployeeDrawer } from '../features/org/components/BranchEmployeeDrawer'
 import { EmployeeProfileDrawer } from '../features/org/components/EmployeeProfileDrawer'
 import { LevelBadge } from '../features/org/components/LevelBadge'
 import { ActiveStatusPill } from '../features/org/components/OrgStatus'
+import { ShiftStatusChip } from '../features/org/components/ShiftStatusChip'
+import { Toast } from '../features/org/components/Toast'
 import { BRANCH_MANAGER_DESIGNATION } from '../features/org/mocks'
 import {
+  approveBreak,
+  backToShift,
   countUnusedDesignations,
   listEligibleDesignations,
   listEmployees,
+  scheduleReturn,
 } from '../services/orgService'
 import type { DesignationGroup, EmployeeList, EmployeeRow } from '../services/orgService'
 
@@ -41,6 +46,11 @@ const STATUS_FILTERS: { label: StatusFilter; count: keyof EmployeeList['counts']
   { label: 'Inactive', count: 'inactive' },
 ]
 
+interface ToastState {
+  message: string
+  placement: 'top' | 'bottom'
+}
+
 export function BranchEmployeesPage() {
   const [list, setList] = useState<EmployeeList | null>(null)
   const [groups, setGroups] = useState<DesignationGroup[]>([])
@@ -50,7 +60,7 @@ export function BranchEmployeesPage() {
   const [page, setPage] = useState(1)
   const [adding, setAdding] = useState(false)
   const [viewing, setViewing] = useState<string | null>(null)
-  const [toast, setToast] = useState<string | null>(null)
+  const [toast, setToast] = useState<ToastState | null>(null)
   const [highlight, setHighlight] = useState<string | null>(null)
   const timers = useRef<number[]>([])
 
@@ -87,11 +97,38 @@ export function BranchEmployeesPage() {
   const closeAdd = useCallback(() => setAdding(false), [])
   const closeProfile = useCallback(() => setViewing(null), [])
 
-  const added = (employee: EmployeeRow) => {
-    setToast(`${employee.name} added to ${BRANCH.name} · ${employee.designation} · Level ${employee.level}`)
-    setHighlight(employee.id)
+  const showToast = (next: ToastState) => {
+    setToast(next)
     timers.current.push(window.setTimeout(() => setToast(null), 4000))
+  }
+
+  const added = (employee: EmployeeRow) => {
+    showToast({
+      message: `${employee.name} added to ${BRANCH.name} · ${employee.designation} · Level ${employee.level}`,
+      placement: 'top',
+    })
+    setHighlight(employee.id)
     timers.current.push(window.setTimeout(() => setHighlight(null), 6000))
+  }
+
+  const approve = async (employee: EmployeeRow) => {
+    await approveBreak(employee.id)
+    loadList()
+    showToast({ message: `Break approved for ${employee.name} · set an expected return`, placement: 'bottom' })
+  }
+
+  const schedule = async (employee: EmployeeRow, returnAt: string) => {
+    await scheduleReturn(employee.id, returnAt)
+    loadList()
+    showToast({
+      message: `Return set for ${returnAt} · ${employee.name.split(' ')[0]} stays On Break`,
+      placement: 'bottom',
+    })
+  }
+
+  const markBack = async (employee: EmployeeRow) => {
+    await backToShift(employee.id)
+    loadList()
   }
 
   const resetPage = <T,>(set: (value: T) => void) => (value: T) => {
@@ -99,11 +136,13 @@ export function BranchEmployeesPage() {
     setPage(1)
   }
 
+  const isManager = (employee: EmployeeRow) => employee.designation === BRANCH_MANAGER_DESIGNATION
+
   const columns: Column<EmployeeRow>[] = [
     {
       key: 'employee',
       header: 'Employee',
-      width: 336,
+      width: 188,
       render: (employee) => (
         <>
           <Avatar initials={employee.initials} size="sm" />
@@ -112,7 +151,7 @@ export function BranchEmployeesPage() {
             <span className="truncate text-xs leading-4 text-content-tertiary">{employee.email}</span>
           </span>
           {employee.id === CURRENT_USER_ID && (
-            <span className="ml-auto pr-3">
+            <span className="ml-auto flex">
               <Tag tone="brand">You</Tag>
             </span>
           )}
@@ -122,52 +161,62 @@ export function BranchEmployeesPage() {
     {
       key: 'designation',
       header: 'Designation',
-      width: 220,
+      width: 126,
       render: (employee) => <span className="truncate text-[13px] leading-4.5">{employee.designation}</span>,
     },
     {
       key: 'level',
       header: 'Level',
-      width: 151,
-      render: (employee) => (
-        <LevelBadge level={employee.level} reserved={employee.designation === BRANCH_MANAGER_DESIGNATION} />
-      ),
+      width: 142,
+      render: (employee) => <LevelBadge level={employee.level} reserved={isManager(employee)} />,
     },
     {
       key: 'status',
       header: 'Status',
-      width: 110,
+      width: 102,
       render: (employee) => <ActiveStatusPill status={employee.status} />,
     },
     {
-      key: 'lastActive',
-      header: 'Last active',
+      key: 'shiftStatus',
+      header: 'Shift Status',
+      width: 100,
+      render: (employee) => <ShiftStatusChip shift={employee.shift} />,
+    },
+    {
+      key: 'shiftAction',
+      header: 'Shift Action',
       width: 140,
       render: (employee) => (
-        <span className="truncate text-[13px] leading-4.5 text-content-secondary">{employee.lastActive}</span>
+        <ShiftActionCell employee={employee} isManager={isManager(employee)} onApprove={approve} />
+      ),
+    },
+    {
+      key: 'backToShift',
+      header: 'Back to Shift',
+      width: 170,
+      render: (employee) => (
+        <BackToShiftCell
+          employee={employee}
+          isManager={isManager(employee)}
+          onSchedule={schedule}
+          onBack={markBack}
+        />
       ),
     },
     {
       key: 'openTickets',
       header: 'Open tickets',
-      width: 100,
+      width: 98,
       render: (employee) => (
-        <span className="text-[13px] leading-4.5">
-          {employee.designation === BRANCH_MANAGER_DESIGNATION ? '—' : employee.openTickets}
-        </span>
+        <span className="text-[13px] leading-4.5">{isManager(employee) ? '—' : employee.openTickets}</span>
       ),
     },
     {
       key: 'view',
       header: '',
-      width: 53,
+      width: 44,
       render: (employee) => (
-        <IconButton
-          icon={Eye}
-          label={`View ${employee.name}`}
-          size="sm"
-          onClick={() => setViewing(employee.id)}
-        />
+        <IconButton icon={Eye} label={`View ${employee.name}`} size="sm" onClick={() => setViewing(employee.id)} />
       ),
     },
   ]
@@ -233,6 +282,7 @@ export function BranchEmployeesPage() {
           rows={rows}
           rowKey={(employee) => employee.id}
           rowHeight={60}
+          density="compact"
           rowClassName={(employee) => (employee.id === highlight ? 'bg-success-bg' : undefined)}
           empty={
             <p className="px-4 py-10 text-center text-sm leading-5 text-content-secondary">
@@ -255,7 +305,7 @@ export function BranchEmployeesPage() {
         />
       )}
       {viewing && <EmployeeProfileDrawer employeeId={viewing} onClose={closeProfile} />}
-      <ReviewToast message={toast} />
+      <Toast message={toast?.message ?? null} placement={toast?.placement} />
     </div>
   )
 }
