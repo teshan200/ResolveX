@@ -57,11 +57,11 @@ The plan flow is Choose Plan (`/choose-plan`), Payment (`/payment`), then Onboar
 |---|---|---|---|
 | SA · Platform Overview | `/super-admin/overview` | Built | `GET /admin/usage` |
 | SA · Companies, Tenant Detail, Suspend Tenant | `/super-admin/companies` | Built | `GET /admin/tenants`, `GET /admin/tenants/{id}`, `POST /admin/tenants/{id}/suspend`, `POST /admin/tenants/{id}/reactivate`, `POST /admin/tenants/{id}/deactivate` |
-| SA · Subscriptions | `/super-admin/subscriptions` | Built | `GET /admin/subscriptions` |
+| SA · Subscriptions | `/super-admin/subscriptions` | Built | `GET /admin/subscriptions?period=` |
 | SA · Plans & Pricing | `/super-admin/plans` | Built | `GET /admin/plans`, `POST /admin/plans`, `PUT /admin/plans/{id}` |
 | SA · Platform Audit Log | `/super-admin/audit-log` | Built | `GET /admin/audit-logs` |
-| Admin users (sidebar only, no Figma screen) | `/super-admin/admin-users` | Placeholder | Not planned |
-| Settings (sidebar only, no Figma screen) | `/super-admin/settings` | Placeholder | Not planned |
+| SA · Admin Users | `/super-admin/admin-users` | Built | `GET /admin/tenant-admins` (proposed) |
+| SA · Analytics, Custom Range, CSV / PDF report | `/super-admin/analytics` | Built | `GET /admin/analytics?from=&to=`, `GET /admin/analytics/report?format=csv\|pdf` (proposed) |
 
 ### Tenant Admin (`/tenant`)
 
@@ -81,7 +81,6 @@ The plan flow is Choose Plan (`/choose-plan`), Payment (`/payment`), then Onboar
 | TA · Audit Log | `/tenant/audit-log` | Placeholder | `GET /audit-logs` |
 | TA · Billing & Plan, Payment Failed | `/tenant/billing` | Placeholder | `GET /subscription`, `POST /subscription/checkout`, `POST /subscription/upgrade`, `POST /subscription/downgrade`, `POST /subscription/renew` |
 | TA · Settings, Branding | `/tenant/settings` | Placeholder | `GET /me`, `PATCH /me` |
-| TA · Email Delivery | `/tenant/email-delivery` | Placeholder | Not in the API list yet |
 | SLA Monitoring (added by the SLA engine feature, not in the Figma sidebar) | `/tenant/sla-monitoring` | Built | Mock data only |
 
 ### Branch Manager (`/branch`)
@@ -96,8 +95,7 @@ The plan flow is Choose Plan (`/choose-plan`), Payment (`/payment`), then Onboar
 | BM · Staff & Workload | `/branch/staff` | Placeholder | `GET /analytics/staff` |
 | BM · Employees, Add Employee, Employee Detail | `/branch/employees` | Placeholder | `GET /employees`, `POST /employees`, `GET /employees/{id}` |
 | BM · QR Codes, Generate QR Codes, Rename QR Code | `/branch/qr-codes` | Placeholder | `GET /qr-codes`, `POST /qr-codes`, `PATCH /qr-codes/{id}` |
-| Branch analytics (sidebar only, no Figma screen) | `/branch/analytics` | Placeholder | `GET /analytics/branches` |
-| Reports (sidebar only, no Figma screen) | `/branch/reports` | Placeholder | `GET /reports`, `GET /reports/{id}/export?format=pdf\|csv` |
+| BM · Branch Analytics | `/branch/analytics` | Placeholder | `GET /analytics/branches` |
 
 ### Shared (all roles)
 

@@ -2,6 +2,7 @@ import type { ReactElement } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../layout/AppLayout'
 import { areas, navItems } from '../layout/navigation'
+import { AdminUsersPage } from '../pages/AdminUsersPage'
 import { AiReviewQueuePage } from '../pages/AiReviewQueuePage'
 import { AnalyticsPage } from '../pages/AnalyticsPage'
 import { AuditLogPage } from '../pages/AuditLogPage'
@@ -29,6 +30,7 @@ import { PaymentPage } from '../pages/PaymentPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { PlansPricingPage } from '../pages/PlansPricingPage'
 import { PlatformAuditLogPage } from '../pages/PlatformAuditLogPage'
+import { PlatformAnalyticsPage } from '../pages/PlatformAnalyticsPage'
 import { PlatformOverviewPage } from '../pages/PlatformOverviewPage'
 import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { RegisterPage } from '../pages/RegisterPage'
@@ -50,6 +52,8 @@ const builtPages: Record<string, ReactElement> = {
 
   '/branch/approvals': <ResolutionApprovalsPage />,
   '/super-admin/overview': <PlatformOverviewPage />,
+  '/super-admin/analytics': <PlatformAnalyticsPage />,
+  '/super-admin/admin-users': <AdminUsersPage />,
   '/super-admin/companies': <CompaniesPage />,
 
   '/branch/ai-review': <AiReviewQueuePage />,
