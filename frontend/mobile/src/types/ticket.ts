@@ -60,10 +60,30 @@ export type TicketSummary = {
   };
 };
 
+export type TicketGuest = {
+  name: string;
+  notification: string;
+  photoCount: number;
+};
+
+export type TicketSlaDetail = {
+  phase: string;
+  elapsedSeconds: number;
+  totalSeconds: number;
+  escalatesTo: string;
+  policy: string;
+};
+
 /** What the ticket detail screen shows besides the list-card fields. */
 export type TicketDetailContent = {
   /** The customer's complaint. */
   description: string;
+  category?: string;
+  aiConfidence?: number;
+  guest?: TicketGuest;
+  orderRef?: string;
+  assignedTo?: string;
+  slaDetail?: TicketSlaDetail;
   /** Present when the ticket has been escalated. */
   escalation?: TicketEscalation;
   /** Newest first. */

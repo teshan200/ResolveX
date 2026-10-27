@@ -110,7 +110,20 @@ export function createMockTicketDetails(): Record<string, TicketDetailContent> {
       ],
     },
     't-1042': {
-      description: '“My food arrived cold.”',
+      description:
+        '“The chicken biryani and garlic naan arrived barely lukewarm after a 35-minute wait. Server was handling another section.”',
+      category: 'Food quality',
+      aiConfidence: 92,
+      guest: { name: 'Nimal P.', notification: 'emailed when resolved', photoCount: 1 },
+      orderRef: '#ORD-8821',
+      assignedTo: 'Dinesh K. (you)',
+      slaDetail: {
+        phase: 'Acknowledge within',
+        elapsedSeconds: 6 * 60 + 18,
+        totalSeconds: 15 * 60,
+        escalatesTo: 'Supervisor',
+        policy: 'High · 15m ack / 45m fix',
+      },
       timeline: [],
     },
     't-1045': {

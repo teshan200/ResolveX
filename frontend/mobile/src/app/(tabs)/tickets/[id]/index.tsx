@@ -3,13 +3,20 @@ import { StatusBar } from 'expo-status-bar';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { DetailAppBar } from '@/components/detail-app-bar';
+import { AiConfidenceBadge } from '@/components/tickets/ai-confidence-badge';
 import { EscalationBanner } from '@/components/tickets/escalation-banner';
 import { LockedActionBar } from '@/components/tickets/locked-action-bar';
+import { SlaCard } from '@/components/tickets/sla-card';
+import { TicketActionBar } from '@/components/tickets/ticket-action-bar';
 import { PriorityBadge, SlaTimer, StatusBadge } from '@/components/tickets/ticket-badges';
+import { DetailTabs, TicketDetailsCard } from '@/components/tickets/ticket-details-card';
+import type { TicketDetailRow } from '@/components/tickets/ticket-details-card';
+import { TicketInfoCard } from '@/components/tickets/ticket-info-card';
 import { TicketTimeline } from '@/components/tickets/ticket-timeline';
 import { Brand, InterFonts, Radius, Spacing } from '@/constants/theme';
 import { useTicketDetail } from '@/hooks/use-ticket-detail';
 import type { TicketDetail } from '@/types/ticket';
+import { formatEventTime, formatMinutesAgo } from '@/utils/ticket-timeline';
 
 const FIGMA_STATUS_BAR_HEIGHT = 44;
 
@@ -46,8 +53,75 @@ export default function TicketDetailScreen() {
   );
 }
 
+function getDetailRows(ticket: TicketDetail): TicketDetailRow[] {
+  const rows: (TicketDetailRow | null)[] = [
+    ticket.orderRef
+      ? {
+          label: 'Order',
+          value: ticket.orderRef,
+          icon: require('@/assets/images/tickets/detail-order.svg'),
+        }
+      : null,
+    {
+      label: 'Branch',
+      value: ticket.branchName,
+      icon: require('@/assets/images/tickets/detail-branch.svg'),
+    },
+    ticket.assignedTo
+      ? {
+          label: 'Assigned to',
+          value: ticket.assignedTo,
+          icon: require('@/assets/images/tickets/detail-assigned.svg'),
+        }
+      : null,
+    {
+      label: 'Created',
+      value: `${formatEventTime(ticket.createdAt)} · ${formatMinutesAgo(ticket.createdAt)}`,
+      icon: require('@/assets/images/tickets/detail-created.svg'),
+    },
+    ticket.slaDetail
+      ? {
+          label: 'SLA policy',
+          value: ticket.slaDetail.policy,
+          icon: require('@/assets/images/tickets/detail-policy.svg'),
+        }
+      : null,
+  ];
+  return rows.filter((row): row is TicketDetailRow => row !== null);
+}
+
+function TicketOverview({ ticket }: { ticket: TicketDetail }) {
+  return (
+    <>
+      <ScrollView contentContainerStyle={styles.content}>
+        <View style={styles.badges}>
+          <StatusBadge status={ticket.status} />
+          <PriorityBadge priority={ticket.priority} />
+          {ticket.aiConfidence !== undefined && (
+            <AiConfidenceBadge confidence={ticket.aiConfidence} />
+          )}
+        </View>
+        {ticket.slaDetail && <SlaCard state={ticket.sla.state} detail={ticket.slaDetail} />}
+        <TicketInfoCard
+          title={ticket.title}
+          description={ticket.description}
+          category={ticket.category}
+          guest={ticket.guest}
+        />
+        <DetailTabs />
+        <TicketDetailsCard rows={getDetailRows(ticket)} />
+      </ScrollView>
+      {ticket.status === 'assigned' && <TicketActionBar />}
+    </>
+  );
+}
+
 function TicketDetailContent({ ticket }: { ticket: TicketDetail }) {
   const isEscalated = ticket.status === 'escalated';
+
+  if (!isEscalated && ticket.slaDetail) {
+    return <TicketOverview ticket={ticket} />;
+  }
 
   return (
     <>
