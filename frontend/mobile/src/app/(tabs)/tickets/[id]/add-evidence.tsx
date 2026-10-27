@@ -35,7 +35,8 @@ export default function AddEvidenceScreen() {
     setSaving(true);
     try {
       await ticketsRepository.attachEvidence(ticket.id, evidence);
-      goBack();
+      // Replaces this screen, so Back from Resolve ticket returns to where the update started.
+      router.replace({ pathname: '/tickets/[id]/resolve', params: { id: ticket.id } });
     } catch {
       submitting.current = false;
       setSaving(false);

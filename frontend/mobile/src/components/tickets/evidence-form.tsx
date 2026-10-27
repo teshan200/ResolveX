@@ -113,6 +113,11 @@ export function EvidenceForm({ ticket, saving, onSubmit }: EvidenceFormProps) {
   }
 
   function chooseSource() {
+    // Alert.alert is a no-op on web, so go straight to the browser's file dialog (JPG, PNG or PDF).
+    if (Platform.OS === 'web') {
+      void addFile('document');
+      return;
+    }
     Alert.alert('Add evidence', undefined, [
       ...SOURCE_OPTIONS.map(({ text, source }) => ({ text, onPress: () => void addFile(source) })),
       { text: 'Cancel', style: 'cancel' as const },

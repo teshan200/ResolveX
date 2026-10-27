@@ -1,8 +1,10 @@
 import type {
   EvidenceFile,
   TicketDetail,
+  TicketEscalationRequest,
   TicketEvidence,
   TicketProgressUpdate,
+  TicketResolution,
   TicketSummary,
 } from '@/types/ticket';
 
@@ -43,4 +45,14 @@ export type TicketsRepository = {
    * attached.
    */
   attachEvidence(id: string, evidence: TicketEvidence): Promise<void>;
+  /**
+   * Submits the resolution for manager review. Resolving means it was accepted; a rejection
+   * means the ticket does not exist or can no longer be resolved.
+   */
+  resolveTicket(id: string, resolution: TicketResolution): Promise<void>;
+  /**
+   * Escalates a ticket the staff member is unable to resolve. Resolving means it was escalated;
+   * a rejection means the ticket does not exist or can no longer be escalated.
+   */
+  escalateTicket(id: string, request: TicketEscalationRequest): Promise<void>;
 };

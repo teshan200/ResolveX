@@ -37,6 +37,19 @@ export type TicketEvidence = {
   caption: string;
 };
 
+/** What the "Resolve ticket" form submits when the outcome is "Resolved". */
+export type TicketResolution = {
+  /** Included in the resolution email to the guest. */
+  note: string;
+};
+
+/** What the "Resolve ticket" form submits when the outcome is "Unable to resolve". */
+export type TicketEscalationRequest = {
+  reason: string;
+  /** What happened. Goes to the person the ticket is escalated to. */
+  note: string;
+};
+
 export type TicketTimelineEventKind = 'claimed' | 'progress' | 'escalated';
 
 export type TicketTimelineEvent = {

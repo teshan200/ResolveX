@@ -127,6 +127,12 @@ export const TicketColors = {
   successFg: '#15803d',
 } as const;
 
+/** Inline banner colours from the Figma Alert Banner component. */
+export const Feedback = {
+  info: { bg: '#eff6ff', border: '#bfdbfe', fg: '#1d4ed8' },
+  warning: { bg: '#fffbeb', border: '#fde68a', fg: '#b45309' },
+} as const;
+
 export const FigmaSpace = {
   onePointFive: 6,
   three: 12,
