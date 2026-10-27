@@ -82,6 +82,7 @@ export const categorySlices = [
 
 /** Bar heights in pixels, highest first (Complaints per 1,000 covers, six branches). */
 export const branchBars = [127.5, 93, 72, 60, 45, 33]
+export const branchLabels = ['Colombo', 'Kandy', 'Galle Fort', 'Negombo Beach', 'Nuwara Eliya', 'Matara']
 
 export const recoveryMetrics = [
   { label: 'Follow-up completion', display: '91%', percent: 91, tone: 'success' },
