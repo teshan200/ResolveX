@@ -54,13 +54,13 @@ export function PlatformOverviewPage() {
           </div>
 
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_420px]">
-            <ChartCard title="Tickets processed platform-wide" subtitle="Last 30 days">
+            <ChartCard title="Tickets processed platform-wide" subtitle={overview.period}>
               <TicketsLineChart
                 processed={overview.ticketsProcessed}
                 breached={overview.ticketsBreached}
               />
             </ChartCard>
-            <ChartCard title="Tenants by plan" subtitle="Last 30 days">
+            <ChartCard title="Tenants by plan" subtitle={overview.period}>
               <TenantsDonut slices={overview.tenantsByPlan} />
             </ChartCard>
           </div>

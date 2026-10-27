@@ -1,31 +1,7 @@
-import {
-  Activity,
-  ArrowLeft,
-  Ban,
-  Calendar,
-  CircleCheck,
-  CreditCard,
-  Eye,
-  Power,
-  Settings,
-  Shield,
-  Store,
-  Ticket,
-  Users,
-} from 'lucide-react'
+import { ArrowLeft, Calendar, CreditCard, Power, Shield, Store, Ticket, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import {
-  AlertBanner,
-  Button,
-  KpiCard,
-  Panel,
-  PanelRow,
-  ProgressBar,
-  StatusPill,
-  Table,
-  Tag,
-} from '../components/ui'
+import { AlertBanner, Button, KpiCard, Panel, PanelRow, Table, Tag } from '../components/ui'
 import type { Column } from '../components/ui'
 import { CompanyStatusBadge } from '../features/companies/CompanyStatusBadge'
 import { SuspendTenantModal } from '../features/companies/SuspendTenantModal'
@@ -33,14 +9,6 @@ import { useBreadcrumb } from '../layout/breadcrumb'
 import { getCompany, suspendCompany } from '../services/companyService'
 import { formatLkr } from '../services/planService'
 import type { CompanyDetail, SuspendRequest, TenantAdmin } from '../types/company'
-
-function TwoFactorBadge({ enabled }: { enabled: boolean }) {
-  return (
-    <StatusPill tone={enabled ? 'resolved' : 'neutral'} icon={enabled ? CircleCheck : Ban}>
-      {enabled ? 'On' : 'Off'}
-    </StatusPill>
-  )
-}
 
 const adminColumns: Column<TenantAdmin>[] = [
   {
@@ -64,18 +32,12 @@ const adminColumns: Column<TenantAdmin>[] = [
   {
     key: 'lastSignIn',
     header: 'Last sign-in',
-    width: 150,
+    width: 240,
     render: (admin) => (
       <span className="truncate text-[13px] leading-4.5 text-content-secondary">
         {admin.lastSignIn}
       </span>
     ),
-  },
-  {
-    key: 'twoFactor',
-    header: '2FA',
-    width: 90,
-    render: (admin) => <TwoFactorBadge enabled={admin.twoFactor} />,
   },
 ]
 
@@ -143,10 +105,6 @@ export function TenantDetailPage() {
           </p>
         </div>
         <div className="flex shrink-0 gap-3">
-          <Button variant="outline" className="font-semibold!">
-            <Eye size={18} />
-            Impersonate (read-only)
-          </Button>
           {pastDue && (
             <Button variant="outline" className="font-semibold!">
               <Calendar size={18} />
@@ -176,7 +134,7 @@ export function TenantDetailPage() {
 
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="flex min-w-0 flex-col gap-6">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 items-start gap-4">
             <KpiCard
               label="Branches"
               value={String(company.branches ?? '—')}
@@ -188,8 +146,6 @@ export function TenantDetailPage() {
               label="Users"
               value={company.users.toLocaleString('en-US')}
               icon={Users}
-              delta="0.0%"
-              caption={`${company.adminCount} admins`}
             />
             <KpiCard
               label="Tickets (30d)"
@@ -201,56 +157,30 @@ export function TenantDetailPage() {
             />
           </div>
 
-          <Panel title="Usage this cycle" icon={Activity}>
-            <div className="flex flex-col gap-4">
-              {company.usage.map((meter) => (
-                <div key={meter.label} className="flex flex-col gap-1.5">
-                  <div className="flex justify-between text-[13px] leading-4.5">
-                    <span className="font-medium">{meter.label}</span>
-                    <span className="text-content-secondary">{meter.summary}</span>
-                  </div>
-                  <ProgressBar percent={meter.percent} label={meter.label} />
-                </div>
-              ))}
-            </div>
-          </Panel>
-
-          <Panel title="Tenant admins" icon={Shield} flush>
-            <Table columns={adminColumns} rows={company.admins} rowKey={(admin) => admin.email} />
+          <Panel title="Tenant Admin" icon={Shield} flush>
+            <Table columns={adminColumns} rows={[company.admin]} rowKey={(admin) => admin.email} />
           </Panel>
         </div>
 
-        <div className="flex flex-col gap-6">
-          <Panel title="Subscription" icon={CreditCard}>
-            <PanelRow label="Plan">{company.plan ?? 'No plan'}</PanelRow>
-            <PanelRow label="Outlet capacity">
-              {capacity
-                ? `${company.branches ?? 0} of ${capacity} outlets`
-                : `${company.branches ?? 0} outlets`}
-            </PanelRow>
-            {invoice ? (
-              <>
-                <PanelRow label="Invoice due" danger>
-                  {formatLkr(invoice.amount)}
-                </PanelRow>
-                <PanelRow label="Retries">{invoice.retries}</PanelRow>
-                <PanelRow label="Grace period ends">{invoice.graceEnds}</PanelRow>
-              </>
-            ) : (
-              <PanelRow label="Billing status">{company.status}</PanelRow>
-            )}
-          </Panel>
-
-          <Panel title="Tenant configuration" icon={Settings}>
-            <PanelRow label="Tenant ID" mono>
-              {company.tenantId}
-            </PanelRow>
-            <PanelRow label="Data region">{company.region}</PanelRow>
-            <PanelRow label="Isolation">Row-level · tenantId</PanelRow>
-            <PanelRow label="Email verified">{company.emailVerified}</PanelRow>
-            <PanelRow label="Feature flags">All core features</PanelRow>
-          </Panel>
-        </div>
+        <Panel title="Subscription" icon={CreditCard}>
+          <PanelRow label="Plan">{company.plan ?? 'No plan'}</PanelRow>
+          <PanelRow label="Outlet capacity">
+            {capacity
+              ? `${company.branches ?? 0} of ${capacity} outlets`
+              : `${company.branches ?? 0} outlets`}
+          </PanelRow>
+          {invoice ? (
+            <>
+              <PanelRow label="Invoice due" danger>
+                {formatLkr(invoice.amount)}
+              </PanelRow>
+              <PanelRow label="Retries">{invoice.retries}</PanelRow>
+              <PanelRow label="Grace period ends">{invoice.graceEnds}</PanelRow>
+            </>
+          ) : (
+            <PanelRow label="Billing status">{company.status}</PanelRow>
+          )}
+        </Panel>
       </div>
 
       <SuspendTenantModal

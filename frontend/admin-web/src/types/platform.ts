@@ -28,6 +28,8 @@ export interface AttentionItem {
 
 export interface PlatformOverview {
   kpis: PlatformKpi[]
+  // Shown under each chart title, e.g. "This month · 1–26 Oct 2026".
+  period: string
   // Two series scaled 0–1, drawn over the last 30 days.
   ticketsProcessed: number[]
   ticketsBreached: number[]
@@ -56,8 +58,11 @@ export interface SubscriptionEvent {
   failed?: boolean
 }
 
+export type PeriodName = 'Last 7 days' | 'Last 30 days' | 'Last 90 days' | 'This month' | 'Last month'
+
 export interface SubscriptionsData {
-  kpis: PlatformKpi[]
+  // The four KPI cards change with the selected period.
+  kpisByPeriod: Record<PeriodName, PlatformKpi[]>
   events: SubscriptionEvent[]
 }
 
@@ -68,7 +73,7 @@ export interface AdminPlan {
   caption: string
 }
 
-export type AuditCategory = 'Tenants' | 'Subscriptions' | 'Impersonation' | 'Plans' | 'Admin users'
+export type AuditCategory = 'Activation' | 'Plan change' | 'Grace period' | 'Suspension'
 
 export interface AuditEvent {
   id: string

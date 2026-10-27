@@ -1,10 +1,10 @@
 import {
   Banknote,
+  Calendar,
   CircleArrowUp,
   CircleCheck,
   CircleDot,
   CreditCard,
-  Download,
   RotateCw,
   TrendingDown,
   TrendingUp,
@@ -13,10 +13,24 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { Button, FilterChip, KpiCard, PageHeader, Panel, StatusPill, Table } from '../components/ui'
+import {
+  FilterChip,
+  KpiCard,
+  PageHeader,
+  Panel,
+  PeriodSelector,
+  StatusPill,
+  Table,
+} from '../components/ui'
 import type { Column, PillTone } from '../components/ui'
+import { PERIODS, PERIOD_RANGES } from '../features/platform/periods'
 import { getSubscriptions } from '../services/platformService'
-import type { SubscriptionEvent, SubscriptionEventType, SubscriptionsData } from '../types/platform'
+import type {
+  PeriodName,
+  SubscriptionEvent,
+  SubscriptionEventType,
+  SubscriptionsData,
+} from '../types/platform'
 
 type EventFilter = 'All events' | Exclude<SubscriptionEventType, 'Trials'>
 
@@ -101,6 +115,7 @@ const columns: Column<SubscriptionEvent>[] = [
 
 export function SubscriptionsPage() {
   const [data, setData] = useState<SubscriptionsData | null>(null)
+  const [period, setPeriod] = useState<PeriodName>('This month')
   const [filter, setFilter] = useState<EventFilter>('All events')
 
   useEffect(() => {
@@ -117,26 +132,32 @@ export function SubscriptionsPage() {
       <PageHeader
         title="Subscriptions"
         description="Activations, renewals, upgrades, downgrades and failed payments via the sandbox gateway."
-        actions={
-          <Button variant="outline" className="font-semibold!">
-            <Download size={18} />
-            Export
-          </Button>
-        }
       />
 
-      <div className="grid grid-cols-4 gap-4">
-        {(data?.kpis ?? []).map((kpi) => (
-          <KpiCard
-            key={kpi.id}
-            label={kpi.label}
-            value={kpi.value}
-            icon={kpiIcons[kpi.id]}
-            delta={kpi.delta}
-            trend={kpi.trend}
-            caption={kpi.caption}
-          />
-        ))}
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-4">
+          <PeriodSelector periods={PERIODS} value={period} onChange={setPeriod} />
+          <p className="flex items-center gap-2 text-[13px] leading-4.5 text-content-secondary">
+            <Calendar size={16} className="shrink-0 text-neutral-700" />
+            <span>
+              Showing {period}:{' '}
+              <span className="font-semibold text-content">{PERIOD_RANGES[period]}</span>
+            </span>
+          </p>
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          {(data?.kpisByPeriod[period] ?? []).map((kpi) => (
+            <KpiCard
+              key={kpi.id}
+              label={kpi.label}
+              value={kpi.value}
+              icon={kpiIcons[kpi.id]}
+              delta={kpi.delta}
+              trend={kpi.trend}
+              caption={kpi.caption}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="flex gap-2">

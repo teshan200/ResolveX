@@ -4,8 +4,17 @@ export type CompanyStatus = 'Active' | 'Trial' | 'Past due' | 'Suspended' | 'Pen
 
 export type CompanyFilter = 'All' | 'Active' | 'Trial' | 'Past due' | 'Suspended' | 'Pending'
 
+export interface TenantAdmin {
+  name: string
+  initials: string
+  role: string
+  email: string
+  lastSignIn: string
+}
+
 export interface Company {
   id: string
+  tenantId: string
   name: string
   initials: string
   domain: string
@@ -19,6 +28,7 @@ export interface Company {
   // Monthly plan price in LKR, null for trials and companies without a plan.
   planPrice: number | null
   lastActivity: string
+  admin: TenantAdmin
 }
 
 export interface CompanyList {
@@ -28,28 +38,11 @@ export interface CompanyList {
   counts: Record<CompanyFilter, number>
 }
 
-export interface UsageMeter {
-  label: string
-  summary: string
-  percent: number
-}
-
-export interface TenantAdmin {
-  name: string
-  role: string
-  email: string
-  lastSignIn: string
-  twoFactor: boolean
-}
-
 export interface CompanyDetail extends Company {
-  tenantId: string
   createdAt: string
-  adminCount: number
   planCapacity: number
   tickets30d: string
   slaBreach: string
-  usage: UsageMeter[]
   // Present while a payment has failed.
   invoice?: {
     failedOn: string
@@ -59,9 +52,21 @@ export interface CompanyDetail extends Company {
     reason: string
     emailsSent: number
   }
-  admins: TenantAdmin[]
-  region: string
-  emailVerified: string
+}
+
+export interface AdminUserRow {
+  name: string
+  initials: string
+  role: string
+  email: string
+  companyName: string
+  tenantId: string
+}
+
+export interface AdminUserList {
+  admins: AdminUserRow[]
+  total: number
+  pageCount: number
 }
 
 export interface SuspendRequest {

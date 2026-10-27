@@ -17,7 +17,14 @@ import type { AuditCategory, AuditEvent, AuditLogData } from '../types/platform'
 
 type AuditFilter = 'All' | AuditCategory
 
-const FILTERS: AuditFilter[] = ['All', 'Tenants', 'Subscriptions', 'Impersonation', 'Plans', 'Admin users']
+// Each chip shows a plural label and filters on one event category.
+const FILTERS: { label: string; category: AuditFilter }[] = [
+  { label: 'All', category: 'All' },
+  { label: 'Tenant activation', category: 'Activation' },
+  { label: 'Plan changes', category: 'Plan change' },
+  { label: 'Grace periods', category: 'Grace period' },
+  { label: 'Suspensions', category: 'Suspension' },
+]
 const PAGE_SIZE = 10
 
 const columns: Column<AuditEvent>[] = [
@@ -107,7 +114,7 @@ export function PlatformAuditLogPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Platform audit log"
-        description="Super-admin and cross-tenant actions (SaaS-31, AUD-03, AUD-04, AUD-09)."
+        description="Tenant activations, subscription plan changes, grace period extensions and tenant suspensions."
         actions={
           <Button variant="outline" className="font-semibold!">
             <Download size={18} />
@@ -120,11 +127,11 @@ export function PlatformAuditLogPage() {
         <div className="flex min-w-0 flex-1 gap-2">
           {FILTERS.map((item) => (
             <FilterChip
-              key={item}
-              label={item}
-              selected={filter === item}
+              key={item.label}
+              label={item.label}
+              selected={filter === item.category}
               onClick={() => {
-                setFilter(item)
+                setFilter(item.category)
                 setPage(1)
               }}
             />

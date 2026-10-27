@@ -15,9 +15,10 @@ interface KpiCardProps {
   value: string
   icon: LucideIcon
   iconClassName?: string
-  delta: string
+  // Without a delta and caption the card shows only the label and the value.
+  delta?: string
   trend?: KpiTrend
-  caption: string
+  caption?: string
 }
 
 export function KpiCard({
@@ -40,18 +41,20 @@ export function KpiCard({
         </span>
       </div>
       <p className="text-3xl leading-9.5 font-semibold tracking-[-0.3px]">{value}</p>
-      <div className="flex items-center gap-2">
-        <span
-          className={cn(
-            'flex items-center gap-0.5 rounded-full px-1.5 text-xs leading-4 font-semibold',
-            style,
-          )}
-        >
-          <TrendIcon size={12} />
-          {delta}
-        </span>
-        <span className="text-xs leading-4 text-content-tertiary">{caption}</span>
-      </div>
+      {delta !== undefined && (
+        <div className="flex items-center gap-2">
+          <span
+            className={cn(
+              'flex items-center gap-0.5 rounded-full px-1.5 text-xs leading-4 font-semibold',
+              style,
+            )}
+          >
+            <TrendIcon size={12} />
+            {delta}
+          </span>
+          <span className="text-xs leading-4 text-content-tertiary">{caption}</span>
+        </div>
+      )}
     </div>
   )
 }
