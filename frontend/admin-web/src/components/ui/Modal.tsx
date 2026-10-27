@@ -11,9 +11,11 @@ interface ModalProps {
   footer?: ReactNode
   // 'lg' is the wider dialog used for longer content.
   size?: 'md' | 'lg'
+  // Space above the dialog. Most designs put it 200px from the top; the QR code dialogs use 160px.
+  topClass?: string
 }
 
-export function Modal({ open, title, onClose, children, footer, size = 'md' }: ModalProps) {
+export function Modal({ open, title, onClose, children, footer, size = 'md', topClass = 'pt-50' }: ModalProps) {
   const titleId = useId()
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export function Modal({ open, title, onClose, children, footer, size = 'md' }: M
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-overlay/48 p-4 pt-50"
+      className={`fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-overlay/48 p-4 ${topClass}`}
       onClick={onClose}
     >
       <div
