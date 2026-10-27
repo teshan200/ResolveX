@@ -14,6 +14,7 @@ import { BranchTicketDetailPage } from '../pages/BranchTicketDetailPage'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
 import { CompaniesPage } from '../pages/CompaniesPage'
 import { ComplaintDetailPage } from '../pages/ComplaintDetailPage'
+import { ComplaintsOverviewPage } from '../pages/ComplaintsOverviewPage'
 import { EscalatedToMePage } from '../pages/EscalatedToMePage'
 import { EscalationDetailPage } from '../pages/EscalationDetailPage'
 import { EmployeesPage } from '../pages/EmployeesPage'
@@ -66,6 +67,7 @@ const builtPages: Record<string, ReactElement> = {
   '/branch/staff': <StaffWorkloadPage />,
   '/branch/employees': <BranchEmployeesPage />,
   '/tenant/analytics': <AnalyticsPage />,
+  '/tenant/complaints': <ComplaintsOverviewPage />,
   '/tenant/audit-log': <AuditLogPage />,
   '/tenant/branches': <BranchesPage />,
   '/tenant/employees': <EmployeesPage />,

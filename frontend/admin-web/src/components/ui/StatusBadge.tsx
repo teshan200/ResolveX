@@ -56,12 +56,14 @@ const priorityStyles: Record<TicketPriority, { style: string; icon: LucideIcon }
   Normal: { style: 'bg-priority-normal-bg text-priority-normal-fg', icon: Minus },
 }
 
-export function StatusBadge({ status }: { status: TicketStatus }) {
+// 'sm' is the 20px badge used inside table rows.
+export function StatusBadge({ status, size = 'md' }: { status: TicketStatus; size?: 'md' | 'sm' }) {
   const { style, icon: Icon } = statusStyles[status]
   return (
     <span
       className={cn(
-        'inline-flex h-6 items-center gap-1 rounded-full px-2 text-[13px] leading-4.5 font-medium whitespace-nowrap',
+        'inline-flex items-center gap-1 rounded-full px-2 font-medium whitespace-nowrap',
+        size === 'sm' ? 'h-5 text-xs leading-4' : 'h-6 text-[13px] leading-4.5',
         style,
       )}
     >
