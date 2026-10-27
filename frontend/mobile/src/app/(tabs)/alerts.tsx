@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -97,7 +98,10 @@ export default function AlertsScreen() {
                     key={item.id}
                     notification={item}
                     isLast={index === group.items.length - 1}
-                    onPress={(pressed) => markAsRead(pressed.id)}
+                    onPress={(pressed) => {
+                      markAsRead(pressed.id);
+                      router.push({ pathname: '/tickets/[id]', params: { id: pressed.ticketId } });
+                    }}
                   />
                 ))}
               </View>

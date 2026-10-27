@@ -71,6 +71,28 @@ export function createMockTickets(): TicketSummary[] {
       createdAt: minutesAgo(3 * 24 * 60),
       sla: { state: 'met', label: 'SLA met' },
     },
+    {
+      id: 't-1049',
+      ticketNumber: '#1049',
+      title: 'Extra cutlery requested',
+      priority: 'normal',
+      status: 'assigned',
+      branchName: 'Colombo Branch',
+      servicePoint: 'Table 19',
+      createdAt: minutesAgo(18),
+      sla: { state: 'onTrack', label: '41:20 left' },
+    },
+    {
+      id: 't-1031',
+      ticketNumber: '#1031',
+      title: 'Dessert served late',
+      priority: 'normal',
+      status: 'closed',
+      branchName: 'Colombo Branch',
+      servicePoint: 'Table 5',
+      createdAt: minutesAgo(26 * 60),
+      sla: { state: 'met', label: 'SLA met' },
+    },
   ];
 }
 

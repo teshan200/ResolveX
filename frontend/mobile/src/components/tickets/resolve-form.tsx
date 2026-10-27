@@ -39,6 +39,7 @@ export function ResolveForm({ ticket, saving, onResolve, onEscalate, onDiscard }
   const [reason, setReason] = useState<string>(ESCALATION_REASONS[0]);
   const [escalationNote, setEscalationNote] = useState('');
   const [focused, setFocused] = useState(false);
+  const [reasonOpen, setReasonOpen] = useState(false);
 
   const resolving = outcome === 'resolved';
   const note = resolving ? resolutionNote : escalationNote;
@@ -63,12 +64,6 @@ export function ResolveForm({ ticket, saving, onResolve, onEscalate, onDiscard }
     ]);
   }
 
-  function chooseReason() {
-    Alert.alert('Reason', undefined, [
-      ...ESCALATION_REASONS.map((option) => ({ text: option, onPress: () => setReason(option) })),
-      { text: 'Cancel', style: 'cancel' as const },
-    ]);
-  }
 
   return (
     <KeyboardAvoidingView
@@ -112,17 +107,35 @@ export function ResolveForm({ ticket, saving, onResolve, onEscalate, onDiscard }
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={`Reason: ${reason}`}
-              onPress={chooseReason}
+              accessibilityState={{ expanded: reasonOpen }}
+              onPress={() => setReasonOpen((open) => !open)}
               style={styles.select}>
               <Text style={styles.selectValue} numberOfLines={1}>
                 {reason}
               </Text>
               <Image
                 source={require('@/assets/images/resolve/chevron-down.svg')}
-                style={styles.chevron}
+                style={[styles.chevron, reasonOpen && styles.chevronOpen]}
                 contentFit="contain"
               />
             </Pressable>
+            {reasonOpen && (
+              <View style={styles.menu}>
+                {ESCALATION_REASONS.map((option) => (
+                  <Pressable
+                    key={option}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: option === reason }}
+                    onPress={() => {
+                      setReason(option);
+                      setReasonOpen(false);
+                    }}
+                    style={[styles.menuItem, option === reason && styles.menuItemSelected]}>
+                    <Text style={styles.selectValue}>{option}</Text>
+                  </Pressable>
+                ))}
+              </View>
+            )}
           </View>
         )}
 
@@ -327,6 +340,25 @@ const styles = StyleSheet.create({
   chevron: {
     width: 18,
     height: 18,
+  },
+  chevronOpen: {
+    transform: [{ rotate: '180deg' }],
+  },
+  menu: {
+    backgroundColor: Brand.bgSurface,
+    borderWidth: 1,
+    borderColor: Brand.borderDefault,
+    borderRadius: Radius.md,
+    overflow: 'hidden',
+  },
+  menuItem: {
+    minHeight: 40,
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: Spacing.two,
+  },
+  menuItemSelected: {
+    backgroundColor: Brand.bgBrandMuted,
   },
   input: {
     height: 120,
