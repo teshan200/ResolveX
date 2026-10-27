@@ -16,6 +16,7 @@ import { TicketTimeline } from '@/components/tickets/ticket-timeline';
 import { Brand, InterFonts, Radius, Spacing } from '@/constants/theme';
 import { useTicketDetail } from '@/hooks/use-ticket-detail';
 import type { TicketDetail } from '@/types/ticket';
+import { canClaimTicket } from '@/utils/ticket-claim';
 import { formatEventTime, formatMinutesAgo } from '@/utils/ticket-timeline';
 
 const FIGMA_STATUS_BAR_HEIGHT = 44;
@@ -111,7 +112,16 @@ function TicketOverview({ ticket }: { ticket: TicketDetail }) {
         <DetailTabs />
         <TicketDetailsCard rows={getDetailRows(ticket)} />
       </ScrollView>
-      {ticket.status === 'assigned' && <TicketActionBar />}
+      {ticket.status === 'assigned' && (
+        <TicketActionBar
+          onClaim={
+            canClaimTicket(ticket)
+              ? () =>
+                  router.push({ pathname: '/tickets/[id]/claim', params: { id: ticket.id } })
+              : undefined
+          }
+        />
+      )}
     </>
   );
 }

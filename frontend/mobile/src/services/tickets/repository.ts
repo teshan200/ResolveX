@@ -17,4 +17,9 @@ export type TicketsRepository = {
    * was not saved.
    */
   updateProgress(id: string, update: TicketProgressUpdate): Promise<void>;
+  /**
+   * Claims an assigned ticket for the signed-in staff member. Resolving means the claim was
+   * accepted; a rejection means the ticket does not exist or can no longer be claimed.
+   */
+  claimTicket(id: string): Promise<void>;
 };

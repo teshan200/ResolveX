@@ -3,14 +3,19 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Brand, InterFonts, Radius } from '@/constants/theme';
 
-export function TicketActionBar() {
+type TicketActionBarProps = {
+  onClaim?: () => void;
+};
+
+export function TicketActionBar({ onClaim }: TicketActionBarProps) {
   return (
     <View style={styles.bar}>
       <Pressable
         accessibilityRole="button"
-        accessibilityState={{ disabled: true }}
-        disabled
-        style={[styles.claim, styles.disabled]}>
+        accessibilityState={{ disabled: !onClaim }}
+        disabled={!onClaim}
+        onPress={onClaim}
+        style={[styles.claim, !onClaim && styles.disabled]}>
         <Image
           source={require('@/assets/images/tickets/action-claim.svg')}
           style={styles.claimIcon}

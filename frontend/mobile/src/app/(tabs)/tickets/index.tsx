@@ -28,8 +28,9 @@ import {
 
 const FIGMA_STATUS_BAR_HEIGHT = 44;
 
-// Only "Update" has a screen so far; Claim and Resolve are not built yet.
+// "Claim" and "Update" have screens so far; Resolve is not built yet.
 const ACTION_HANDLERS: Partial<Record<TicketActionId, (ticket: TicketSummary) => void>> = {
+  claim: (ticket) => router.push({ pathname: '/tickets/[id]/claim', params: { id: ticket.id } }),
   update: (ticket) =>
     router.push({ pathname: '/tickets/[id]/update-progress', params: { id: ticket.id } }),
 };
