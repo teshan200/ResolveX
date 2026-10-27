@@ -9,6 +9,7 @@ import { TrendLineChart } from '../features/analytics/components/TrendLineChart'
 import {
   analyticsKpis,
   branchBars,
+  branchLabels,
   categorySlices,
   defaultAnalyticsFilters,
   trendBreaches,
@@ -61,8 +62,13 @@ export function AnalyticsPage() {
         </ChartCard>
       </div>
 
-      <ChartCard title="Branch comparison" subtitle="Complaints per 1,000 covers" className="w-full">
-        <BranchBars heights={branchBars} />
+      <ChartCard
+        title="Branch comparison"
+        subtitle="Complaints per 1,000 covers"
+        plotHeight={200}
+        className="w-full"
+      >
+        <BranchBars heights={branchBars} labels={branchLabels} />
       </ChartCard>
     </div>
   )

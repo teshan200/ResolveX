@@ -9,11 +9,14 @@ import { AuditLogPage } from '../pages/AuditLogPage'
 import { BranchEmployeesPage } from '../pages/BranchEmployeesPage'
 import { BranchDetailPage } from '../pages/BranchDetailPage'
 import { BranchesPage } from '../pages/BranchesPage'
+import { BranchAnalyticsPage } from '../pages/BranchAnalyticsPage'
 import { BranchOverviewPage } from '../pages/BranchOverviewPage'
 import { BranchTicketDetailPage } from '../pages/BranchTicketDetailPage'
+import { BranchTicketsPage } from '../pages/BranchTicketsPage'
 import { ChoosePlanPage } from '../pages/ChoosePlanPage'
 import { CompaniesPage } from '../pages/CompaniesPage'
 import { ComplaintDetailPage } from '../pages/ComplaintDetailPage'
+import { ComplaintsOverviewPage } from '../pages/ComplaintsOverviewPage'
 import { EscalatedToMePage } from '../pages/EscalatedToMePage'
 import { EscalationDetailPage } from '../pages/EscalationDetailPage'
 import { EmployeesPage } from '../pages/EmployeesPage'
@@ -62,10 +65,13 @@ const builtPages: Record<string, ReactElement> = {
   '/super-admin/plans': <PlansPricingPage />,
   '/super-admin/audit-log': <PlatformAuditLogPage />,
   '/branch/escalations': <EscalationInboxPage />,
+  '/branch/analytics': <BranchAnalyticsPage />,
   '/branch/overview': <BranchOverviewPage />,
   '/branch/staff': <StaffWorkloadPage />,
+  '/branch/tickets': <BranchTicketsPage />,
   '/branch/employees': <BranchEmployeesPage />,
   '/tenant/analytics': <AnalyticsPage />,
+  '/tenant/complaints': <ComplaintsOverviewPage />,
   '/tenant/audit-log': <AuditLogPage />,
   '/tenant/branches': <BranchesPage />,
   '/tenant/employees': <EmployeesPage />,

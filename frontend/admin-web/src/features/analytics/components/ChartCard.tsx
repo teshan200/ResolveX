@@ -6,13 +6,15 @@ import { cn } from '../../../components/ui/cn'
 interface ChartCardProps {
   title: string
   subtitle?: string
+  /** Height of the plot area in px. The Branch comparison plot is 200px, the others 180px. */
+  plotHeight?: number
   /** Extra classes for the card, for example a fixed or flexible width. */
   className?: string
   children: ReactNode
 }
 
 /** Card shell for Analytics charts: title, subtitle, a menu button and a 180px plot area. */
-export function ChartCard({ title, subtitle, className, children }: ChartCardProps) {
+export function ChartCard({ title, subtitle, plotHeight = 180, className, children }: ChartCardProps) {
   return (
     <section
       aria-label={title}
@@ -25,7 +27,9 @@ export function ChartCard({ title, subtitle, className, children }: ChartCardPro
         </div>
         <IconButton icon={EllipsisVertical} label={`${title} options`} size="sm" />
       </div>
-      <div className="relative h-[180px] w-full shrink-0 overflow-hidden">{children}</div>
+      <div className="relative w-full shrink-0 overflow-hidden" style={{ height: plotHeight }}>
+        {children}
+      </div>
     </section>
   )
 }
