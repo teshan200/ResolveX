@@ -20,6 +20,23 @@ export type TicketProgressUpdate = {
   note: string;
 };
 
+/** A photo or PDF picked on the "Add evidence" screen. */
+export type EvidenceFile = {
+  id: string;
+  name: string;
+  /** Local file URI on the device. */
+  uri: string;
+  mimeType: string;
+  sizeBytes: number;
+};
+
+/** What the "Add evidence" form submits. */
+export type TicketEvidence = {
+  files: EvidenceFile[];
+  /** Optional, shown with the files. */
+  caption: string;
+};
+
 export type TicketTimelineEventKind = 'claimed' | 'progress' | 'escalated';
 
 export type TicketTimelineEvent = {

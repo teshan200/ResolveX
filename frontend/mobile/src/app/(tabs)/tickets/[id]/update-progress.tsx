@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { DetailAppBar } from '@/components/detail-app-bar';
@@ -25,16 +25,20 @@ export default function UpdateProgressScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { status, ticket } = useTicket(id);
   const [saving, setSaving] = useState(false);
+  const submitting = useRef(false);
 
   async function handleSubmit(update: TicketProgressUpdate) {
-    if (!ticket) {
+    if (!ticket || submitting.current) {
       return;
     }
+    submitting.current = true;
     setSaving(true);
     try {
       await ticketsRepository.updateProgress(ticket.id, update);
-      goBack();
+      // Replaces this screen, so Back from Add evidence returns to where the update started.
+      router.replace({ pathname: '/tickets/[id]/add-evidence', params: { id: ticket.id } });
     } catch {
+      submitting.current = false;
       setSaving(false);
       Alert.alert('Update not saved', 'We couldn’t save your update. Please try again.');
     }

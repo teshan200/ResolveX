@@ -111,6 +111,7 @@ function TicketOverview({ ticket }: { ticket: TicketDetail }) {
         />
         <DetailTabs />
         <TicketDetailsCard rows={getDetailRows(ticket)} />
+        {ticket.timeline.length > 0 && <TicketTimeline events={ticket.timeline} />}
       </ScrollView>
       {ticket.status === 'assigned' && (
         <TicketActionBar

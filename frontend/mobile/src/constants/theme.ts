@@ -74,6 +74,7 @@ export const Brand = {
   borderDefault: '#dde4e3',
   borderStrong: '#c3cdcc',
   borderFocus: '#4aaa9c',
+  borderBrand: '#1b7266',
   dangerFg: '#b91c1c',
   bgBrandMuted: '#d5efea',
   bgBrandSubtle: '#eef8f6',

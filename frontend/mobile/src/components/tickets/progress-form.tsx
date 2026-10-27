@@ -31,9 +31,8 @@ type ProgressFormProps = {
 
 /** Body and action bar of the "Update progress" screen. */
 export function ProgressForm({ ticket, saving, onSubmit }: ProgressFormProps) {
-  const [status, setStatus] = useState<ProgressStatus>(
-    ticket.status === 'claimed' ? 'claimed' : 'inProgress',
-  );
+  // The design opens on "In Progress"; claimed tickets move forward from here.
+  const [status, setStatus] = useState<ProgressStatus>('inProgress');
   const [note, setNote] = useState('');
   const [focused, setFocused] = useState(false);
 

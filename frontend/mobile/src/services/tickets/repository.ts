@@ -1,4 +1,10 @@
-import type { TicketDetail, TicketProgressUpdate, TicketSummary } from '@/types/ticket';
+import type {
+  EvidenceFile,
+  TicketDetail,
+  TicketEvidence,
+  TicketProgressUpdate,
+  TicketSummary,
+} from '@/types/ticket';
 
 /**
  * Data-access contract for tickets. Replace the mock implementation with one that calls the real
@@ -22,4 +28,19 @@ export type TicketsRepository = {
    * accepted; a rejection means the ticket does not exist or can no longer be claimed.
    */
   claimTicket(id: string): Promise<void>;
+  /**
+   * Uploads one evidence file and scans it for malware. `onProgress` receives the fraction
+   * uploaded (0 to 1). Resolving means the file was uploaded and scanned clean; a rejection means
+   * it was not accepted.
+   */
+  uploadEvidenceFile(
+    id: string,
+    file: EvidenceFile,
+    onProgress: (fraction: number) => void,
+  ): Promise<void>;
+  /**
+   * Attaches already uploaded files and a caption to the ticket. A rejection means nothing was
+   * attached.
+   */
+  attachEvidence(id: string, evidence: TicketEvidence): Promise<void>;
 };

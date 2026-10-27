@@ -30,7 +30,8 @@ export default function ClaimTicketScreen() {
     setSaving(true);
     try {
       await ticketsRepository.claimTicket(ticket.id);
-      goBack();
+      // Replaces the sheet, so Back from Update progress returns to the screen the claim started on.
+      router.replace({ pathname: '/tickets/[id]/update-progress', params: { id: ticket.id } });
     } catch {
       inFlight.current = false;
       setSaving(false);
