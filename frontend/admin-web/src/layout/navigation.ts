@@ -9,7 +9,6 @@ import {
   History,
   Layers,
   LayoutDashboard,
-  Mail,
   Network,
   QrCode,
   Settings,
@@ -62,6 +61,12 @@ export const superAdminArea: NavArea = {
           icon: LayoutDashboard,
           crumb: ['Platform', 'Overview'],
         },
+        {
+          label: 'Analytics',
+          path: 'analytics',
+          icon: ChartColumn,
+          crumb: ['Platform', 'Analytics'],
+        },
       ],
     },
     {
@@ -93,12 +98,6 @@ export const superAdminArea: NavArea = {
           crumb: ['Platform', 'Audit log'],
         },
         { label: 'Admin users', path: 'admin-users', icon: Users, crumb: ['Platform', 'Admin users'] },
-      ],
-    },
-    {
-      heading: 'System',
-      items: [
-        { label: 'Settings', path: 'settings', icon: Settings, crumb: ['System', 'Settings'] },
       ],
     },
   ],
@@ -187,12 +186,6 @@ export const tenantAdminArea: NavArea = {
           path: 'sla-monitoring',
           icon: Activity,
           crumb: ['Configuration', 'SLA monitoring'],
-        },
-        {
-          label: 'Email delivery',
-          path: 'email-delivery',
-          icon: Mail,
-          crumb: ['Configuration', 'Email delivery'],
         },
         {
           label: 'Billing & plan',
@@ -304,7 +297,6 @@ export const branchManagerArea: NavArea = {
           icon: ChartColumn,
           crumb: ['Insights', 'Branch analytics'],
         },
-        { label: 'Reports', path: 'reports', icon: FileText, crumb: ['Insights', 'Reports'] },
       ],
     },
   ],
