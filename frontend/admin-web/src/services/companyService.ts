@@ -1,11 +1,10 @@
 import type {
+  AdminUserList,
   Company,
   CompanyDetail,
   CompanyFilter,
   CompanyList,
   SuspendRequest,
-  TenantAdmin,
-  UsageMeter,
 } from '../types/company'
 
 // Mock implementation. Replace the bodies with real calls when the backend is ready.
@@ -17,6 +16,7 @@ function delay(ms = 400) {
 const companies: Company[] = [
   {
     id: 'spice-garden',
+    tenantId: 'tn_4be210',
     name: 'Spice Garden Holdings',
     initials: 'SG',
     domain: 'spicegarden.lk',
@@ -28,9 +28,17 @@ const companies: Company[] = [
     status: 'Active',
     planPrice: 71000,
     lastActivity: '2 min ago',
+    admin: {
+      name: 'Marcus Vance',
+      initials: 'MV',
+      role: 'Tenant Admin',
+      email: 'marcus.vance@spicegarden.lk',
+      lastSignIn: 'Today 09:12',
+    },
   },
   {
     id: 'bistrogate',
+    tenantId: 'tn_3a19cd',
     name: 'BistroGate Restaurant Group',
     initials: 'BG',
     domain: 'bistrogate.com',
@@ -42,9 +50,17 @@ const companies: Company[] = [
     status: 'Active',
     planPrice: 149000,
     lastActivity: 'Now',
+    admin: {
+      name: 'Ruwan Fernando',
+      initials: 'RF',
+      role: 'Tenant Admin',
+      email: 'ruwan@bistrogate.com',
+      lastSignIn: 'Today 10:40',
+    },
   },
   {
     id: 'ceylon-curry',
+    tenantId: 'tn_91b0e2',
     name: 'Ceylon Curry Co.',
     initials: 'CC',
     domain: 'ceyloncurry.lk',
@@ -56,9 +72,17 @@ const companies: Company[] = [
     status: 'Trial',
     planPrice: null,
     lastActivity: '1 h ago',
+    admin: {
+      name: 'Ishara Dias',
+      initials: 'ID',
+      role: 'Tenant Admin',
+      email: 'ishara@ceyloncurry.lk',
+      lastSignIn: 'Today 08:55',
+    },
   },
   {
     id: 'harbour-grill',
+    tenantId: 'tn_7f3a91',
     name: 'Harbour Grill',
     initials: 'HG',
     domain: 'harbourgrill.lk',
@@ -70,9 +94,17 @@ const companies: Company[] = [
     status: 'Past due',
     planPrice: 30000,
     lastActivity: 'Yesterday',
+    admin: {
+      name: 'Sanjeewa Herath',
+      initials: 'SH',
+      role: 'Tenant Admin',
+      email: 'sanjeewa@harbourgrill.lk',
+      lastSignIn: 'Yesterday 21:14',
+    },
   },
   {
     id: 'urban-kottu',
+    tenantId: 'tn_2c81aa',
     name: 'Urban Kottu Bar',
     initials: 'UK',
     domain: 'urbankottu.lk',
@@ -84,9 +116,17 @@ const companies: Company[] = [
     status: 'Suspended',
     planPrice: null,
     lastActivity: '12 days ago',
+    admin: {
+      name: 'Kasun Wijeratne',
+      initials: 'KW',
+      role: 'Tenant Admin',
+      email: 'kasun@urbankottu.lk',
+      lastSignIn: '14 Oct 18:30',
+    },
   },
   {
     id: 'lotus-tea',
+    tenantId: 'tn_5d0c77',
     name: 'Lotus Tea Rooms',
     initials: 'LT',
     domain: 'lotustea.lk',
@@ -98,6 +138,13 @@ const companies: Company[] = [
     status: 'Pending verification',
     planPrice: null,
     lastActivity: '—',
+    admin: {
+      name: 'Tharushi Peiris',
+      initials: 'TP',
+      role: 'Tenant Admin',
+      email: 'tharushi@lotustea.lk',
+      lastSignIn: '—',
+    },
   },
 ]
 
@@ -113,53 +160,14 @@ const counts: Record<CompanyFilter, number> = {
 
 const planCapacity: Record<string, number | null> = { Basic: 3, Pro: 15, Enterprise: null }
 
-const usageMeters: UsageMeter[] = [
-  { label: 'AI classifications', summary: '1,148 of 10,000', percent: 30 },
-  { label: 'File storage', summary: '3.1 of 10 GB', percent: 30 },
-  { label: 'API calls', summary: '182k of 1M', percent: 30 },
-]
-
-function adminsFor(company: Company): TenantAdmin[] {
-  if (company.id === 'harbour-grill') {
-    return [
-      {
-        name: 'Sanjeewa Herath',
-        role: 'Owner',
-        email: 'sanjeewa@harbourgrill.lk',
-        lastSignIn: 'Yesterday 21:14',
-        twoFactor: true,
-      },
-      {
-        name: 'Dilini Costa',
-        role: 'Company admin',
-        email: 'dilini@harbourgrill.lk',
-        lastSignIn: '4 Nov 09:02',
-        twoFactor: false,
-      },
-    ]
-  }
-  return [
-    {
-      name: `${company.name} Owner`,
-      role: 'Owner',
-      email: `owner@${company.domain}`,
-      lastSignIn: company.lastActivity,
-      twoFactor: true,
-    },
-  ]
-}
-
-function toDetail(company: Company, index: number): CompanyDetail {
+function toDetail(company: Company): CompanyDetail {
   const harbour = company.id === 'harbour-grill'
   return {
     ...company,
-    tenantId: harbour ? 'tn_7f3a91' : `tn_${(0x3b2c10 + index * 0x1f4a7).toString(16)}`,
     createdAt: harbour ? '14 Mar 2026' : '2 Feb 2026',
-    adminCount: harbour ? 12 : Math.max(1, Math.round(company.users / 40)),
     planCapacity: planCapacity[company.plan ?? ''] ?? 0,
     tickets30d: harbour ? '1,148' : (company.users * 12).toLocaleString('en-US'),
     slaBreach: harbour ? '4.8%' : '2.1%',
-    usage: usageMeters,
     invoice: harbour
       ? {
           failedOn: '2 Nov',
@@ -170,9 +178,6 @@ function toDetail(company: Company, index: number): CompanyDetail {
           emailsSent: 2,
         }
       : undefined,
-    admins: adminsFor(company),
-    region: 'ap-south-1',
-    emailVerified: company.status === 'Pending verification' ? 'No' : 'Yes · 14 Mar 2026',
   }
 }
 
@@ -186,8 +191,26 @@ export async function getCompanies(): Promise<CompanyList> {
 // GET /admin/tenants/{id}
 export async function getCompany(id: string): Promise<CompanyDetail | undefined> {
   await delay()
-  const index = companies.findIndex((company) => company.id === id)
-  return index === -1 ? undefined : toDetail(companies[index], index)
+  const company = companies.find((item) => item.id === id)
+  return company ? toDetail(company) : undefined
+}
+
+// GET /admin/tenant-admins
+export async function getAdminUsers(): Promise<AdminUserList> {
+  await delay()
+  // The mock returns the same rows for every page.
+  return {
+    total: 134,
+    pageCount: 13,
+    admins: companies.map((company) => ({
+      name: company.admin.name,
+      initials: company.admin.initials,
+      role: 'Tenant admin',
+      email: company.admin.email,
+      companyName: company.name,
+      tenantId: company.tenantId,
+    })),
+  }
 }
 
 // POST /admin/tenants/{id}/suspend
