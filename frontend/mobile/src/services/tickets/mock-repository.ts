@@ -1,5 +1,5 @@
-import { createMockTickets } from '@/mock-data/tickets';
-import type { TicketSummary } from '@/types/ticket';
+import { createMockTicketDetails, createMockTickets } from '@/mock-data/tickets';
+import type { TicketDetailContent, TicketSummary } from '@/types/ticket';
 
 import type { TicketsRepository } from './repository';
 
@@ -12,8 +12,10 @@ const copy = (ticket: TicketSummary): TicketSummary => ({ ...ticket, sla: { ...t
  */
 export function createMockTicketsRepository(
   seed: () => TicketSummary[] = createMockTickets,
+  seedDetails: () => Record<string, TicketDetailContent> = createMockTicketDetails,
 ): TicketsRepository {
   let tickets = seed();
+  const details = seedDetails();
 
   return {
     async listTickets() {
@@ -22,6 +24,18 @@ export function createMockTicketsRepository(
     async getTicket(id) {
       const ticket = tickets.find((item) => item.id === id);
       return ticket ? copy(ticket) : null;
+    },
+    async getTicketDetail(id) {
+      const ticket = tickets.find((item) => item.id === id);
+      if (!ticket) {
+        return null;
+      }
+      const content = details[id] ?? { description: '', timeline: [] };
+      return {
+        ...copy(ticket),
+        ...content,
+        timeline: content.timeline.map((event) => ({ ...event })),
+      };
     },
     async updateProgress(id, update) {
       tickets = tickets.map((ticket) =>

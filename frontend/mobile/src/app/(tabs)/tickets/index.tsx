@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AppBar } from '@/components/app-bar';
+import { EmptyToolbar } from '@/components/tickets/empty-toolbar';
 import { FilterSortSheet } from '@/components/tickets/filter-sort-sheet';
 import { TicketCard } from '@/components/tickets/ticket-card';
 import type { TicketActionId } from '@/components/tickets/ticket-card';
@@ -32,6 +33,9 @@ const ACTION_HANDLERS: Partial<Record<TicketActionId, (ticket: TicketSummary) =>
   update: (ticket) =>
     router.push({ pathname: '/tickets/[id]/update-progress', params: { id: ticket.id } }),
 };
+
+const openTicket = (ticket: TicketSummary) =>
+  router.push({ pathname: '/tickets/[id]', params: { id: ticket.id } });
 
 export default function TicketsScreen() {
   const { status, tickets, reload } = useTickets();
@@ -64,12 +68,15 @@ export default function TicketsScreen() {
             </Pressable>
           </View>
         ) : tickets.length === 0 ? (
-          <TicketEmptyState
-            title="You’re all caught up"
-            message="No tickets assigned to you right now. New complaints for you will appear here instantly."
-            actionLabel="Refresh"
-            onAction={reload}
-          />
+          <>
+            <EmptyToolbar tickets={tickets} onSortPress={() => setSheetVisible(true)} />
+            <TicketEmptyState
+              title="You’re all caught up"
+              message="No tickets assigned to you right now. New complaints for you will appear here instantly."
+              actionLabel="Refresh"
+              onAction={reload}
+            />
+          </>
         ) : (
           <>
             <TicketsToolbar
@@ -110,7 +117,12 @@ export default function TicketsScreen() {
             ) : (
               <View style={styles.list}>
                 {visibleTickets.map((ticket) => (
-                  <TicketCard key={ticket.id} ticket={ticket} actionHandlers={ACTION_HANDLERS} />
+                  <TicketCard
+                    key={ticket.id}
+                    ticket={ticket}
+                    onPress={openTicket}
+                    actionHandlers={ACTION_HANDLERS}
+                  />
                 ))}
               </View>
             )}

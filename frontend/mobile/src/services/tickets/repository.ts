@@ -1,4 +1,4 @@
-import type { TicketProgressUpdate, TicketSummary } from '@/types/ticket';
+import type { TicketDetail, TicketProgressUpdate, TicketSummary } from '@/types/ticket';
 
 /**
  * Data-access contract for tickets. Replace the mock implementation with one that calls the real
@@ -10,6 +10,8 @@ export type TicketsRepository = {
   listTickets(): Promise<TicketSummary[]>;
   /** One ticket, or null when it does not exist (or is not assigned to the staff member). */
   getTicket(id: string): Promise<TicketSummary | null>;
+  /** One ticket with its description, escalation and timeline, or null when it does not exist. */
+  getTicketDetail(id: string): Promise<TicketDetail | null>;
   /**
    * Submits a progress update. Resolving means the update was accepted; a rejection means it
    * was not saved.

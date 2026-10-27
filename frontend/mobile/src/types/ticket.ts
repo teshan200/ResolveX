@@ -20,6 +20,27 @@ export type TicketProgressUpdate = {
   note: string;
 };
 
+export type TicketTimelineEventKind = 'claimed' | 'progress' | 'escalated';
+
+export type TicketTimelineEvent = {
+  id: string;
+  kind: TicketTimelineEventKind;
+  /** Who did it, e.g. "you" or "SLA engine". */
+  actor: string;
+  /** ISO 8601 timestamp. */
+  at: string;
+  detail?: string;
+};
+
+export type TicketEscalation = {
+  escalatedTo: string;
+  escalatedToRole: string;
+  /** ISO 8601 timestamp. */
+  escalatedAt: string;
+  /** Why it was escalated, e.g. "Resolution SLA breached". */
+  reason: string;
+};
+
 /** The ticket fields shown on list cards. */
 export type TicketSummary = {
   id: string;
@@ -38,3 +59,15 @@ export type TicketSummary = {
     label: string;
   };
 };
+
+/** What the ticket detail screen shows besides the list-card fields. */
+export type TicketDetailContent = {
+  /** The customer's complaint. */
+  description: string;
+  /** Present when the ticket has been escalated. */
+  escalation?: TicketEscalation;
+  /** Newest first. */
+  timeline: TicketTimelineEvent[];
+};
+
+export type TicketDetail = TicketSummary & TicketDetailContent;

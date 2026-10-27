@@ -1,4 +1,4 @@
-import type { TicketSummary } from '@/types/ticket';
+import type { TicketDetailContent, TicketSummary } from '@/types/ticket';
 
 const minutesAgo = (minutes: number) => new Date(Date.now() - minutes * 60000).toISOString();
 
@@ -72,4 +72,71 @@ export function createMockTickets(): TicketSummary[] {
       sla: { state: 'met', label: 'SLA met' },
     },
   ];
+}
+
+/** Development-only detail content for the sample tickets, keyed by ticket id. */
+export function createMockTicketDetails(): Record<string, TicketDetailContent> {
+  return {
+    't-1038': {
+      description: '“Ordered the seafood kottu, got chicken. Second time this month.”',
+      escalation: {
+        escalatedTo: 'Kavinda P.',
+        escalatedToRole: 'Supervisor',
+        escalatedAt: minutesAgo(5),
+        reason: 'Resolution SLA breached',
+      },
+      timeline: [
+        {
+          id: 'e-1038-3',
+          kind: 'escalated',
+          actor: 'SLA engine',
+          at: minutesAgo(5),
+          detail: 'Resolution SLA (30 min) breached.',
+        },
+        {
+          id: 'e-1038-2',
+          kind: 'progress',
+          actor: 'you',
+          at: minutesAgo(16),
+          detail: 'Kitchen re-preparing seafood kottu.',
+        },
+        {
+          id: 'e-1038-1',
+          kind: 'claimed',
+          actor: 'you',
+          at: minutesAgo(23),
+          detail: 'Acknowledged in 2 min.',
+        },
+      ],
+    },
+    't-1042': {
+      description: '“My food arrived cold.”',
+      timeline: [],
+    },
+    't-1045': {
+      description: '“The bill doesn’t match what we ordered.”',
+      timeline: [{ id: 'e-1045-1', kind: 'claimed', actor: 'you', at: minutesAgo(30) }],
+    },
+    't-1036': {
+      description: '“The naan was missing from our delivery.”',
+      timeline: [
+        { id: 'e-1036-2', kind: 'progress', actor: 'you', at: minutesAgo(26 * 60 - 20) },
+        { id: 'e-1036-1', kind: 'claimed', actor: 'you', at: minutesAgo(26 * 60 - 5) },
+      ],
+    },
+    't-1047': {
+      description: '“We’ve been waiting a long time for our table to be served.”',
+      timeline: [
+        { id: 'e-1047-2', kind: 'progress', actor: 'you', at: minutesAgo(10) },
+        { id: 'e-1047-1', kind: 'claimed', actor: 'you', at: minutesAgo(15) },
+      ],
+    },
+    't-1030': {
+      description: '“The cutlery on our table was not clean.”',
+      timeline: [
+        { id: 'e-1030-2', kind: 'progress', actor: 'you', at: minutesAgo(3 * 24 * 60 - 15) },
+        { id: 'e-1030-1', kind: 'claimed', actor: 'you', at: minutesAgo(3 * 24 * 60 - 5) },
+      ],
+    },
+  };
 }
