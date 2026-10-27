@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CustomerLayout } from '../layout/CustomerLayout'
+import { CaseDetailPage } from '../pages/CaseDetailPage'
 import { GuestFeedbackPage } from '../pages/GuestFeedbackPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { SubmissionSuccessPage } from '../pages/SubmissionSuccessPage'
@@ -15,7 +16,7 @@ const screens: Array<{ path: string; title: string; element?: ReactElement }> = 
     element: <SubmissionSuccessPage />,
   },
   { path: 'track', title: 'Track Your Case', element: <TrackCasePage /> },
-  { path: 'track/:caseId', title: 'Case Detail' },
+  { path: 'track/:caseId', title: 'Case Detail', element: <CaseDetailPage /> },
   { path: 'survey/:caseId', title: 'Post-Resolution Survey' },
   { path: 'survey/:caseId/thanks', title: 'Survey Thank You' },
   { path: 'invalid-qr', title: 'Invalid QR' },

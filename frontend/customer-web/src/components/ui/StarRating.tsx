@@ -2,7 +2,7 @@ import { StarIcon } from '../icons'
 import { cn } from './cn'
 
 interface StarRatingProps {
-  /** 0 means not rated yet. */
+  /** Number of stars selected, from 1 to 5. */
   value: number
   onChange: (value: number) => void
   /** Accessible name of the group. */
@@ -12,10 +12,8 @@ interface StarRatingProps {
 const words = ['', 'Very poor', 'Poor', 'Okay', 'Good', 'Excellent']
 
 export function StarRating({ value, onChange, label }: StarRatingProps) {
-  const middleWord = value >= 2 && value <= 4 ? words[value] : null
-
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2">
       <div role="radiogroup" aria-label={label} className="flex justify-between">
         {[1, 2, 3, 4, 5].map((star) => {
           const filled = star <= value
@@ -47,7 +45,6 @@ export function StarRating({ value, onChange, label }: StarRatingProps) {
         >
           Very poor
         </span>
-        {middleWord && <span className="font-semibold text-warning-fg">{middleWord}</span>}
         <span
           className={cn(
             value === 5 ? 'font-semibold text-success-fg' : 'font-medium text-content-tertiary',

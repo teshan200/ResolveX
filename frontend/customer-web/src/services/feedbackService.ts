@@ -7,7 +7,7 @@ import { registerCase } from '../mocks/cases'
 export interface FeedbackReceipt {
   caseId: string
   branch: string
-  /** Table the guest entered, if any. */
+  /** Table the QR code is placed on, if it is mapped to one. */
   table: string | null
   /** Guest name, if given. */
   name: string | null
@@ -28,13 +28,18 @@ export async function submitFeedback(
 
   // Fixed so the tracking screens can use the same demo case.
   const caseId = 'RX-1042'
-  // Remembered so the tracking lookup accepts the email the guest just gave.
-  if (values.email) registerCase({ caseId, email: values.email })
+  // Remembered so the tracking screens show what the guest just submitted.
+  registerCase({
+    caseId,
+    submittedAt: new Date().toISOString(),
+    table: mockBranding.table,
+    areas: values.areas,
+  })
 
   return {
     caseId,
     branch: mockBranding.branch,
-    table: values.tableNumber || null,
+    table: mockBranding.table,
     name: values.name || null,
     email: values.email || null,
   }

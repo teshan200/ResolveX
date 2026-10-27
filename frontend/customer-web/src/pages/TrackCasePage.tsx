@@ -9,7 +9,7 @@ export function TrackCasePage() {
       </div>
       <p className="flex items-center gap-1.5 text-xs/4 text-content-tertiary">
         <ShieldCheckIcon className="size-3.5 shrink-0" />
-        Visible only with the matching case ID and email
+        Case details are visible only with a valid case ID
       </p>
     </div>
   )

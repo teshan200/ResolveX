@@ -3,10 +3,9 @@ import { LOW_RATING_MAX, MAX_DESCRIPTION, MIN_DESCRIPTION, dineTypes, problemAre
 
 export const feedbackSchema = z
   .object({
-    // 0 means the guest has not rated yet.
-    rating: z.number().min(1, 'Please rate your visit').max(5),
+    // The rating starts at 1 star, so it is always set.
+    rating: z.number().min(1).max(5),
     dineType: z.enum(dineTypes),
-    tableNumber: z.string().trim().max(10, 'Use 10 characters or fewer'),
     areas: z.array(z.enum(problemAreas)),
     description: z.string().trim().max(MAX_DESCRIPTION),
     // Type and size are checked when the file is picked (see photo.ts), so only valid files get here.
@@ -36,9 +35,8 @@ export const feedbackSchema = z
 export type FeedbackFormValues = z.infer<typeof feedbackSchema>
 
 export const feedbackDefaults: FeedbackFormValues = {
-  rating: 0,
+  rating: 1,
   dineType: 'Dine in',
-  tableNumber: '',
   areas: [],
   description: '',
   photo: null,

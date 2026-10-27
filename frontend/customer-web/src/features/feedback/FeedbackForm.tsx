@@ -26,7 +26,7 @@ import {
   Textarea,
 } from '../../components/ui'
 import { submitFeedback } from '../../services/feedbackService'
-import { LOW_RATING_MAX, MAX_DESCRIPTION, PHOTO_TYPES, dineTypes, problemAreas } from './options'
+import { MAX_DESCRIPTION, PHOTO_TYPES, dineTypes, problemAreas } from './options'
 import type { ProblemArea } from './options'
 import { validatePhoto } from './photo'
 import { feedbackDefaults, feedbackSchema } from './schema'
@@ -64,10 +64,8 @@ export function FeedbackForm({ qrId }: { qrId: string }) {
     defaultValues: feedbackDefaults,
   })
 
-  const rating = useWatch({ control, name: 'rating' })
   const description = useWatch({ control, name: 'description' })
   const errorCount = Object.keys(errors).length
-  const detailsRequired = rating <= LOW_RATING_MAX
 
   const onSubmit = async (values: FeedbackFormValues) => {
     setServerError(null)
@@ -90,7 +88,7 @@ export function FeedbackForm({ qrId }: { qrId: string }) {
         )}
         {serverError && <AlertBanner title="We couldn’t send your feedback" description={serverError} />}
 
-        <FormCard title="How was your visit today?" tag="Required" invalid={Boolean(errors.rating)}>
+        <FormCard title="How was your visit today?" tag="Required">
           <Controller
             control={control}
             name="rating"
@@ -106,7 +104,6 @@ export function FeedbackForm({ qrId }: { qrId: string }) {
               />
             )}
           />
-          {errors.rating?.message && <FieldError message={errors.rating.message} />}
         </FormCard>
 
         <FormCard title="How did you dine?">
@@ -123,20 +120,10 @@ export function FeedbackForm({ qrId }: { qrId: string }) {
               />
             )}
           />
-          <TextField
-            label="Table number (optional)"
-            placeholder="e.g. 7"
-            leadingIcon={<UtensilsIcon />}
-            helper="One QR for all tables — add yours"
-            error={errors.tableNumber?.message}
-            {...register('tableNumber')}
-          />
         </FormCard>
 
         <FormCard title="Which area was the problem?">
-          <p className="text-[13px]/[18px] text-content-secondary">
-            Select all that apply{detailsRequired ? '' : ' (optional)'}
-          </p>
+          <p className="text-[13px]/[18px] text-content-secondary">Select all that apply</p>
           <Controller
             control={control}
             name="areas"
