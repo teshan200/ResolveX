@@ -1,6 +1,6 @@
 // Sample data for the Staff & workload screen. No backend is connected.
 
-export type ShiftStatus = 'On shift' | 'On break' | 'Off shift'
+export type ShiftStatus = 'On shift' | 'On break'
 export type LoadTone = 'brand' | 'warning' | 'danger'
 
 export interface StaffMember {
@@ -24,5 +24,5 @@ export const staffMembers: StaffMember[] = [
   { id: 'kp', name: 'Kavinda Perera', initials: 'KP', role: 'Floor Supervisor', status: 'On shift', open: 3, loadTone: 'brand', loadPercent: 100, avgAck: '3 min', slaMet: '95%', slaTone: 'success' },
   { id: 'nj', name: 'Nadeesha Jay', initials: 'NJ', role: 'Bartender', status: 'On break', open: 1, loadTone: 'brand', loadPercent: 100, avgAck: '5 min', slaMet: '94%', slaTone: 'success' },
   { id: 'aw', name: 'Amali Wije', initials: 'AW', role: 'Delivery Rider / Driver', status: 'On shift', open: 2, loadTone: 'brand', loadPercent: 100, avgAck: '7 min', slaMet: '90%', slaTone: 'success' },
-  { id: 'cn', name: 'Chathura N.', initials: 'CN', role: 'Waiter / Waitress', status: 'Off shift', open: 0, loadTone: 'brand', loadPercent: 100, avgAck: '—', slaMet: '—', slaTone: 'none' },
+  { id: 'cn', name: 'Chathura N.', initials: 'CN', role: 'Waiter / Waitress', status: 'On break', open: 0, loadTone: 'brand', loadPercent: 100, avgAck: '—', slaMet: '—', slaTone: 'none' },
 ]

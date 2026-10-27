@@ -15,7 +15,7 @@ export const reviewItems: ReviewItem[] = [
     id: '#1054',
     meta: 'Table 3 · 9 min ago',
     quote: '“Chicken tasted strange, worried it was undercooked.”',
-    confidence: 71,
+    confidence: 41,
     category: 'Food quality',
     subCategory: 'Safety',
     priority: 'High',
@@ -24,7 +24,7 @@ export const reviewItems: ReviewItem[] = [
     id: '#1055',
     meta: 'Washrooms · 15 min ago',
     quote: '“Washroom had no soap, again.”',
-    confidence: 68,
+    confidence: 36,
     category: 'Cleanliness',
     priority: 'Normal',
   },
@@ -59,7 +59,6 @@ export const employeesByDesignation: Record<string, Employee[]> = {
 
 export const reviewChips: { key: ReviewChip; label: string }[] = [
   { key: 'waiting', label: 'Waiting' },
-  { key: 'reviewed', label: 'Reviewed today' },
   { key: 'overridden', label: 'Overridden' },
 ]
 

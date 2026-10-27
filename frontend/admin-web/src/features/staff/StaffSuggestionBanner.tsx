@@ -8,7 +8,7 @@ export function StaffSuggestionBanner() {
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <p className="text-sm leading-5 font-semibold text-warning-fg">Ravi Silva has 6 open kitchen tickets</p>
         <p className="text-[13px] leading-4.5 text-content-secondary">
-          Suggestion: move #1054 and #1049 to Chathura N. when his shift starts at 5 PM.
+          Suggestion: move #1054 and #1049 to Chathura N. when he is back from his break.
         </p>
       </div>
       <button

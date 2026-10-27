@@ -1,7 +1,5 @@
-import { FileText } from 'lucide-react'
-import { Button } from '../components/ui/Button'
 import { BranchKpis } from '../features/branch/BranchKpis'
-import { NeedsDecisionCard, OnShiftCard } from '../features/branch/BranchSidePanels'
+import { NeedsDecisionCard } from '../features/branch/BranchSidePanels'
 import { LiveQueue } from '../features/branch/LiveQueue'
 
 /** Branch manager "Branch overview" screen (Figma node 47:22). Sample data only. */
@@ -16,20 +14,15 @@ export function BranchOverviewPage() {
         <div className="flex shrink-0 items-start gap-3">
           <span className="flex items-center gap-2 rounded-full bg-success-bg px-3 py-2 text-xs leading-4 font-semibold whitespace-nowrap text-success-fg">
             <span className="size-2 rounded-full bg-success-solid" aria-hidden />
-            Open · 12 staff on shift
+            Branch open
           </span>
-          <Button variant="outline" className="font-semibold!">
-            <FileText size={18} aria-hidden />
-            Branch report
-          </Button>
         </div>
       </header>
       <BranchKpis />
-      <div className="flex items-stretch gap-6">
+      <div className="flex items-start gap-6">
         <LiveQueue />
         <div className="flex w-[360px] shrink-0 flex-col gap-6">
           <NeedsDecisionCard />
-          <OnShiftCard />
         </div>
       </div>
     </div>

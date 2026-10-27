@@ -4,7 +4,6 @@ import { Button } from '../components/ui/Button'
 import { PriorityBadge, StatusBadge } from '../components/ui/StatusBadge'
 import { DetailPanel, DetailRow } from '../features/escalation/components/DetailPanel'
 import { EscalationHistory } from '../features/escalation/components/EscalationHistory'
-import { AssignmentPanel } from '../features/tickets/AssignmentPanel'
 import { SlaProgressCard } from '../features/tickets/SlaProgressCard'
 import { ticket1042 } from '../features/tickets/mocks'
 
@@ -60,7 +59,6 @@ export function BranchTicketDetailPage() {
           </DetailPanel>
         </div>
         <div className="flex w-[360px] shrink-0 flex-col gap-5">
-          <AssignmentPanel />
           <DetailPanel icon={FileText} title="Details">
             {ticket1042.details.map(([label, value]) => (
               <DetailRow key={label} label={label}>

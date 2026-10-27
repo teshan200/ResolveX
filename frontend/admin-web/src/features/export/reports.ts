@@ -43,19 +43,17 @@ export function analyticsReport(filters: AnalyticsFilters): ExportReport {
       ['Priority', filters.priority],
       ['Generated', generated()],
     ],
-    sections: [kpiSection(), categorySection(), recoverySection(), staffSection()],
+    sections: [kpiSection(), categorySection()],
   }
 }
 
 export interface ReportOptions {
   range: string
   branches: string
-  groupBy: string
 }
 
 /** Sections available for each report template. Templates with no sample data return null. */
 const templateSections: Record<string, (() => ExportSection[]) | null> = {
-  executive: () => [kpiSection(), categorySection(), recoverySection()],
   sla: () => [kpiSection(['Avg. response', 'Avg. resolution', 'SLA violation rate', 'Critical rate'])],
   branch: null,
   staff: () => [staffSection()],
@@ -75,7 +73,6 @@ export function templateReport(templateId: string, title: string, options: Repor
     meta: [
       ['Date range', options.range],
       ['Branches', options.branches],
-      ['Group by', options.groupBy],
       ['Generated', generated()],
     ],
     sections: build(),

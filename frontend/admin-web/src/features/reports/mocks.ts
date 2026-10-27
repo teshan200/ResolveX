@@ -1,4 +1,4 @@
-import { FileText, Gift, Sparkles, Store, Timer, Users } from 'lucide-react'
+import { Gift, Sparkles, Store, Timer, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 // Mock data only, taken from the Figma "Reports & exports" frame. No backend is connected.
@@ -10,12 +10,6 @@ export interface ReportTemplate {
 }
 
 export const reportTemplates: ReportTemplate[] = [
-  {
-    id: 'executive',
-    title: 'Executive summary',
-    description: 'KPIs, trends and top issues for the period',
-    icon: FileText,
-  },
   {
     id: 'sla',
     title: 'SLA performance',
@@ -61,7 +55,7 @@ export interface RecentExport {
 
 export const recentExports: RecentExport[] = [
   {
-    title: 'Executive summary · Sep 2026',
+    title: 'Branch comparison · Sep 2026',
     scope: 'All branches',
     format: 'PDF',
     generatedBy: 'Marcus Vance',
@@ -88,4 +82,3 @@ export const recentExports: RecentExport[] = [
 
 export const dateRangeOptions = ['Last 7 days', 'Last 30 days', 'Last 90 days']
 export const branchScopeOptions = ['All 32 branches', 'Colombo Branch', 'Kandy Branch', 'Galle Fort']
-export const groupByOptions = ['Region', 'Branch']

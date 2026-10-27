@@ -8,9 +8,6 @@ export const ticket1042 = {
   subtitle:
     'Colombo Branch · Table 7 · submitted 12:18 PM via “Colombo - Dining Area” · last updated 8 min ago',
   guestComplaint: '“The chicken biryani and garlic naan arrived barely lukewarm after a 35-minute wait.”',
-  priorities: ['Critical', 'High', 'Medium', 'Normal'] as const,
-  designations: ['Waiter / Waitress'],
-  employees: ['Dinesh Kumara'],
   details: [
     ['Branch', 'Colombo Branch'],
     ['Service point', 'Table 7'],

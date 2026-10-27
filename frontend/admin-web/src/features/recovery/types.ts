@@ -15,4 +15,6 @@ export interface ResolutionApproval {
   time: string
   sla: ApprovalSla
   status: ApprovalStatus
+  /** Post-resolution survey answer. Missing when the guest has not submitted one. */
+  survey?: { rating: number; comment: string }
 }

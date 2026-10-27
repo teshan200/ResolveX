@@ -1,16 +1,12 @@
 import { useState } from 'react'
-import { History } from 'lucide-react'
 import { AcknowledgedTable } from '../features/escalation/components/AcknowledgedTable'
-import { EscalationHistory } from '../features/escalation/components/EscalationHistory'
 import { EscalationStatusChips } from '../features/escalation/components/EscalationStatusChips'
 import { InboxUrgentCard } from '../features/escalation/components/InboxUrgentCard'
 import {
   acknowledgedBy,
   acknowledgedEscalations,
-  historyCount,
   inboxChips,
   urgentEscalation,
-  urgentHistory,
 } from '../features/escalation/inbox'
 import type { AcknowledgedEscalation, InboxChip } from '../features/escalation/inbox'
 
@@ -35,7 +31,6 @@ export function EscalationInboxPage() {
   const counts: Record<InboxChip, number> = {
     needs: acknowledged ? 0 : 1,
     acknowledged: rows.length,
-    history: historyCount,
   }
 
   return (
@@ -60,23 +55,7 @@ export function EscalationInboxPage() {
         <InboxUrgentCard escalation={urgentEscalation} onAcknowledge={() => setAcknowledged(true)} />
       )}
 
-      <div className="flex flex-col items-start gap-6 lg:flex-row">
-        <AcknowledgedTable rows={rows} />
-        <section
-          aria-labelledby="inbox-history"
-          className="w-full shrink-0 overflow-hidden rounded-xl border border-line bg-surface lg:w-[420px]"
-        >
-          <div className="flex items-center gap-3 border-b border-line-subtle px-5 py-4">
-            <History size={18} className="shrink-0 text-content-brand" aria-hidden />
-            <h2 id="inbox-history" className="min-w-0 flex-1 text-base leading-6 font-semibold">
-              Escalation history · {urgentEscalation.id}
-            </h2>
-          </div>
-          <div className="px-5 py-4">
-            <EscalationHistory entries={urgentHistory} tight />
-          </div>
-        </section>
-      </div>
+      <AcknowledgedTable rows={rows} />
     </div>
   )
 }
