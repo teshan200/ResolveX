@@ -5,7 +5,6 @@ import { areas, navItems } from '../layout/navigation'
 import { AdminUsersPage } from '../pages/AdminUsersPage'
 import { AiReviewQueuePage } from '../pages/AiReviewQueuePage'
 import { AnalyticsPage } from '../pages/AnalyticsPage'
-import { AuditLogPage } from '../pages/AuditLogPage'
 import { BranchEmployeesPage } from '../pages/BranchEmployeesPage'
 import { BranchDetailPage } from '../pages/BranchDetailPage'
 import { BranchesPage } from '../pages/BranchesPage'
@@ -71,8 +70,10 @@ const builtPages: Record<string, ReactElement> = {
   '/branch/tickets': <BranchTicketsPage />,
   '/branch/employees': <BranchEmployeesPage />,
   '/tenant/analytics': <AnalyticsPage />,
+
   '/tenant/complaints': <ComplaintsOverviewPage />,
   '/tenant/audit-log': <AuditLogPage />,
+
   '/tenant/branches': <BranchesPage />,
   '/tenant/employees': <EmployeesPage />,
   '/tenant/hierarchy': <HierarchyPage />,

@@ -76,7 +76,7 @@ export function BranchEmployeeDrawer({ branch, groups, unusedCount, onClose, onA
     >
       <div className="flex flex-col gap-5">
         <Select label="Branch" disabled options={[branch.name]} />
-        <p className="-mt-2 flex items-center gap-1.5 text-xs leading-4 text-content-tertiary">
+        <p className="flex items-center gap-1.5 text-xs leading-4 text-content-tertiary">
           <Lock size={12} />
           Fixed to the branch you manage
         </p>
@@ -105,7 +105,7 @@ export function BranchEmployeeDrawer({ branch, groups, unusedCount, onClose, onA
           disabled
           options={[chosenLevel === undefined ? '—' : `Level ${chosenLevel}`]}
         />
-        <p className="-mt-2 text-xs leading-4 text-content-tertiary">
+        <p className="text-xs leading-4 text-content-tertiary">
           Set automatically from the designation’s level in Hierarchy.
         </p>
         <Toggle checked={active} onChange={setActive} label="Account active — can sign in" />

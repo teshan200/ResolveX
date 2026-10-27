@@ -211,7 +211,6 @@ export const tenantAdminArea: NavArea = {
           crumb: ['Insights', 'Analytics'],
         },
         { label: 'Reports', path: 'reports', icon: FileText, crumb: ['Insights', 'Reports'] },
-        { label: 'Audit log', path: 'audit-log', icon: History, crumb: ['Insights', 'Audit log'] },
       ],
     },
   ],

@@ -377,28 +377,39 @@ export interface NewEmployee {
   designation: string
   branchId: string
   status?: ActiveStatus
+  /** Add them as the Branch Manager of the branch instead of giving them a designation. */
+  branchManager?: boolean
 }
 
 export async function addEmployee(input: NewEmployee): Promise<EmployeeRow> {
   await delay()
-  if (!placedDesignations(hierarchyStore).includes(input.designation)) {
+  const branch = branchStore.find((b) => b.id === input.branchId)
+  if (input.branchManager) {
+    // A Branch Manager takes the reserved level, and a branch can have only one.
+    if (branch?.managerId) throw new OrgError('branch-has-manager', `${branch.name} already has a Branch Manager`)
+  } else if (!placedDesignations(hierarchyStore).includes(input.designation)) {
     throw new OrgError('not-in-hierarchy', `${input.designation} is not in your hierarchy`)
   }
+  const status = input.status ?? 'Active'
   const employee: Employee = {
     id: slug(input.name) || `emp-${employeeStore.length + 1}`,
     name: input.name,
     initials: initialsOf(input.name),
     email: input.email,
-    designation: input.designation,
+    designation: input.branchManager ? BRANCH_MANAGER_DESIGNATION : input.designation,
     branchId: input.branchId,
-    status: input.status ?? 'Active',
+    status,
     lastActive: 'Invited · just now',
     openTickets: 0,
+    shift: status === 'Active' ? 'In Shift' : null,
+    returnAt: null,
   }
   // New people go to the top of the list.
   employeeStore = [employee, ...employeeStore]
-  const branch = branchStore.find((b) => b.id === input.branchId)
-  if (branch) branch.staffCount += 1
+  if (branch) {
+    branch.staffCount += 1
+    if (input.branchManager) branch.managerId = employee.id
+  }
   return withLevel(employee)
 }
 
@@ -454,6 +465,13 @@ export async function updateEmployee(id: string, changes: EmployeeChanges): Prom
   }
 
   Object.assign(employee, fields)
+  // An inactive account is never on shift; reactivating puts them back on shift.
+  if (fields.status === 'Inactive') {
+    employee.shift = null
+    employee.returnAt = null
+  } else if (fields.status === 'Active' && !employee.shift) {
+    employee.shift = 'In Shift'
+  }
   return withLevel(employee)
 }
 
@@ -467,6 +485,40 @@ export async function removeEmployee(id: string): Promise<void> {
     branch.staffCount = Math.max(0, branch.staffCount - 1)
     if (branch.managerId === id) branch.managerId = null
   }
+}
+
+// ------------------------------------------------------------------ Shifts
+
+function shiftEmployee(id: string) {
+  const employee = employeeStore.find((e) => e.id === id)
+  if (!employee) throw new OrgError('not-found', 'Employee not found')
+  return employee
+}
+
+/** The Branch Manager approves a break: the employee goes On Break until they are marked back in shift. */
+export async function approveBreak(id: string): Promise<EmployeeRow> {
+  await delay(250)
+  const employee = shiftEmployee(id)
+  employee.shift = 'On Break'
+  employee.returnAt = null
+  return withLevel(employee)
+}
+
+/** Sets the expected return time of someone on break. They stay On Break until marked back. */
+export async function scheduleReturn(id: string, returnAt: string): Promise<EmployeeRow> {
+  await delay(250)
+  const employee = shiftEmployee(id)
+  employee.returnAt = returnAt
+  return withLevel(employee)
+}
+
+/** Marks someone back in shift now. */
+export async function backToShift(id: string): Promise<EmployeeRow> {
+  await delay(250)
+  const employee = shiftEmployee(id)
+  employee.shift = 'In Shift'
+  employee.returnAt = null
+  return withLevel(employee)
 }
 
 // --------------------------------------------------------------- Hierarchy
