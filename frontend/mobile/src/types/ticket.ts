@@ -1,0 +1,123 @@
+export type TicketPriority = 'critical' | 'high' | 'medium' | 'normal';
+
+export type TicketStatus =
+  | 'assigned'
+  | 'claimed'
+  | 'inProgress'
+  | 'escalated'
+  | 'resolved'
+  | 'closed';
+
+export type SlaState = 'onTrack' | 'warning' | 'breached' | 'met';
+
+/** The statuses a staff member can move a ticket between on the "Update progress" screen. */
+export type ProgressStatus = Extract<TicketStatus, 'claimed' | 'inProgress'>;
+
+/** What the "Update progress" form submits. */
+export type TicketProgressUpdate = {
+  status: ProgressStatus;
+  /** What the staff member did. Optional, up to 250 characters. */
+  note: string;
+};
+
+/** A photo or PDF picked on the "Add evidence" screen. */
+export type EvidenceFile = {
+  id: string;
+  name: string;
+  /** Local file URI on the device. */
+  uri: string;
+  mimeType: string;
+  sizeBytes: number;
+};
+
+/** What the "Add evidence" form submits. */
+export type TicketEvidence = {
+  files: EvidenceFile[];
+  /** Optional, shown with the files. */
+  caption: string;
+};
+
+/** What the "Resolve ticket" form submits when the outcome is "Resolved". */
+export type TicketResolution = {
+  /** Included in the resolution email to the guest. */
+  note: string;
+};
+
+/** What the "Resolve ticket" form submits when the outcome is "Unable to resolve". */
+export type TicketEscalationRequest = {
+  reason: string;
+  /** What happened. Goes to the person the ticket is escalated to. */
+  note: string;
+};
+
+export type TicketTimelineEventKind = 'claimed' | 'progress' | 'escalated';
+
+export type TicketTimelineEvent = {
+  id: string;
+  kind: TicketTimelineEventKind;
+  /** Who did it, e.g. "you" or "SLA engine". */
+  actor: string;
+  /** ISO 8601 timestamp. */
+  at: string;
+  detail?: string;
+};
+
+export type TicketEscalation = {
+  escalatedTo: string;
+  escalatedToRole: string;
+  /** ISO 8601 timestamp. */
+  escalatedAt: string;
+  /** Why it was escalated, e.g. "Resolution SLA breached". */
+  reason: string;
+};
+
+/** The ticket fields shown on list cards. */
+export type TicketSummary = {
+  id: string;
+  /** Human-readable reference, e.g. "#1038". */
+  ticketNumber: string;
+  title: string;
+  priority: TicketPriority;
+  status: TicketStatus;
+  branchName: string;
+  servicePoint: string;
+  /** ISO 8601 timestamp. Used for "Newest" / "Oldest" sorting. */
+  createdAt: string;
+  sla: {
+    state: SlaState;
+    /** Text shown in the timer pill, e.g. "08:42 left" or "SLA met". */
+    label: string;
+  };
+};
+
+export type TicketGuest = {
+  name: string;
+  notification: string;
+  photoCount: number;
+};
+
+export type TicketSlaDetail = {
+  phase: string;
+  elapsedSeconds: number;
+  totalSeconds: number;
+  escalatesTo: string;
+  policy: string;
+};
+
+/** What the ticket detail screen shows besides the list-card fields. */
+export type TicketDetailContent = {
+  /** The customer's complaint. */
+  description: string;
+  category?: string;
+  aiConfidence?: number;
+  guest?: TicketGuest;
+  orderRef?: string;
+  assignedTo?: string;
+  slaDetail?: TicketSlaDetail;
+  /** Present when the ticket has been escalated. */
+  escalation?: TicketEscalation;
+  /** Newest first. */
+  timeline: TicketTimelineEvent[];
+};
+
+export type TicketDetail = TicketSummary & TicketDetailContent;

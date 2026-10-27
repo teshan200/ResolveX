@@ -61,5 +61,93 @@ export const Spacing = {
   six: 64,
 } as const;
 
-export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
+export const Brand = {
+  bgBrand: '#155e54',
+  bgSurface: '#ffffff',
+  textOnBrand: '#ffffff',
+  bgCanvas: '#f5f7f7',
+  textPrimary: '#162120',
+  textSecondary: '#4e5d5b',
+  textTertiary: '#6b7b79',
+  textDisabled: '#94a3a1',
+  textLink: '#1b7266',
+  borderDefault: '#dde4e3',
+  borderStrong: '#c3cdcc',
+  borderFocus: '#4aaa9c',
+  borderBrand: '#1b7266',
+  dangerFg: '#b91c1c',
+  bgBrandMuted: '#d5efea',
+  bgBrandSubtle: '#eef8f6',
+  bgBrandHover: '#124b44',
+  bgNote: '#f2f5f5',
+  sheetHandle: '#d9dede',
+  scrim: 'rgba(11, 19, 18, 0.45)',
+  bgMuted: '#edf1f1',
+  borderSubtle: '#edf1f1',
+  textBrand: '#155e54',
+  dangerSolid: '#dc2626',
+} as const;
+
+export const Ring = {
+  focus: 'rgba(42, 140, 126, 0.35)',
+  danger: 'rgba(220, 38, 38, 0.25)',
+} as const;
+
+export const Radius = {
+  xs: 4,
+  md: 8,
+  lg: 12,
+  xl: 16,
+  xl2: 24,
+} as const;
+
+/** Ticket priority, status and SLA colours from the Figma badge components. */
+export const TicketColors = {
+  priority: {
+    critical: { bg: '#fef2f2', fg: '#b91c1c', solid: '#dc2626' },
+    high: { bg: '#fff7ed', fg: '#c2410c', solid: '#ea580c' },
+    medium: { bg: '#fffbeb', fg: '#b45309', solid: '#d97706' },
+    normal: { bg: '#edf1f1', fg: '#4e5d5b', solid: '#94a3a1' },
+  },
+  status: {
+    assigned: { bg: '#f5f3ff', fg: '#6d28d9' },
+    claimed: { bg: '#eef8f6', fg: '#155e54' },
+    inProgress: { bg: '#fffbeb', fg: '#b45309' },
+    escalated: { bg: '#fef2f2', fg: '#b91c1c' },
+    resolved: { bg: '#f0fdf4', fg: '#15803d' },
+    closed: { bg: '#edf1f1', fg: '#3a4746' },
+  },
+  sla: {
+    onTrack: { bg: '#f0fdf4', fg: '#15803d' },
+    met: { bg: '#f0fdf4', fg: '#15803d' },
+    warning: { bg: '#fffbeb', fg: '#b45309' },
+    breached: { bg: '#fef2f2', fg: '#b91c1c' },
+  },
+  successBg: '#f0fdf4',
+  successFg: '#15803d',
+} as const;
+
+/** Inline banner colours from the Figma Alert Banner component. */
+export const Feedback = {
+  info: { bg: '#eff6ff', border: '#bfdbfe', fg: '#1d4ed8' },
+  warning: { bg: '#fffbeb', border: '#fde68a', fg: '#b45309' },
+} as const;
+
+export const FigmaSpace = {
+  onePointFive: 6,
+  three: 12,
+  five: 20,
+} as const;
+
+export const InterFonts = {
+  regular: 'Inter_400Regular',
+  medium: 'Inter_500Medium',
+  semiBold: 'Inter_600SemiBold',
+} as const;
+
+export const MonoFonts = {
+  medium: 'JetBrainsMono_500Medium',
+} as const;
+
+export const BottomTabInset =Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;
