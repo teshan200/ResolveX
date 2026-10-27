@@ -72,7 +72,6 @@ const builtPages: Record<string, ReactElement> = {
   '/tenant/analytics': <AnalyticsPage />,
 
   '/tenant/complaints': <ComplaintsOverviewPage />,
-  '/tenant/audit-log': <AuditLogPage />,
 
   '/tenant/branches': <BranchesPage />,
   '/tenant/employees': <EmployeesPage />,
