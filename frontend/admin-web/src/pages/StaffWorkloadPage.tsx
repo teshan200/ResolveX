@@ -1,5 +1,3 @@
-import { ArrowUpDown, Calendar } from 'lucide-react'
-import { Button } from '../components/ui/Button'
 import { StaffKpis } from '../features/staff/StaffKpis'
 import { StaffSuggestionBanner } from '../features/staff/StaffSuggestionBanner'
 import { TeamTable } from '../features/staff/TeamTable'
@@ -14,16 +12,6 @@ export function StaffWorkloadPage() {
           <p className="text-sm leading-5 text-content-secondary">
             Who is on shift, how loaded they are, and how quickly they respond.
           </p>
-        </div>
-        <div className="flex shrink-0 gap-3">
-          <Button variant="outline" className="font-semibold!">
-            <Calendar size={18} aria-hidden />
-            Shift schedule
-          </Button>
-          <Button className="font-semibold!">
-            <ArrowUpDown size={18} aria-hidden />
-            Rebalance tickets
-          </Button>
         </div>
       </header>
       <StaffKpis />

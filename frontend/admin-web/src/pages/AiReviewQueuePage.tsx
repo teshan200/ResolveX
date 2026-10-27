@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Check, Info } from 'lucide-react'
-import { Button } from '../components/ui'
+import { Info } from 'lucide-react'
 import { EscalationStatusChips } from '../features/escalation/components/EscalationStatusChips'
 import { ReviewPanel } from '../features/ai-review/components/ReviewPanel'
 import { ReviewQueueCard } from '../features/ai-review/components/ReviewQueueCard'
@@ -44,10 +43,6 @@ export function AiReviewQueuePage() {
             and assign an employee by designation.
           </p>
         </div>
-        <Button variant="outline" className="font-semibold!">
-          <Check size={18} aria-hidden />
-          Confirm all high-agreement
-        </Button>
       </header>
 
       <div className="flex flex-col items-start gap-6 lg:flex-row">

@@ -37,17 +37,3 @@ export const decisions: DecisionItem[] = [
   { label: 'Resolution approvals', count: 4, tone: 'brand', to: '/branch/approvals' },
   { label: 'Escalations to acknowledge', count: 1, tone: 'danger', to: '/branch/escalations' },
 ]
-
-export interface OnShiftMember {
-  initials: string
-  name: string
-  role: string
-  tone: 'brand' | 'warning' | 'danger'
-}
-
-export const onShift: OnShiftMember[] = [
-  { initials: 'DK', name: 'Dinesh Kumara', role: 'Waiter / Waitress', tone: 'warning' },
-  { initials: 'KP', name: 'Kavinda Perera', role: 'Floor Supervisor', tone: 'brand' },
-  { initials: 'NJ', name: 'Nadeesha Jay', role: 'Bartender', tone: 'brand' },
-  { initials: 'RS', name: 'Ravi Silva', role: 'Head Chef / Kitchen Manager', tone: 'danger' },
-]

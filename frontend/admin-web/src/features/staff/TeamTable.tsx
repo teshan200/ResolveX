@@ -1,4 +1,4 @@
-import { ArrowUpDown, Ban, CircleCheck, Download, Loader } from 'lucide-react'
+import { CircleCheck, Loader } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '../../components/ui/cn'
 import { staffMembers } from './mocks'
@@ -9,13 +9,11 @@ const cols = {
   workload: 'w-[200px]',
   ack: 'w-[110px]',
   sla: 'w-[110px]',
-  action: 'w-[150px]',
 }
 
 const statusStyle: Record<ShiftStatus, { style: string; icon: LucideIcon }> = {
   'On shift': { style: 'bg-status-resolved-bg text-status-resolved-fg', icon: CircleCheck },
   'On break': { style: 'bg-status-in-progress-bg text-status-in-progress-fg', icon: Loader },
-  'Off shift': { style: 'bg-status-cancelled-bg text-status-cancelled-fg', icon: Ban },
 }
 
 const barTone: Record<LoadTone, string> = {
@@ -102,15 +100,6 @@ function TeamRow({ member }: { member: StaffMember }) {
           {member.slaMet}
         </p>
       </div>
-      <div className={cn(cell, cols.action, 'shrink-0')}>
-        <button
-          type="button"
-          className="inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-md px-3 text-[13px] leading-4.5 font-medium whitespace-nowrap text-content-secondary hover:bg-muted"
-        >
-          <ArrowUpDown size={16} aria-hidden />
-          Reassign
-        </button>
-      </div>
     </div>
   )
 }
@@ -118,19 +107,12 @@ function TeamRow({ member }: { member: StaffMember }) {
 const headCell =
   'flex h-10 items-center gap-1 border-b border-line bg-canvas px-4 text-xs leading-4 font-semibold whitespace-nowrap text-content-secondary'
 
-/** "Team" card from the Figma "Staff & workload" frame. Reassign and Export are not wired up. */
+/** "Team" card from the Figma "Staff & workload" frame. */
 export function TeamTable() {
   return (
     <section className="flex flex-col overflow-hidden rounded-xl border border-line bg-surface">
       <div className="flex items-center gap-3 border-b border-line-subtle px-5 py-4">
         <h2 className="flex-1 text-base leading-6 font-semibold">Team</h2>
-        <button
-          type="button"
-          className="inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-md px-3 text-[13px] leading-4.5 font-medium whitespace-nowrap text-content-secondary hover:bg-muted"
-        >
-          <Download size={16} aria-hidden />
-          Export
-        </button>
       </div>
       <div className="flex">
         <div className={cn(headCell, 'min-w-0 flex-1')}>Staff member</div>
@@ -138,7 +120,6 @@ export function TeamTable() {
         <div className={cn(headCell, cols.workload, 'shrink-0')}>Workload</div>
         <div className={cn(headCell, cols.ack, 'shrink-0')}>Avg. ack</div>
         <div className={cn(headCell, cols.sla, 'shrink-0')}>SLA met</div>
-        <div className={cn(headCell, cols.action, 'shrink-0')} />
       </div>
       {staffMembers.map((m) => (
         <TeamRow key={m.id} member={m} />

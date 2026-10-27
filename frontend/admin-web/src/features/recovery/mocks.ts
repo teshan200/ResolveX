@@ -11,6 +11,7 @@ export const resolutionApprovals: ResolutionApproval[] = [
     time: '24 min',
     sla: 'Met',
     status: 'waiting',
+    survey: { rating: 4, comment: '“Hot and fresh this time. Thanks for the quick fix!”' },
   },
   {
     id: '#1029',
@@ -21,6 +22,7 @@ export const resolutionApprovals: ResolutionApproval[] = [
     time: '6 min',
     sla: 'Met',
     status: 'waiting',
+    survey: { rating: 5, comment: '“Fast and friendly — great service.”' },
   },
   {
     id: '#1031',
@@ -41,6 +43,7 @@ export const resolutionApprovals: ResolutionApproval[] = [
     time: '31 min',
     sla: 'Met',
     status: 'waiting',
+    survey: { rating: 3, comment: '“Arrived late, but staff were apologetic.”' },
   },
 ]
 

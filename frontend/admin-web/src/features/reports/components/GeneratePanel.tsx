@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Download } from 'lucide-react'
 import { Button, Select } from '../../../components/ui'
 import { cn } from '../../../components/ui/cn'
-import { branchScopeOptions, dateRangeOptions, groupByOptions } from '../mocks'
+import { branchScopeOptions, dateRangeOptions } from '../mocks'
 import type { ReportFormat } from '../mocks'
 import type { ReportOptions } from '../../export/reports'
 
@@ -79,7 +79,6 @@ interface GeneratePanelProps {
 export function GeneratePanel({ templateTitle, canGenerate, onGenerate }: GeneratePanelProps) {
   const [range, setRange] = useState(dateRangeOptions[1])
   const [branches, setBranches] = useState(branchScopeOptions[0])
-  const [groupBy, setGroupBy] = useState(groupByOptions[0])
   const [format, setFormat] = useState<ReportFormat>('PDF')
   const [email, setEmail] = useState(false)
 
@@ -93,7 +92,6 @@ export function GeneratePanel({ templateTitle, canGenerate, onGenerate }: Genera
       </h2>
       <Select label="Date range" options={dateRangeOptions} value={range} onChange={(e) => setRange(e.target.value)} />
       <Select label="Branches" options={branchScopeOptions} value={branches} onChange={(e) => setBranches(e.target.value)} />
-      <Select label="Group by" options={groupByOptions} value={groupBy} onChange={(e) => setGroupBy(e.target.value)} />
       <div role="radiogroup" aria-labelledby="format-label" className="flex flex-col gap-2">
         <p id="format-label" className="text-[13px] leading-4.5 font-medium">
           Format
@@ -108,7 +106,7 @@ export function GeneratePanel({ templateTitle, canGenerate, onGenerate }: Genera
         className="w-full font-semibold!"
         disabled={!canGenerate}
         title={canGenerate ? undefined : 'No sample data for this report in the prototype'}
-        onClick={() => onGenerate(format, { range, branches, groupBy })}
+        onClick={() => onGenerate(format, { range, branches })}
       >
         <Download size={18} aria-hidden />
         Generate report
