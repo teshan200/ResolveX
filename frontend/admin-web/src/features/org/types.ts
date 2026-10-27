@@ -22,6 +22,9 @@ export interface BranchDetail {
   slaBreachRate: string
 }
 
+/** Whether an active employee is working or on an approved break. */
+export type ShiftStatus = 'In Shift' | 'On Break'
+
 export interface Employee {
   id: string
   name: string
@@ -33,6 +36,10 @@ export interface Employee {
   status: ActiveStatus
   lastActive: string
   openTickets: number
+  /** Null for someone with an inactive account. */
+  shift: ShiftStatus | null
+  /** Expected return from an approved break, e.g. "19 Oct, 3:30 PM". Null until a time is set. */
+  returnAt: string | null
 }
 
 export interface HierarchyLevel {

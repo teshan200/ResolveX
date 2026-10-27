@@ -31,6 +31,8 @@ interface TableProps<T> {
   empty?: ReactNode
   // Height of a row in px, not counting its bottom border.
   rowHeight?: number
+  // 'compact' uses 12px instead of 16px of padding inside each cell.
+  density?: 'default' | 'compact'
 }
 
 const cellWidth = (width?: number) => (width ? { width, flex: 'none' } : { flex: '1 1 0%' })
@@ -45,7 +47,9 @@ export function Table<T>({
   onSort,
   empty,
   rowHeight = 58,
+  density = 'default',
 }: TableProps<T>) {
+  const padding = density === 'compact' ? 'px-3' : 'px-4'
   return (
     <div role="table">
       <div role="row" className="flex">
@@ -60,7 +64,8 @@ export function Table<T>({
               }
               style={cellWidth(column.width)}
               className={cn(
-                'flex h-10 min-w-0 items-center gap-1 border-b border-line bg-canvas px-4 text-xs leading-4 font-semibold text-content-secondary',
+                'flex h-10 min-w-0 items-center gap-1 border-b border-line bg-canvas text-xs leading-4 font-semibold text-content-secondary',
+                padding,
                 column.align === 'center' && 'justify-center',
               )}
             >
@@ -98,7 +103,8 @@ export function Table<T>({
             role="cell"
             style={{ ...cellWidth(column.width), height: rowHeight }}
             className={cn(
-              'flex min-w-0 items-center gap-2 overflow-hidden px-4 text-left',
+              'flex min-w-0 items-center gap-2 overflow-hidden text-left',
+              padding,
               column.align === 'center' && 'justify-center',
             )}
           >
