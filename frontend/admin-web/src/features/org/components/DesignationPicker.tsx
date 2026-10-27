@@ -149,7 +149,7 @@ export function DesignationPicker({ groups, value, onChange, unusedCount, error,
                 <Info size={14} className="mt-px shrink-0 text-content-tertiary" />
                 {variant === 'branch'
                   ? 'Only designations in your company’s hierarchy are listed.'
-                  : `Make someone a Branch Manager from Edit employee › Role. ${unusedCount} designations aren’t in your hierarchy.`}
+                  : `Tick “Branch Manager” above to assign a Branch Manager instead of a designation. ${unusedCount} designations aren’t in your hierarchy.`}
               </p>
             </>
           )}

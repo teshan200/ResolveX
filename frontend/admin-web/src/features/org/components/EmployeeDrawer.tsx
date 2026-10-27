@@ -61,6 +61,8 @@ export function EmployeeDrawer({
     adding ? '' : wasManager ? (eligible[0]?.name ?? '') : (employee?.designation ?? ''),
   )
   const [active, setActive] = useState(employee ? employee.status === 'Active' : true)
+  // Add only: make the new person the Branch Manager of the chosen branch instead of giving them a designation.
+  const [asManager, setAsManager] = useState(false)
   const [previousDesignation, setPreviousDesignation] = useState(eligible[0]?.name ?? '')
   const [confirmed, setConfirmed] = useState(false)
   const [attempted, setAttempted] = useState(false)
@@ -79,12 +81,12 @@ export function EmployeeDrawer({
   const designationError =
     reassign && !designationValid
       ? 'Not eligible — pick a designation from your hierarchy.'
-      : attempted && !isManager && !designationValid
+      : attempted && !isManager && !(adding && asManager) && !designationValid
         ? 'Choose a designation from your hierarchy'
         : undefined
 
   const blocked =
-    (adding && groups.length === 0) ||
+    (adding && !asManager && groups.length === 0) ||
     (reassign && !designationValid) ||
     (replacing && !previousDesignation) ||
     Boolean(otherBranch)
@@ -110,7 +112,7 @@ export function EmployeeDrawer({
   const save = async () => {
     setAttempted(true)
     const needsEmail = !isManager
-    const needsDesignation = !isManager
+    const needsDesignation = !isManager && !(adding && asManager)
     if (
       !name.trim() ||
       (needsEmail && !emailPattern.test(email.trim())) ||
@@ -125,7 +127,14 @@ export function EmployeeDrawer({
     try {
       const shortBranch = branch?.name ?? ''
       if (adding) {
-        const row = await addEmployee({ name: name.trim(), email: email.trim(), designation, branchId })
+        const row = await addEmployee({
+          name: name.trim(),
+          email: email.trim(),
+          designation,
+          branchId,
+          branchManager: asManager,
+          status: active ? 'Active' : 'Inactive',
+        })
         onDone({
           message: `${row.name} added · ${row.designation} · Level ${row.level} · ${shortBranch.replace(/ Branch$/, '')}`,
           highlight: row,
@@ -219,19 +228,55 @@ export function EmployeeDrawer({
 
         {branchSelect}
         {!isManager && (
-          <p className="text-xs leading-4 text-content-tertiary">Choose from your company’s branches.</p>
+          <p className="text-xs leading-4 text-content-tertiary">
+            {adding && asManager ? 'Choose the branch this person will manage.' : 'Choose from your company’s branches.'}
+          </p>
         )}
 
         {!adding && !reassign && <RoleSwitch value={role} onChange={setRole} />}
 
         {adding && (
-          <DesignationPicker
-            groups={groups}
-            value={designation}
-            onChange={setDesignation}
-            unusedCount={unusedCount}
-            error={designationError}
-          />
+          <>
+            <Checkbox
+              label="Branch Manager"
+              checked={asManager}
+              onChange={(event) => setAsManager(event.target.checked)}
+            />
+            {asManager && (
+              <p className="text-xs leading-4 text-content-tertiary">
+                This person is assigned as the Branch Manager of the selected branch, not an ordinary designation. One
+                Branch Manager per branch.
+              </p>
+            )}
+            {asManager ? (
+              <Select label="Designation" disabled options={['Unavailable — Branch Manager selected']} />
+            ) : (
+              <DesignationPicker
+                groups={groups}
+                value={designation}
+                onChange={setDesignation}
+                unusedCount={unusedCount}
+                error={designationError}
+              />
+            )}
+            <Select
+              label="Hierarchy level"
+              disabled
+              options={[
+                asManager
+                  ? `Level ${managerLevel} · Branch Manager (reserved)`
+                  : chosenLevel === undefined
+                    ? '—'
+                    : `Level ${chosenLevel}`,
+              ]}
+            />
+            <p className="text-xs leading-4 text-content-tertiary">
+              {asManager
+                ? 'Branch Manager is a reserved hierarchy level and can’t be combined with a designation.'
+                : 'Set automatically from the designation’s level in Hierarchy.'}
+            </p>
+            <Toggle checked={active} onChange={setActive} label="Account active — can sign in" />
+          </>
         )}
 
         {!adding && !isManager && (
@@ -249,7 +294,7 @@ export function EmployeeDrawer({
               disabled
               options={[chosenLevel === undefined ? '— (no level until reassigned)' : `Level ${chosenLevel}`]}
             />
-            <p className="-mt-2 text-xs leading-4 text-content-tertiary">
+            <p className="text-xs leading-4 text-content-tertiary">
               Set automatically from the designation’s level in Hierarchy.
             </p>
             <Toggle checked={active} onChange={setActive} label="Account active — can sign in" />
